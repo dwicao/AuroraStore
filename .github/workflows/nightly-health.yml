@@ -1,0 +1,111 @@
+# SPDX-FileCopyrightText: 2026 Aurora OSS
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Nightly early-warning for the two things that break Aurora outside of code changes:
+# Google altering the Play API, and the anonymous token dispensers going down.
+#
+# - Probes the default dispenser and Play reachability over plain HTTPS (no build).
+# - Checks whether the pinned gplayapi is behind Maven Central (warning only).
+# - Runs the JVM unit tests, which cover the Play-error taxonomy mapping and the
+#   dispenser health policy — the seams that have to hold when upstream changes.
+#
+# A red probes job is the signal to look at Play/gplayapi before users report breakage.
+# The full release pipeline (build + sign + publish) lives in release.yml.
+
+name: Nightly health
+
+on:
+  schedule:
+    # 03:00 UTC daily — off-peak for both CI and the dispenser hosts.
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe default token dispenser
+        run: |
+          set -uo pipefail
+          # An empty POST is not a valid mint, so any 4xx proves the dispenser is
+          # alive and parsing requests. 000/timeout or persistent 5xx means down.
+          for attempt in 1 2 3; do
+            CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
+              -X POST -H 'Content-Type: application/json' --data '{}' \
+              https://auroraoss.com/api/auth || true)"
+            echo "attempt $attempt: HTTP $CODE"
+            case "$CODE" in
+              4??) echo "dispenser alive (HTTP $CODE)"; exit 0 ;;
+            esac
+            sleep 5
+          done
+          echo "::error::default dispenser unreachable (last HTTP code: $CODE)"
+          exit 1
+
+      - name: Probe Play reachability
+        run: |
+          set -uo pipefail
+          fail=0
+          for url in https://play.google.com/store https://android.googleapis.com; do
+            CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$url" || true)"
+            echo "$url -> HTTP $CODE"
+            # Any HTTP answer (even 4xx) proves the route is up; 000 means no route.
+            if [ "$CODE" = "000" ]; then fail=1; fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::Play endpoints unreachable"
+            exit 1
+          fi
+
+      - name: Check gplayapi freshness
+        run: |
+          set -uo pipefail
+          PINNED="$(grep -E '^gplayapi' gradle/libs.versions.toml | grep -oE '[0-9.]+' | head -n1)"
+          LATEST="$(curl -s --max-time 20 \
+            'https://search.maven.org/solrsearch/select?q=g:%22com.auroraoss%22+AND+a:%22gplayapi%22&rows=1&wt=json' \
+            | grep -oE '"latestVersion":"[^"]+"' | cut -d'"' -f4)"
+          echo "pinned=$PINNED latest=$LATEST"
+          {
+            echo "### gplayapi version check"
+            echo "- pinned in repo: \`$PINNED\`"
+            echo "- latest on Maven Central: \`$LATEST\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$LATEST" ] && [ "$PINNED" != "$LATEST" ]; then
+            echo "::warning::gplayapi $LATEST available (repo pins $PINNED) — review the diff before bumping"
+          fi
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          # Accepts all licenses; AGP auto-downloads whatever else the build needs.
+          packages: 'platform-tools'
+
+      - name: Run JVM unit tests
+        run: |
+          chmod +x gradlew
+          ./gradlew testVanillaDebugUnitTest --stacktrace
+
+      - name: Upload test reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: app/build/reports/tests/

@@ -54,8 +54,13 @@ object AccountProvider {
 
         if (tokenType == TokenType.AAS) {
             Preferences.putString(context, Constants.ACCOUNT_AAS_PLAIN, token)
+            // The other token must not survive: getLoginToken() prefers a non-blank AAS,
+            // so a stale AAS would shadow a fresh AUTH token (and vice versa) after an
+            // account-type switch, minting sessions for the wrong credential.
+            Preferences.remove(context, Constants.ACCOUNT_AUTH_PLAIN)
         } else {
             Preferences.putString(context, Constants.ACCOUNT_AUTH_PLAIN, token)
+            Preferences.remove(context, Constants.ACCOUNT_AAS_PLAIN)
         }
     }
 

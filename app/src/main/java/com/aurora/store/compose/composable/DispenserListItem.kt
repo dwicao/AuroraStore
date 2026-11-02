@@ -20,12 +20,14 @@ import com.aurora.store.R
 fun DispenserListItem(
     modifier: Modifier = Modifier,
     url: String,
+    supporting: String? = null,
     onClick: () -> Unit = {},
     onClear: () -> Unit = {}
 ) {
     AuroraListItem(
         modifier = modifier,
         headline = url,
+        supporting = supporting,
         onClick = onClick,
         leading = {
             Icon(painter = painterResource(R.drawable.ic_server), contentDescription = null)

@@ -19,10 +19,15 @@ import com.aurora.store.data.room.exodus.TrackerEntity
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_LAST_TRACKER_SYNC
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.Headers.Companion.toHeaders
@@ -42,6 +47,11 @@ class ExodusRepository @Inject constructor(
     companion object {
         private val SYNC_INTERVAL_MS = TimeUnit.DAYS.toMillis(3)
         private const val CATEGORY_SEPARATOR = "\n"
+
+        // Retries for transient Exodus failures (timeouts, DNS blips, 5xx). 4xx and parse
+        // errors are permanent and never retried.
+        private const val MAX_RETRIES = 3
+        private const val RETRY_BASE_DELAY_MS = 1000L
     }
 
     private val authHeaders: Map<String, String>
@@ -54,13 +64,49 @@ class ExodusRepository @Inject constructor(
     private fun get(url: String, headers: Map<String, String>): String {
         val request = Request(url = url.toHttpUrl(), headers = headers.toHeaders())
         return okHttpClient.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Exodus HTTP ${response.code}")
             response.body.string()
         }
     }
 
+    /**
+     * Runs [block] with exponential backoff over transient failures. Non-transient
+     * errors (4xx, malformed bodies, cancellation) propagate immediately so a broken
+     * request fails fast instead of burning retries.
+     */
+    private suspend fun <T> withRetry(label: String, block: suspend () -> T): T {
+        var lastError: Exception? = null
+        repeat(MAX_RETRIES) { attempt ->
+            try {
+                return block()
+            } catch (cancellation: CancellationException) {
+                throw cancellation
+            } catch (exception: Exception) {
+                if (!isRetryable(exception)) throw exception
+                lastError = exception
+                Log.w(TAG, "Exodus $label failed (attempt ${attempt + 1}/$MAX_RETRIES)", exception)
+                delay(RETRY_BASE_DELAY_MS shl attempt)
+            }
+        }
+        throw lastError!!
+    }
+
+    private fun isRetryable(exception: Exception): Boolean = when {
+        exception is UnknownHostException || exception is SocketTimeoutException -> true
+        exception is IOException -> {
+            // Transport-level I/O (resets, timeouts) is transient; our own HTTP-status
+            // wrapper is only transient for 5xx — a 4xx will fail the same way again.
+            val message = exception.message ?: return true
+            !message.startsWith("Exodus HTTP") || "Exodus HTTP 5" in message
+        }
+        else -> false
+    }
+
     suspend fun fetchReports(packageName: String): List<Report> = withContext(Dispatchers.IO) {
         try {
-            val response = get("${Constants.EXODUS_SEARCH_URL}$packageName", authHeaders)
+            val response = withRetry("fetchReports") {
+                get("${Constants.EXODUS_SEARCH_URL}$packageName", authHeaders)
+            }
             parseReports(response, packageName)
         } catch (exception: Exception) {
             Log.e(TAG, "Failed to fetch exodus reports", exception)
@@ -80,7 +126,9 @@ class ExodusRepository @Inject constructor(
         val isStale = System.currentTimeMillis() - lastSync > SYNC_INTERVAL_MS
         if (trackerDao.count() > 0 && !isStale) return@withContext
 
-        val response = get(Constants.EXODUS_TRACKERS_URL, authHeaders)
+        val response = withRetry("syncTrackers") {
+            get(Constants.EXODUS_TRACKERS_URL, authHeaders)
+        }
         val trackers = json.decodeFromString<TrackersResponse>(response)
             .trackers.values.map {
                 TrackerEntity(

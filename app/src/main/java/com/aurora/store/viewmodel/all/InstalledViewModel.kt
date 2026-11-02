@@ -26,6 +26,7 @@ import com.aurora.store.compose.ui.commons.save
 import com.aurora.store.data.PageResult
 import com.aurora.store.data.paging.GenericPagingSource
 import com.aurora.store.data.paging.GenericPagingSource.Companion.manualPager
+import com.aurora.store.data.play.PlayGateway
 import com.aurora.store.data.providers.BlacklistProvider
 import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.Preferences
@@ -46,7 +47,8 @@ import kotlinx.coroutines.launch
 class InstalledViewModel @Inject constructor(
     blacklistProvider: BlacklistProvider,
     @ApplicationContext private val context: Context,
-    private val webPlayClient: WebPlayClient
+    private val webPlayClient: WebPlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     private val blacklist = blacklistProvider.blacklist
@@ -107,7 +109,11 @@ class InstalledViewModel @Inject constructor(
                 manualPager(pageSize = GenericPagingSource.DEFAULT_PAGE_SIZE) { page ->
                     val chunk = chunks.getOrNull(page - 1)
                         ?: return@manualPager PageResult(emptyList<App>(), hasMore = false)
-                    val items = webPlayClient.apps.details(chunk.map { it.packageName })
+                    // Previously uncaught: a rejected session inside the pager crashed
+                    // the app instead of routing to Splash.
+                    val items = playGateway.callOrDefault("installed-details", emptyList()) {
+                        webPlayClient.apps.details(chunk.map { it.packageName })
+                    }
                     PageResult(items, hasMore = page < chunks.size)
                 }.flow
                     .distinctUntilChanged()

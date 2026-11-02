@@ -27,6 +27,7 @@ import com.aurora.store.data.PageResult
 import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.model.SearchFilter
 import com.aurora.store.data.paging.GenericPagingSource.Companion.manualPager
+import com.aurora.store.data.play.PlayGateway
 import com.aurora.store.data.providers.AuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -45,7 +46,8 @@ import kotlinx.coroutines.launch
 class SearchViewModel @Inject constructor(
     val authProvider: AuthProvider,
     private val webPlayClient: WebPlayClient,
-    private val playClient: PlayClient
+    private val playClient: PlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     private val _suggestions = MutableStateFlow<List<SearchSuggestion>>(emptyList())
@@ -116,9 +118,13 @@ class SearchViewModel @Inject constructor(
 
     fun fetchSuggestions(query: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _suggestions.value = webPlayClient.search.suggestions(query)
-                .filter { it.title.isNotBlank() }
-                .take(5)
+            // Previously uncaught: a dead session here crashed the app instead of
+            // routing to Splash like every other Play call does.
+            _suggestions.value = playGateway.callOrDefault("search-suggestions", emptyList()) {
+                webPlayClient.search.suggestions(query)
+                    .filter { it.title.isNotBlank() }
+                    .take(5)
+            }
         }
     }
 

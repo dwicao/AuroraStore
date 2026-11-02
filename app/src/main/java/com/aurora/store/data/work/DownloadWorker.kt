@@ -66,6 +66,7 @@ import java.io.IOException
 import java.net.HttpURLConnection.HTTP_FORBIDDEN
 import java.net.HttpURLConnection.HTTP_GONE
 import java.net.HttpURLConnection.HTTP_PARTIAL
+import java.net.HttpURLConnection.HTTP_REQUESTED_RANGE_NOT_SATISFIABLE
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -144,6 +145,13 @@ class DownloadWorker @AssistedInject constructor(
         Exception(context.getString(R.string.verification_failed))
 
     inner class ExpiredUrlException : Exception(context.getString(R.string.download_failed))
+
+    /**
+     * Play's CDN answered 5xx: the URLs are fine, the server is sick. Retried with
+     * backoff like a network failure instead of failing the download outright.
+     */
+    inner class TransientServerException(val code: Int) :
+        Exception(context.getString(R.string.download_failed))
 
     inner class PatchTooLargeException : Exception("Patch exceeds its declared maximum size")
 
@@ -392,6 +400,9 @@ class DownloadWorker @AssistedInject constructor(
         is UnknownHostException,
         // Expired URLs were re-purchased by clearing the file list; retrying re-fetches them.
         is ExpiredUrlException -> true
+
+        // A sick CDN edge (5xx) deserves the same backoff treatment as lost connectivity.
+        is TransientServerException -> true
 
         else -> isRetryable(throwable.cause)
     }
@@ -808,18 +819,23 @@ class DownloadWorker @AssistedInject constructor(
      * @param expectedSize the bytes [file] should come to, for per-file progress.
      * @param maxSize when positive, the transfer fails with [PatchTooLargeException] past it.
      * @param onLength called with the bytes [file] will come to, when the server says.
+     * @param fromScratch internal retry flag: when the server answers 416 the partial is
+     * longer than what it will serve (e.g. URLs were re-purchased mid-queue), so the stale
+     * `.tmp` is dropped and the transfer restarts from byte zero exactly once.
      */
     private suspend fun transfer(
         url: String,
         file: File,
         expectedSize: Long,
         maxSize: Long = 0L,
-        onLength: (Long) -> Unit = {}
+        onLength: (Long) -> Unit = {},
+        fromScratch: Boolean = false
     ) {
         withContext(Dispatchers.IO) {
             try {
                 // Download as a temporary file to avoid installing corrupted files
                 val tmpFile = File(file.absolutePath + ".tmp")
+                if (fromScratch) tmpFile.delete()
                 val existingBytes = if (tmpFile.exists()) tmpFile.length() else 0L
 
                 val headers = mutableMapOf<String, String>()
@@ -844,6 +860,17 @@ class DownloadWorker @AssistedInject constructor(
                         )
                         throw ExpiredUrlException()
                     }
+                    // The server refuses the resume offset (partial longer than what it will
+                    // serve, e.g. after URLs were re-purchased): drop the stale partial and
+                    // restart from zero once, instead of looping on 416 forever.
+                    if (code == HTTP_REQUESTED_RANGE_NOT_SATISFIABLE && existingBytes > 0 &&
+                        !fromScratch
+                    ) {
+                        Log.w(TAG, "Range rejected for $tmpFile (416), restarting from scratch")
+                        return@withContext transfer(url, file, expectedSize, maxSize, onLength, true)
+                    }
+                    // A 5xx is the CDN being sick, not our URLs: back off and retry.
+                    if (code in 500..599) throw TransientServerException(code)
                     throw DownloadFailedException()
                 }
 

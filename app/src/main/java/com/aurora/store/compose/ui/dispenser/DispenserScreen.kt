@@ -32,11 +32,13 @@ import com.aurora.store.compose.composable.DispenserListItem
 import com.aurora.store.compose.composable.Placeholder
 import com.aurora.store.compose.composable.TopAppBar
 import com.aurora.store.compose.preview.ThemePreviewProvider
+import com.aurora.store.data.DispenserHealth
 import com.aurora.store.viewmodel.dispenser.DispenserViewModel
 
 @Composable
 fun DispenserScreen(viewModel: DispenserViewModel = hiltViewModel()) {
     val dispensers by viewModel.dispensers.collectAsStateWithLifecycle()
+    val health by viewModel.health.collectAsStateWithLifecycle()
 
     var shouldShowInputDialog by rememberSaveable { mutableStateOf(false) }
     if (shouldShowInputDialog) {
@@ -63,6 +65,7 @@ fun DispenserScreen(viewModel: DispenserViewModel = hiltViewModel()) {
 
     ScreenContent(
         dispensers = dispensers,
+        health = health,
         onAddDispenser = { shouldShowInputDialog = true },
         onRemoveDispenser = { url -> shouldRemoveDispenser = url }
     )
@@ -71,6 +74,7 @@ fun DispenserScreen(viewModel: DispenserViewModel = hiltViewModel()) {
 @Composable
 private fun ScreenContent(
     dispensers: Set<String> = emptySet(),
+    health: Map<String, DispenserHealth> = emptyMap(),
     onAddDispenser: () -> Unit = {},
     onRemoveDispenser: (url: String) -> Unit = {}
 ) {
@@ -109,8 +113,14 @@ private fun ScreenContent(
                     .padding(vertical = dimensionResource(R.dimen.spacing_medium))
             ) {
                 items(items = dispensers.toList(), key = { url -> url }) { url ->
+                    val failures = health[url]?.failures ?: 0
                     DispenserListItem(
                         url = url,
+                        supporting = if (failures > 0) {
+                            stringResource(R.string.dispenser_status_backing_off, failures)
+                        } else {
+                            null
+                        },
                         onClick = { context.copyToClipBoard(url) },
                         onClear = { onRemoveDispenser(url) }
                     )

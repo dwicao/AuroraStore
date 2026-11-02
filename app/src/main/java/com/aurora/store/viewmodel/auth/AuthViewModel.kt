@@ -80,7 +80,13 @@ class AuthViewModel @Inject constructor(
     fun checkSession() {
         if (sessionChecked) return
         sessionChecked = true
-        updateAuthState()
+        viewModelScope.launch(Dispatchers.IO) {
+            // Repair any DB/prefs account drift (backup restore, crash mid-write) before
+            // the login gate reads the prefs; cheap and fully offline.
+            runCatching { authProvider.reconcileAccountState() }
+                .onFailure { Log.e(TAG, "Account reconciliation failed", it) }
+            updateAuthState()
+        }
         viewModelScope.launch {
             authProvider.sessionRejections.drop(1).collect { updateAuthState() }
         }
@@ -202,8 +208,11 @@ class AuthViewModel @Inject constructor(
                     AuthState.Failed(context.getString(R.string.session_timeout))
             } catch (exception: Exception) {
                 Log.e(TAG, "Failed to generate Session", exception)
-                val message = when (exception) {
-                    is UnknownHostException -> context.getString(R.string.check_connectivity)
+                val message = when {
+                    exception is UnknownHostException -> context.getString(R.string.check_connectivity)
+                    isDispenserMisconfigured(exception) -> context.getString(
+                        R.string.dispensers_not_configured
+                    )
                     else -> exception.message.toString()
                 }
 
@@ -255,6 +264,15 @@ class AuthViewModel @Inject constructor(
                 else -> fallback
             }
         )
+
+    /**
+     * The empty-dispenser-set signal from [AuthProvider.buildAnonymousAuthData]: it means
+     * the user has no dispenser configured at all (as opposed to all of them failing),
+     * so the error must point at Settings instead of a generic "internal error".
+     */
+    private fun isDispenserMisconfigured(exception: Throwable): Boolean =
+        exception is IllegalStateException &&
+            exception.message?.contains("dispenser", ignoreCase = true) == true
 
     fun retry() {
         // Cancel any hung attempt so a stuck Fetching/Verifying/Pending state can recover.
@@ -334,10 +352,12 @@ class AuthViewModel @Inject constructor(
                 Log.e(TAG, "Session check timed out", exception)
                 _authState.value = AuthState.Failed(context.getString(R.string.session_timeout))
             } catch (exception: Exception) {
-                val error = when (exception) {
-                    is UnknownHostException -> context.getString(R.string.title_no_network)
-                    is IOException -> context.getString(R.string.server_unreachable)
-                    is IllegalStateException -> context.getString(R.string.bad_request)
+                val error = when {
+                    exception is UnknownHostException -> context.getString(R.string.title_no_network)
+                    exception is IOException -> context.getString(R.string.server_unreachable)
+                    isDispenserMisconfigured(exception) -> context.getString(
+                        R.string.dispensers_not_configured
+                    )
                     else -> context.getString(R.string.bad_request)
                 }
                 _authState.value = AuthState.Failed(error)

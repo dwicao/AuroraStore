@@ -41,6 +41,7 @@ import com.aurora.store.data.model.PlexusReport
 import com.aurora.store.data.model.Report
 import com.aurora.store.data.model.Scores
 import com.aurora.store.data.model.StorageRequirement
+import com.aurora.store.data.play.PlayGateway
 import com.aurora.store.data.providers.AuthProvider
 import com.aurora.store.data.room.download.Download
 import com.aurora.store.data.room.favourite.Favourite
@@ -92,7 +93,8 @@ class AppDetailsViewModel @Inject constructor(
     private val okHttpClient: OkHttpClient,
     private val json: Json,
     private val accountRepository: AccountRepository,
-    private val exodusRepository: ExodusRepository
+    private val exodusRepository: ExodusRepository,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     private val _app = MutableStateFlow<App?>(null)
@@ -219,7 +221,14 @@ class AppDetailsViewModel @Inject constructor(
 
     init {
         observeAppState()
-        viewModelScope.launch { _canDownload.value = playClient.supports(Capability.DOWNLOAD) }
+        // Previously uncaught: a rejected session here crashed the app. On failure the
+        // previous value is kept (optimistic: assume downloadable until proven otherwise).
+        viewModelScope.launch {
+            _canDownload.value = playGateway.callOrDefault(
+                "supports-download",
+                _canDownload.value
+            ) { playClient.supports(Capability.DOWNLOAD) }
+        }
     }
 
     fun fetchAppDetails(packageName: String) {

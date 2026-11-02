@@ -22,8 +22,10 @@ import com.aurora.store.BuildConfig.VERSION_CODE
 import com.aurora.store.BuildConfig.VERSION_NAME
 import com.aurora.store.R
 import com.aurora.store.data.AccountRepository
+import com.aurora.store.data.DispenserHealthTracker
 import com.aurora.store.data.model.AccountType
 import com.aurora.store.data.model.Auth
+import com.aurora.store.data.play.PlayErrors
 import com.aurora.store.data.room.account.Account
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_AUTH_DATA
@@ -61,7 +63,8 @@ class AuthProvider @Inject constructor(
     private val okHttpClient: OkHttpClient,
     private val httpEngine: HttpEngine,
     private val accountRepository: AccountRepository,
-    private val tokenProvider: GoogleAccountTokenProvider
+    private val tokenProvider: GoogleAccountTokenProvider,
+    private val healthTracker: DispenserHealthTracker
 ) {
     private val sessionFactory = SessionFactory(httpEngine, AndroidLogger)
 
@@ -105,11 +108,15 @@ class AuthProvider @Inject constructor(
         }
     }
 
+    /**
+     * Next dispenser to try, health-weighted: recently-failed ones are skipped with
+     * exponential backoff ([DispenserHealthTracker]) instead of the old pure-random pick
+     * that kept hammering a dead dispenser on every retry.
+     */
     val dispenserURL: String?
-        get() {
-            val dispensers = Preferences.getStringSet(context, PREFERENCE_DISPENSER_URLS)
-            return if (dispensers.isNotEmpty()) dispensers.random() else null
-        }
+        get() = healthTracker.pickDispenser(
+            Preferences.getStringSet(context, PREFERENCE_DISPENSER_URLS)
+        )
 
     /** Default account's session (or `null`). Served from the cache when warm (see [init]). */
     val authData: AuthenticatedSession?
@@ -247,7 +254,7 @@ class AuthProvider @Inject constructor(
                     )
                 )
             } catch (exception: Exception) {
-                Log.e(TAG, "Failed to generate Session", exception)
+                Log.e(TAG, "Failed to generate Session (${PlayErrors.of(exception)})", exception)
                 return@withContext Result.failure(exception)
             }
         }
@@ -264,13 +271,21 @@ class AuthProvider @Inject constructor(
                     ?: return@withContext Result.failure(
                         IllegalStateException("No anonymous dispenser configured")
                     )
-                val body = postToDispenser(
-                    url,
-                    json.encodeToString(spoofProvider.deviceProperties).toByteArray()
-                ).use { response ->
-                    if (!response.isSuccessful) throwError(response, context)
-                    response.body.string()
+                // Health tracks the dispenser round-trip only: a mint failure from a good
+                // response is Play-side, not the dispenser's fault.
+                val body = try {
+                    postToDispenser(
+                        url,
+                        json.encodeToString(spoofProvider.deviceProperties).toByteArray()
+                    ).use { response ->
+                        if (!response.isSuccessful) throwError(response, context)
+                        response.body.string()
+                    }
+                } catch (exception: Exception) {
+                    healthTracker.recordFailure(url)
+                    throw exception
                 }
+                healthTracker.recordSuccess(url)
 
                 val auth = json.decodeFromString<Auth>(body)
                 val session = sessionFactory.authenticate(
@@ -282,7 +297,7 @@ class AuthProvider @Inject constructor(
                 ).copy(isDispensed = true)
                 return@withContext Result.success(session)
             } catch (exception: Exception) {
-                Log.e(TAG, "Failed to generate AuthData", exception)
+                Log.e(TAG, "Failed to generate AuthData (${PlayErrors.of(exception)})", exception)
                 return@withContext Result.failure(exception)
             }
         }
@@ -465,6 +480,41 @@ class AuthProvider @Inject constructor(
      */
     fun removeAuthData(context: Context) {
         Preferences.remove(context, PREFERENCE_AUTH_DATA)
+    }
+
+    /**
+     * One-time, idempotent repair of the dual account state: Room is the source of truth,
+     * the legacy SharedPreferences mirror is what the login gate and the token-mint paths
+     * actually read. Backup restores, crashes mid-write and manual data edits can leave
+     * them disagreeing (logged in with an empty DB, or prefs pointing at an account the
+     * DB no longer has as default) — the classic "stuck or instantly signed-out" start.
+     *
+     * The DB always wins: prefs are rewritten to match it, or cleared when it is empty.
+     * Cheap (one or two indexed reads, zero network), so it runs on every cold start.
+     */
+    suspend fun reconcileAccountState() {
+        val dbDefault = accountRepository.getDefault()
+        if (dbDefault == null) {
+            if (AccountProvider.isLoggedIn(context)) {
+                importLegacyAccountIfNeeded()
+                if (accountRepository.getDefault() == null) {
+                    Log.w(TAG, "Prefs say logged in but no account exists; clearing stale prefs")
+                    AccountProvider.logout(context)
+                }
+            }
+            return
+        }
+
+        val prefsToken = AccountProvider.getLoginToken(context)?.first
+        val dbToken = dbDefault.aasToken ?: dbDefault.authToken
+        val matches = AccountProvider.isLoggedIn(context) &&
+            AccountProvider.getLoginEmail(context) == dbDefault.email &&
+            runCatching { AccountProvider.getAccountType(context) }.getOrNull() == dbDefault.type &&
+            prefsToken == dbToken
+        if (!matches) {
+            Log.i(TAG, "Account prefs disagree with DB default; rewriting prefs from DB")
+            syncDefaultToPrefs()
+        }
     }
 
     private suspend fun importLegacyAccountIfNeeded() {

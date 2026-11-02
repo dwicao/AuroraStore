@@ -17,6 +17,7 @@ import com.aurora.extensions.isVAndAbove
 import com.aurora.gplayapi.PlayClient
 import com.aurora.store.AuroraApp
 import com.aurora.store.data.helper.DownloadHelper
+import com.aurora.store.data.play.PlayGateway
 import com.aurora.store.data.providers.AccountProvider
 import com.aurora.store.util.NotificationUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,9 @@ class UnarchivePackageReceiver : BroadcastReceiver() {
     @Inject
     lateinit var downloadHelper: DownloadHelper
 
+    @Inject
+    lateinit var playGateway: PlayGateway
+
     override fun onReceive(context: Context?, intent: Intent?) {
         if (isVAndAbove && context != null && intent?.action == Intent.ACTION_UNARCHIVE_PACKAGE) {
             val packageName = intent.getStringExtra(EXTRA_UNARCHIVE_PACKAGE_NAME)!!
@@ -53,7 +57,12 @@ class UnarchivePackageReceiver : BroadcastReceiver() {
                     return@launch
                 }
 
-                val app = playClient.apps.details(packageName)
+                // Previously uncaught: a rejected session here crashed the receiver's
+                // coroutine (and potentially the app) instead of routing to Splash.
+                val app = playGateway.callOrNull(
+                    "unarchive-details",
+                    expiredPackage = packageName
+                ) { playClient.apps.details(packageName) } ?: return@launch
                 downloadHelper.enqueueApp(app)
             }
         }
