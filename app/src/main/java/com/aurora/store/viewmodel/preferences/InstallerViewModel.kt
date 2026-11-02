@@ -150,7 +150,12 @@ class InstallerViewModel @Inject constructor(
                         if (!AppInstaller.hasShizukuPerm(context)) {
                             Log.i(TAG, "Requesting permission for shizuku")
                             awaitingShizukuGrant = true
-                            Shizuku.requestPermission(9000)
+                            // Manual opt-in resets the startup auto-prompt bookkeeping so
+                            // the result below can complete the switch even after a
+                            // previous denial of the automatic popup.
+                            context.save(Preferences.PREFERENCE_SHIZUKU_AUTO_PROMPTED, true)
+                            context.save(Preferences.PREFERENCE_SHIZUKU_AUTO_PROMPT_DECLINED, false)
+                            Shizuku.requestPermission(AppInstaller.SHIZUKU_REQUEST_CODE)
                             return@launch
                         }
                     } else {

@@ -39,6 +39,18 @@ object Preferences {
 
     const val PREFERENCE_AUTO_DELETE = "PREFERENCE_AUTO_DELETE"
 
+    /**
+     * Set once Aurora has auto-prompted for the Shizuku permission on startup, so a
+     * fresh install only sees the grant popup once instead of on every foreground.
+     */
+    const val PREFERENCE_SHIZUKU_AUTO_PROMPTED = "PREFERENCE_SHIZUKU_AUTO_PROMPTED"
+
+    /**
+     * Set when the startup auto-prompt was denied, so later launches don't nag. The user
+     * can still grant it manually from the Installer screen (which clears this back).
+     */
+    const val PREFERENCE_SHIZUKU_AUTO_PROMPT_DECLINED = "PREFERENCE_SHIZUKU_AUTO_PROMPT_DECLINED"
+
     const val PREFERENCE_NOTIFICATION_PROGRESS = "PREFERENCE_NOTIFICATION_PROGRESS"
 
     const val PREFERENCE_INSTALLATION_DEVICE_OWNER = "PREFERENCE_INSTALLATION_DEVICE_OWNER"

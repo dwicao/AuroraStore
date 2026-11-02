@@ -295,6 +295,76 @@ class AppInstaller @Inject constructor(
             Log.i(TAG, "Auto-selected Shizuku installer (permission already granted)")
             return true
         }
+
+        /** Request code for [Shizuku.requestPermission], shared by all callers. */
+        const val SHIZUKU_REQUEST_CODE = 9000
+
+        /**
+         * Whether a startup auto-prompt for the Shizuku permission makes sense right now:
+         * onboarding is done, the installer is still the SESSION default, Shizuku is
+         * installed and alive, its permission is not yet held, and we haven't already
+         * prompted (or been denied) before.
+         */
+        fun shouldAutoRequestShizukuPermission(context: Context): Boolean {
+            if (!Preferences.getBoolean(context, Preferences.PREFERENCE_INTRO, false)) return false
+            if (getCurrentInstaller(context) != Installer.SESSION) return false
+            if (Preferences.getBoolean(
+                    context,
+                    Preferences.PREFERENCE_SHIZUKU_AUTO_PROMPTED,
+                    false
+                ) ||
+                Preferences.getBoolean(
+                    context,
+                    Preferences.PREFERENCE_SHIZUKU_AUTO_PROMPT_DECLINED,
+                    false
+                )
+            ) {
+                return false
+            }
+            return Shizuku.pingBinder() && !hasShizukuPerm(context)
+        }
+
+        /**
+         * Shows the Shizuku grant popup when [shouldAutoRequestShizukuPermission] holds.
+         * Safe to call on every foreground: it fires at most once per install (until the
+         * user picks Shizuku manually, which resets the bookkeeping).
+         *
+         * @return true when a permission request was fired.
+         */
+        fun requestShizukuPermissionIfNeeded(context: Context): Boolean {
+            if (!shouldAutoRequestShizukuPermission(context)) return false
+            return try {
+                Preferences.putBoolean(context, Preferences.PREFERENCE_SHIZUKU_AUTO_PROMPTED, true)
+                Shizuku.requestPermission(SHIZUKU_REQUEST_CODE)
+                Log.i(TAG, "Auto-requesting Shizuku permission on startup")
+                true
+            } catch (_: Exception) {
+                false
+            }
+        }
+
+        /**
+         * Routes a Shizuku permission result: a grant switches the stored installer to
+         * SHIZUKU (when still on the SESSION default), a denial records that the
+         * startup auto-prompt must not nag again.
+         */
+        fun onShizukuPermissionResult(context: Context, granted: Boolean) {
+            if (granted) {
+                Preferences.putBoolean(
+                    context,
+                    Preferences.PREFERENCE_SHIZUKU_AUTO_PROMPT_DECLINED,
+                    false
+                )
+                maybeSelectShizukuAsDefault(context)
+            } else {
+                Preferences.putBoolean(
+                    context,
+                    Preferences.PREFERENCE_SHIZUKU_AUTO_PROMPT_DECLINED,
+                    true
+                )
+                Log.i(TAG, "Shizuku permission denied, startup auto-prompt disabled")
+            }
+        }
     }
 
     private val defaultInstaller: IInstaller

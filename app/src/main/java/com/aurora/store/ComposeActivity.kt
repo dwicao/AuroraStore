@@ -55,7 +55,11 @@ class ComposeActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         MigrationReceiver.runMigrationsIfRequired(this)
         // Every app open: if Shizuku permission is held, install via Shizuku by default.
+        // If Shizuku is ready but the permission isn't held yet (e.g. fresh install),
+        // show its grant popup once — the result listener above flips the installer
+        // to Shizuku on grant.
         AppInstaller.maybeSelectShizukuAsDefault(this)
+        AppInstaller.requestShizukuPermissionIfNeeded(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
@@ -155,8 +159,10 @@ class ComposeActivity : FragmentActivity() {
     override fun onResume() {
         super.onResume()
         // Re-check on every return to the foreground: the user may have granted Shizuku
-        // in its manager while Aurora was in the background.
+        // in its manager while Aurora was in the background. If the permission is still
+        // missing and we never prompted, show the grant popup now.
         AppInstaller.maybeSelectShizukuAsDefault(this)
+        AppInstaller.requestShizukuPermissionIfNeeded(this)
     }
 
     private fun resolveStartDestination(): Screen {

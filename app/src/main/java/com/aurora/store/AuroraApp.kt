@@ -9,6 +9,7 @@ package com.aurora.store
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log.DEBUG
 import android.util.Log.INFO
@@ -94,13 +95,19 @@ class AuroraApp : Application(), Configuration.Provider, SingletonImageLoader.Fa
         // Shizuku as default installer: if its permission is already granted, install via
         // Shizuku without the user having to re-pick it (e.g. after a clear-data). The
         // binder may not be alive yet at this point, so re-check whenever it appears or
-        // its permission result arrives.
+        // its permission result arrives. A denial disables the startup auto-prompt so
+        // later launches don't nag (manual opt-in via the Installer screen still works).
         AppInstaller.maybeSelectShizukuAsDefault(this)
         Shizuku.addBinderReceivedListenerSticky {
             scope.launch { AppInstaller.maybeSelectShizukuAsDefault(this@AuroraApp) }
         }
-        Shizuku.addRequestPermissionResultListener { _, _ ->
-            scope.launch { AppInstaller.maybeSelectShizukuAsDefault(this@AuroraApp) }
+        Shizuku.addRequestPermissionResultListener { _, grantResult ->
+            scope.launch {
+                AppInstaller.onShizukuPermissionResult(
+                    this@AuroraApp,
+                    granted = grantResult == PackageManager.PERMISSION_GRANTED
+                )
+            }
         }
 
         // Initialize Download and Update helpers to observe and trigger downloads
