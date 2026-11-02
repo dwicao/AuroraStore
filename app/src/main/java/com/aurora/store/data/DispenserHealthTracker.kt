@@ -53,10 +53,12 @@ object DispenserHealthPolicy {
             val state = health[url] ?: return@filter true
             state.failures <= 0 || now - state.lastFailureAt >= cooldownMs(state.failures)
         }
-        // All cooling down: fall back to the least-recently-failed rather than null.
-        val pool = eligible.ifEmpty { urls.sortedBy { health[it]?.lastFailureAt ?: 0L } }
-        val minFailures = pool.minOf { health[it]?.failures ?: 0 }
-        val best = pool.filter { (health[it]?.failures ?: 0) == minFailures }
+        if (eligible.isEmpty()) {
+            // All cooling down: the one that failed longest ago most likely recovered.
+            return urls.minByOrNull { health[it]?.lastFailureAt ?: 0L }
+        }
+        val minFailures = eligible.minOf { health[it]?.failures ?: 0 }
+        val best = eligible.filter { (health[it]?.failures ?: 0) == minFailures }
         return best.random()
     }
 }
