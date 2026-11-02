@@ -10,6 +10,9 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.SerializationException
 import org.junit.Test
 
@@ -32,8 +35,16 @@ class PlayErrorsTest {
 
     @Test
     fun coroutineTimeout_isNetwork() {
-        assertThat(PlayErrors.of(TimeoutCancellationException("timed out")))
-            .isEqualTo(PlayError.Network)
+        // TimeoutCancellationException's constructor is internal; produce a real one.
+        val cause = try {
+            runBlocking {
+                withTimeout(1L) { delay(1000L) }
+                error("should have timed out")
+            }
+        } catch (expected: TimeoutCancellationException) {
+            expected
+        }
+        assertThat(PlayErrors.of(cause)).isEqualTo(PlayError.Network)
     }
 
     @Test
