@@ -33,13 +33,13 @@ sealed interface PlayError {
     /** Play says the app was not purchased by this account. */
     data object NotPurchased : PlayError
 
-    /** Play rate-limited us; back off and retry later. */
+    /** Reserved: Play rate-limiting us. Currently surfaces as [Unknown]. */
     data object RateLimited : PlayError
 
     /** Connectivity or timeout — nothing wrong with the request itself. */
     data object Network : PlayError
 
-    /** Play's servers errored (5xx). Retrying later may work. */
+    /** Reserved: Play's servers erroring (5xx). Currently surfaces as [Unknown]. */
     data object ServerError : PlayError
 
     /**
@@ -69,9 +69,10 @@ object PlayErrors {
                 is PlayException.RequiresAccount -> return PlayError.NeedsAccount
                 is PlayException.AppNotSupported -> return PlayError.NotSupported
                 is PlayException.AppNotPurchased -> return PlayError.NotPurchased
-            }
-            if (cursor is PlayException && cursor.code == HTTP_TOO_MANY_REQUESTS) {
-                return PlayError.RateLimited
+                // Any other Play-side failure has no actionable taxonomy yet (gplayapi
+                // exposes numeric codes only on some subtypes); keep it visible as
+                // Unknown so the monitor still flags a spike.
+                is PlayException -> return PlayError.Unknown(throwable)
             }
             cursor = cursor.cause
         }
@@ -88,13 +89,9 @@ object PlayErrors {
             }
             // Generic I/O this deep in a Play call is the network, not the request.
             if (cursor is IOException) return PlayError.Network
-            // A 5xx surfaced as a status-carrying PlayException without a dedicated subtype.
-            if (cursor is PlayException && cursor.code in 500..599) return PlayError.ServerError
             cursor = cursor.cause
         }
 
         return PlayError.Unknown(throwable)
     }
-
-    private const val HTTP_TOO_MANY_REQUESTS = 429
 }

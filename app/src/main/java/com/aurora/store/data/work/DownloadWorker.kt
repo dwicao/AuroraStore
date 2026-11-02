@@ -66,7 +66,6 @@ import java.io.IOException
 import java.net.HttpURLConnection.HTTP_FORBIDDEN
 import java.net.HttpURLConnection.HTTP_GONE
 import java.net.HttpURLConnection.HTTP_PARTIAL
-import java.net.HttpURLConnection.HTTP_REQUESTED_RANGE_NOT_SATISFIABLE
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -109,6 +108,9 @@ class DownloadWorker @AssistedInject constructor(
         // Upper bound on automatic WorkManager retries for transient (network) failures
         // before the download is marked as failed and left for the user to retry.
         private const val MAX_DOWNLOAD_RETRIES = 5
+
+        // java.net.HttpURLConnection defines no constant for 416.
+        private const val HTTP_RANGE_NOT_SATISFIABLE = 416
     }
 
     private lateinit var download: Download
@@ -863,7 +865,7 @@ class DownloadWorker @AssistedInject constructor(
                     // The server refuses the resume offset (partial longer than what it will
                     // serve, e.g. after URLs were re-purchased): drop the stale partial and
                     // restart from zero once, instead of looping on 416 forever.
-                    if (code == HTTP_REQUESTED_RANGE_NOT_SATISFIABLE && existingBytes > 0 &&
+                    if (code == HTTP_RANGE_NOT_SATISFIABLE && existingBytes > 0 &&
                         !fromScratch
                     ) {
                         Log.w(TAG, "Range rejected for $tmpFile (416), restarting from scratch")

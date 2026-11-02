@@ -27,6 +27,12 @@ jobs:
   probes:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Shallow is enough: only libs.versions.toml is read from the tree.
+          fetch-depth: 1
+
       - name: Probe default token dispenser
         run: |
           set -uo pipefail
