@@ -77,6 +77,11 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # The action defaults to the long-removed `tools` package, which makes
+          # sdkmanager exit 1. Install exactly what this project targets instead
+          # (compileSdk/targetSdk 37, see app/build.gradle.kts).
+          packages: platform-tools "platforms;android-37" "build-tools;37.0.0"
 
       - name: Restore release keystore
         env:
