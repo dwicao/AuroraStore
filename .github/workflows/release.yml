@@ -79,11 +79,14 @@ jobs:
         uses: android-actions/setup-android@v3
         with:
           # The action defaults to the long-removed `tools` package, which makes
-          # sdkmanager exit 1. Install exactly what this project targets instead
-          # (compileSdk/targetSdk 37, see app/build.gradle.kts). NOTE: single
-          # YAML quotes — double quotes inside would be passed literally to
-          # sdkmanager as part of the package name.
-          packages: 'platform-tools platforms;android-37 build-tools;37.0.0'
+          # sdkmanager exit 1 — so pin an installable package explicitly. This
+          # accepts all SDK licenses; AGP then auto-downloads whatever else the
+          # build needs (platform android-37, build-tools) during the Gradle run.
+          # NOTE: single YAML quotes — doubles would be passed literally to
+          # sdkmanager as part of the package name. `platforms;android-37`
+          # must NOT be listed here: it is not published in the sdkmanager repo
+          # and AGP resolves it on its own.
+          packages: 'platform-tools'
 
       - name: Restore release keystore
         env:
