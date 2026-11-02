@@ -24,6 +24,7 @@ import com.aurora.extensions.setAppTheme
 import com.aurora.store.data.event.EventFlow
 import com.aurora.store.data.helper.DownloadHelper
 import com.aurora.store.data.helper.UpdateHelper
+import com.aurora.store.data.installer.AppInstaller
 import com.aurora.store.data.receiver.PackageManagerReceiver
 import com.aurora.store.util.CommonUtil
 import com.aurora.store.util.NotificationUtil
@@ -33,7 +34,9 @@ import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import rikka.shizuku.Shizuku
 
 @HiltAndroidApp
 class AuroraApp : Application(), Configuration.Provider, SingletonImageLoader.Factory {
@@ -87,6 +90,18 @@ class AuroraApp : Application(), Configuration.Provider, SingletonImageLoader.Fa
         NotificationUtil.createNotificationChannel(this)
 
         registerActivityLifecycleCallbacks(foregroundTracker)
+
+        // Shizuku as default installer: if its permission is already granted, install via
+        // Shizuku without the user having to re-pick it (e.g. after a clear-data). The
+        // binder may not be alive yet at this point, so re-check whenever it appears or
+        // its permission result arrives.
+        AppInstaller.maybeSelectShizukuAsDefault(this)
+        Shizuku.addBinderReceivedListenerSticky {
+            scope.launch { AppInstaller.maybeSelectShizukuAsDefault(this@AuroraApp) }
+        }
+        Shizuku.addRequestPermissionResultListener { _, _ ->
+            scope.launch { AppInstaller.maybeSelectShizukuAsDefault(this@AuroraApp) }
+        }
 
         // Initialize Download and Update helpers to observe and trigger downloads
         downloadHelper.init()

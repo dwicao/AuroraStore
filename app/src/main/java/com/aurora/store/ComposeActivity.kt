@@ -35,6 +35,7 @@ import com.aurora.store.compose.navigation.Screen
 import com.aurora.store.compose.theme.AuroraTheme
 import com.aurora.store.compose.ui.lock.AppLockScreen
 import com.aurora.store.data.AppLockManager
+import com.aurora.store.data.installer.AppInstaller
 import com.aurora.store.data.model.NetworkStatus
 import com.aurora.store.data.providers.NetworkProvider
 import com.aurora.store.data.receiver.MigrationReceiver
@@ -53,6 +54,8 @@ class ComposeActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         MigrationReceiver.runMigrationsIfRequired(this)
+        // Every app open: if Shizuku permission is held, install via Shizuku by default.
+        AppInstaller.maybeSelectShizukuAsDefault(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
@@ -147,6 +150,13 @@ class ComposeActivity : FragmentActivity() {
             },
             onError = { onError() }
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Re-check on every return to the foreground: the user may have granted Shizuku
+        // in its manager while Aurora was in the background.
+        AppInstaller.maybeSelectShizukuAsDefault(this)
     }
 
     private fun resolveStartDestination(): Screen {

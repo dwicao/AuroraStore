@@ -275,6 +275,26 @@ class AppInstaller @Inject constructor(
             }
             context.startActivity(intent)
         }
+
+        /**
+         * Auto-selects Shizuku as the installer when its permission is already granted.
+         *
+         * Called on every app start (and when the Shizuku binder appears/permission is
+         * granted) so the user doesn't have to re-pick Shizuku after a clear-data, and so
+         * installs keep using Shizuku while its permission holds.
+         *
+         * Only upgrades from SESSION (the fresh-install default): an explicit ROOT / SERVICE /
+         * NATIVE choice is left alone.
+         *
+         * @return true when the stored installer was switched to SHIZUKU.
+         */
+        fun maybeSelectShizukuAsDefault(context: Context): Boolean {
+            if (getCurrentInstaller(context) != Installer.SESSION) return false
+            if (!hasShizukuOrSui(context) || !hasShizukuPerm(context)) return false
+            Preferences.putInteger(context, PREFERENCE_INSTALLER_ID, Installer.SHIZUKU.ordinal)
+            Log.i(TAG, "Auto-selected Shizuku installer (permission already granted)")
+            return true
+        }
     }
 
     private val defaultInstaller: IInstaller

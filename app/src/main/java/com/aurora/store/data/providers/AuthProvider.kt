@@ -35,12 +35,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import okhttp3.Headers.Companion.toHeaders
@@ -194,7 +196,13 @@ class AuthProvider @Inject constructor(
     suspend fun isSavedAuthDataValid(): Boolean {
         val session = authData ?: return false
         if (!matchesActiveSpoof(session.device, session.locale)) return false
-        return sessionFactory.validate(session)
+        // Bound the live Play call: without this a stalled network hangs the splash forever.
+        // A timeout is reported as IOException (unreachable) so callers retry, not sign out.
+        try {
+            return withTimeout(VALIDATE_TIMEOUT_MS) { sessionFactory.validate(session) }
+        } catch (e: TimeoutCancellationException) {
+            throw IOException("Timed out validating session", e)
+        }
     }
 
     /**
@@ -252,8 +260,12 @@ class AuthProvider @Inject constructor(
     suspend fun buildAnonymousAuthData(): Result<AuthenticatedSession> {
         return withContext(Dispatchers.IO) {
             try {
+                val url = dispenserURL
+                    ?: return@withContext Result.failure(
+                        IllegalStateException("No anonymous dispenser configured")
+                    )
                 val body = postToDispenser(
-                    dispenserURL!!,
+                    url,
                     json.encodeToString(spoofProvider.deviceProperties).toByteArray()
                 ).use { response ->
                     if (!response.isSuccessful) throwError(response, context)
@@ -518,5 +530,6 @@ class AuthProvider @Inject constructor(
 
     companion object {
         const val SESSION_REJECTION_WINDOW_MS = 60_000L
+        private const val VALIDATE_TIMEOUT_MS = 25_000L
     }
 }

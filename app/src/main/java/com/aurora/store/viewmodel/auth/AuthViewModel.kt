@@ -34,12 +34,15 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
@@ -58,6 +61,21 @@ class AuthViewModel @Inject constructor(
 
     private var sessionChecked = false
 
+    /**
+     * The in-flight auth attempt. Kept so [retry] can cancel a hung validation instead of
+     * leaving the splash spinner forever — the root cause of "stuck loading" after the app
+     * hasn't been opened for a while (expired session + slow/dead network, or a dead
+     * AccountManager callback that never returns).
+     */
+    private var authJob: Job? = null
+
+    companion object {
+        /** Upper bound for any single session validation/mint. OkHttp already times out at 25s. */
+        private const val SESSION_TIMEOUT_MS = 35_000L
+        /** Longer bound for the microG path, which may show user consent UI. */
+        private const val MICROG_TIMEOUT_MS = 120_000L
+    }
+
     /** Only the splash screen should call this: a failed check rebuilds the default session. */
     fun checkSession() {
         if (sessionChecked) return
@@ -74,10 +92,19 @@ class AuthViewModel @Inject constructor(
         activity: Activity?,
         onError: () -> Unit
     ) {
-        viewModelScope.launch {
+        authJob?.cancel()
+        // IO: fetchAuthToken switches to Main itself only for the consent UI.
+        authJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val token = tokenProvider.fetchAuthToken(email, oldToken, activity)
-                buildGoogleAuthData(email, token, TokenType.AUTH)
+                withTimeout(MICROG_TIMEOUT_MS) {
+                    val token = tokenProvider.fetchAuthToken(email, oldToken, activity)
+                    buildGoogleAuthDataInternal(email, token, TokenType.AUTH)
+                }
+            } catch (exception: TimeoutCancellationException) {
+                Log.e(TAG, "Timed out getting authToken for Google login", exception)
+                _authState.value =
+                    AuthState.Failed(context.getString(R.string.session_timeout))
+                onError()
             } catch (exception: Exception) {
                 Log.e(TAG, "Failed to get authToken for Google login", exception)
                 _authState.value =
@@ -88,18 +115,44 @@ class AuthViewModel @Inject constructor(
     }
 
     fun buildGoogleAuthData(email: String, token: String, tokenType: TokenType) {
+        authJob?.cancel()
         _authState.value = AuthState.Fetching
-        viewModelScope.launch(Dispatchers.IO) {
+        authJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                verifyAndSaveAuth(
-                    authProvider.buildGoogleAuthData(email, token, tokenType).getOrThrow(),
-                    AccountType.GOOGLE
-                )
+                withTimeout(SESSION_TIMEOUT_MS) {
+                    verifyAndSaveAuth(
+                        authProvider.buildGoogleAuthData(email, token, tokenType).getOrThrow(),
+                        AccountType.GOOGLE
+                    )
+                }
+            } catch (exception: TimeoutCancellationException) {
+                Log.e(TAG, "Timed out generating Google session", exception)
+                _authState.value =
+                    AuthState.Failed(context.getString(R.string.session_timeout))
             } catch (exception: Exception) {
                 _authState.value =
                     AuthState.Failed(context.getString(R.string.failed_to_generate_session))
                 Log.e(TAG, "Failed to generate Session", exception)
             }
+        }
+    }
+
+    private suspend fun buildGoogleAuthDataInternal(
+        email: String,
+        token: String,
+        tokenType: TokenType
+    ) {
+        _authState.value = AuthState.Fetching
+        try {
+            verifyAndSaveAuth(
+                authProvider.buildGoogleAuthData(email, token, tokenType).getOrThrow(),
+                AccountType.GOOGLE
+            )
+        } catch (exception: Exception) {
+            _authState.value =
+                AuthState.Failed(context.getString(R.string.failed_to_generate_session))
+            Log.e(TAG, "Failed to generate Session", exception)
+            throw exception
         }
     }
 
@@ -133,13 +186,20 @@ class AuthViewModel @Inject constructor(
     }
 
     fun buildAnonymousAuthData() {
+        authJob?.cancel()
         _authState.value = AuthState.Fetching
-        viewModelScope.launch(Dispatchers.IO) {
+        authJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                verifyAndSaveAuth(
-                    authProvider.buildAnonymousAuthData().getOrThrow(),
-                    AccountType.ANONYMOUS
-                )
+                withTimeout(SESSION_TIMEOUT_MS) {
+                    verifyAndSaveAuth(
+                        authProvider.buildAnonymousAuthData().getOrThrow(),
+                        AccountType.ANONYMOUS
+                    )
+                }
+            } catch (exception: TimeoutCancellationException) {
+                Log.e(TAG, "Timed out generating anonymous session", exception)
+                _authState.value =
+                    AuthState.Failed(context.getString(R.string.session_timeout))
             } catch (exception: Exception) {
                 Log.e(TAG, "Failed to generate Session", exception)
                 val message = when (exception) {
@@ -196,59 +256,92 @@ class AuthViewModel @Inject constructor(
             }
         )
 
-    fun retry() = updateAuthState()
+    fun retry() {
+        // Cancel any hung attempt so a stuck Fetching/Verifying/Pending state can recover.
+        // Without this, updateAuthState()'s Fetching guard makes retry a no-op forever.
+        authJob?.cancel()
+        updateAuthState(force = true)
+    }
 
-    private fun updateAuthState() {
-        if (_authState.value != AuthState.Fetching) {
-            if (authProvider.isSessionRepeatedlyRejected) {
-                Log.w(TAG, "Session rejected again right after re-validation, not retrying")
-                _authState.value = AuthState.Failed(context.getString(R.string.session_rejected))
-            } else if (AccountProvider.isLoggedIn(context)) {
-                _authState.value = AuthState.Available
-                buildSavedAuthData()
-            } else {
-                _authState.value = AuthState.Unavailable
-            }
+    private fun updateAuthState(force: Boolean = false) {
+        // Guard against overlapping checks, but allow a forced retry to break out of a
+        // hung Fetching/Verifying/Pending state (retry() cancels authJob first).
+        if (!force && (_authState.value == AuthState.Fetching ||
+                _authState.value == AuthState.Verifying ||
+                _authState.value is AuthState.PendingAccountManager ||
+                _authState.value == AuthState.Available)
+        ) {
+            return
+        }
+        if (authProvider.isSessionRepeatedlyRejected) {
+            Log.w(TAG, "Session rejected again right after re-validation, not retrying")
+            _authState.value = AuthState.Failed(context.getString(R.string.session_rejected))
+        } else if (AccountProvider.isLoggedIn(context)) {
+            _authState.value = AuthState.Available
+            buildSavedAuthData()
+        } else {
+            _authState.value = AuthState.Unavailable
         }
     }
 
-    private fun buildSavedAuthData() = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            if (authProvider.isSavedAuthDataValid()) {
-                _authState.value = AuthState.Valid
-            } else {
-                // Generate and validate new auth
-                when (AccountProvider.getAccountType(context)) {
-                    AccountType.ANONYMOUS -> buildAnonymousAuthData()
-
-                    AccountType.GOOGLE -> {
-                        val email = AccountProvider.getLoginEmail(context)
-                        val tokenPair = AccountProvider.getLoginToken(context)
-
-                        if (email == null || tokenPair == null) {
-                            throw Exception()
-                        }
-
-                        when (tokenPair.second) {
-                            TokenType.AAS -> {
-                                buildGoogleAuthData(email, tokenPair.first, TokenType.AAS)
+    private fun buildSavedAuthData() {
+        authJob?.cancel()
+        authJob = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                withTimeout(SESSION_TIMEOUT_MS) {
+                    if (authProvider.isSavedAuthDataValid()) {
+                        _authState.value = AuthState.Valid
+                    } else {
+                        // Generate and validate new auth (inlined so the timeout covers
+                        // the whole validate + re-mint, not just the validate half).
+                        when (AccountProvider.getAccountType(context)) {
+                            AccountType.ANONYMOUS -> {
+                                _authState.value = AuthState.Fetching
+                                val session =
+                                    authProvider.buildAnonymousAuthData().getOrThrow()
+                                verifyAndSaveAuth(session, AccountType.ANONYMOUS)
                             }
 
-                            TokenType.AUTH -> {
-                                _authState.value =
-                                    AuthState.PendingAccountManager(email, tokenPair.first)
+                            AccountType.GOOGLE -> {
+                                val email = AccountProvider.getLoginEmail(context)
+                                val tokenPair = AccountProvider.getLoginToken(context)
+
+                                if (email == null || tokenPair == null) {
+                                    throw IllegalStateException("Missing saved Google credentials")
+                                }
+
+                                when (tokenPair.second) {
+                                    TokenType.AAS -> {
+                                        _authState.value = AuthState.Fetching
+                                        val session = authProvider.buildGoogleAuthData(
+                                            email,
+                                            tokenPair.first,
+                                            TokenType.AAS
+                                        ).getOrThrow()
+                                        verifyAndSaveAuth(session, AccountType.GOOGLE)
+                                    }
+
+                                    TokenType.AUTH -> {
+                                        _authState.value =
+                                            AuthState.PendingAccountManager(email, tokenPair.first)
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            } catch (exception: TimeoutCancellationException) {
+                Log.e(TAG, "Session check timed out", exception)
+                _authState.value = AuthState.Failed(context.getString(R.string.session_timeout))
+            } catch (exception: Exception) {
+                val error = when (exception) {
+                    is UnknownHostException -> context.getString(R.string.title_no_network)
+                    is IOException -> context.getString(R.string.server_unreachable)
+                    is IllegalStateException -> context.getString(R.string.bad_request)
+                    else -> context.getString(R.string.bad_request)
+                }
+                _authState.value = AuthState.Failed(error)
             }
-        } catch (exception: Exception) {
-            val error = when (exception) {
-                is UnknownHostException -> context.getString(R.string.title_no_network)
-                is IOException -> context.getString(R.string.server_unreachable)
-                else -> context.getString(R.string.bad_request)
-            }
-            _authState.value = AuthState.Failed(error)
         }
     }
 

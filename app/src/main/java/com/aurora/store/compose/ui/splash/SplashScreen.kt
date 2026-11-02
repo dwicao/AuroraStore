@@ -14,8 +14,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -60,6 +62,7 @@ import com.aurora.store.util.CertUtil.GOOGLE_ACCOUNT_TYPE
 import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.Preferences
 import com.aurora.store.viewmodel.auth.AuthViewModel
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,6 +83,33 @@ fun SplashScreen(
 
     var anonymousLoading by remember { mutableStateOf(false) }
     var googleLoading by remember { mutableStateOf(false) }
+
+    // Watchdog: if a validation hangs (slow/dead network, dead AccountManager callback),
+    // the ViewModel now times out at ~35s — but surface a Retry button anyway so the user
+    // is never stuck on a spinner with no recourse (e.g. airplane mode toggled mid-check).
+    var stuck by remember { mutableStateOf(false) }
+
+    val isLoading = authState == AuthState.Init ||
+        authState == AuthState.Available ||
+        authState == AuthState.Fetching ||
+        authState == AuthState.Verifying ||
+        authState is AuthState.PendingAccountManager
+
+    LaunchedEffect(authState) {
+        if (isLoading) {
+            delay(STUCK_TIMEOUT_MS)
+            // Re-read the latest state after the grace period; the captured isLoading
+            // is stale by design (it reflects the state when the effect launched).
+            val stillLoading = authState == AuthState.Init ||
+                authState == AuthState.Available ||
+                authState == AuthState.Fetching ||
+                authState == AuthState.Verifying ||
+                authState is AuthState.PendingAccountManager
+            if (stillLoading) stuck = true
+        } else {
+            stuck = false
+        }
+    }
 
     val accountLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -137,16 +167,11 @@ fun SplashScreen(
     }
 
     LaunchedEffect(isOnline) {
-        if (isOnline && authState is AuthState.Failed) {
+        if (isOnline && (authState is AuthState.Failed || stuck)) {
+            stuck = false
             viewModel.retry()
         }
     }
-
-    val isLoading = authState == AuthState.Init ||
-        authState == AuthState.Available ||
-        authState == AuthState.Fetching ||
-        authState == AuthState.Verifying ||
-        authState is AuthState.PendingAccountManager
 
     val showLoginButtons = authState is AuthState.Unavailable ||
         authState is AuthState.Failed ||
@@ -219,9 +244,11 @@ fun SplashScreen(
                 contentAlignment = Alignment.Center
             ) {
                 val (statusText, statusColor) = when {
-                    !isOnline && showLoginButtons -> stringResource(R.string.title_no_network) to
+                    !isOnline -> stringResource(R.string.title_no_network) to
                         MaterialTheme.colorScheme.error
                     authState is AuthState.Failed -> (authState as AuthState.Failed).status to
+                        MaterialTheme.colorScheme.error
+                    stuck -> stringResource(R.string.session_taking_long) to
                         MaterialTheme.colorScheme.error
                     else -> statusText(authState) to MaterialTheme.colorScheme.onSurfaceVariant
                 }
@@ -240,10 +267,34 @@ fun SplashScreen(
                 contentAlignment = Alignment.TopCenter
             ) {
                 if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        strokeWidth = 2.dp
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(
+                            dimensionResource(R.dimen.spacing_small)
+                        )
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp
+                        )
+                        // After the watchdog fires (or when offline), offer an explicit
+                        // retry instead of leaving the user on a dead spinner.
+                        if (stuck || !isOnline) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            OutlinedButton(
+                                modifier = Modifier.width(
+                                    dimensionResource(R.dimen.width_button)
+                                ),
+                                enabled = isOnline,
+                                onClick = {
+                                    stuck = false
+                                    viewModel.retry()
+                                }
+                            ) {
+                                Text(stringResource(R.string.action_retry))
+                            }
+                        }
+                    }
                 } else if (showLoginButtons) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -312,3 +363,5 @@ private fun statusText(authState: AuthState): String = when (authState) {
     is AuthState.PendingAccountManager -> stringResource(R.string.requesting_new_session)
     is AuthState.Failed -> authState.status
 }
+
+private const val STUCK_TIMEOUT_MS = 30_000L

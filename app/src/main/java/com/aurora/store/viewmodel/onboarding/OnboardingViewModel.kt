@@ -21,6 +21,8 @@ import com.aurora.store.AuroraApp
 import com.aurora.store.BuildConfig
 import com.aurora.store.data.event.InstallerEvent
 import com.aurora.store.data.helper.UpdateHelper
+import com.aurora.store.data.installer.AppInstaller
+import com.aurora.store.data.model.Installer
 import com.aurora.store.data.model.UpdateMode
 import com.aurora.store.data.providers.BlacklistProvider
 import com.aurora.store.data.work.CacheWorker
@@ -129,7 +131,14 @@ class OnboardingViewModel @Inject constructor(
 
         /*Installer*/
         save(PREFERENCE_AUTO_DELETE, true)
-        save(PREFERENCE_INSTALLER_ID, 0)
+        // Shizuku as the default installer: after a clear-data the Shizuku manager often
+        // still holds our grant, so keep installing via Shizuku instead of resetting to
+        // session and forcing the user to re-pick it.
+        if (AppInstaller.hasShizukuOrSui(this) && AppInstaller.hasShizukuPerm(this)) {
+            save(PREFERENCE_INSTALLER_ID, Installer.SHIZUKU.ordinal)
+        } else {
+            save(PREFERENCE_INSTALLER_ID, Installer.SESSION.ordinal)
+        }
 
         /*Updates*/
         save(PREFERENCE_UPDATES_EXTENDED, false)

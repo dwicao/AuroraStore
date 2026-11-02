@@ -107,9 +107,12 @@ class InstallerViewModel @Inject constructor(
     /**
      * Completes a Shizuku selection waiting on a permission granted since, on return from the
      * manager's screen. Acts only once the permission is held, so a denial does not loop.
+     * Also picks up a grant given outside this screen (e.g. in the Shizuku manager) so the
+     * stored installer follows the permission without the user having to re-pick it.
      */
     fun onResumed() {
         refreshInstallers()
+        AppInstaller.maybeSelectShizukuAsDefault(context)
         if (!awaitingShizukuGrant) return
         if (AppInstaller.hasShizukuPerm(context)) save(Installer.SHIZUKU)
     }

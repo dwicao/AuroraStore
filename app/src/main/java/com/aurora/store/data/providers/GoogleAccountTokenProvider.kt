@@ -30,8 +30,10 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 
 /**
  * Wraps the system [AccountManager] for Google/microG accounts: enumerating the accounts present
@@ -41,6 +43,10 @@ import kotlinx.coroutines.withContext
 class GoogleAccountTokenProvider @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
+
+    companion object {
+        private const val TOKEN_TIMEOUT_MS = 25_000L
+    }
 
     /** E-mails of Google accounts present on-device (e.g. provided by microG). */
     fun systemGoogleAccountEmails(): List<String> = try {
@@ -56,13 +62,23 @@ class GoogleAccountTokenProvider @Inject constructor(
      * Mints a Play Store AUTH token for [email]. Pass an [activity] for interactive requests
      * (e.g. adding an account) so microG can show any consent UI it needs; without one a request
      * that needs consent fails and the system posts a notification instead.
+     *
+     * The non-interactive [AccountManager] round-trip is bounded by [TOKEN_TIMEOUT_MS]: a dead
+     * microG/account whose callback never fires used to hang the splash screen forever. The
+     * interactive consent screen itself is user-driven and is not timed out.
      */
     suspend fun fetchAuthToken(
         email: String,
         oldToken: String? = null,
         activity: Activity? = null
     ): String {
-        val result = requestAuthToken(email, oldToken, notifyAuthFailure = activity == null)
+        val result = try {
+            withTimeout(TOKEN_TIMEOUT_MS) {
+                requestAuthToken(email, oldToken, notifyAuthFailure = activity == null)
+            }
+        } catch (e: TimeoutCancellationException) {
+            throw IllegalStateException("Timed out waiting for account manager", e)
+        }
         result.getString(AccountManager.KEY_AUTHTOKEN)?.let { return it }
 
         val consentIntent = BundleCompat.getParcelable(
@@ -76,8 +92,13 @@ class GoogleAccountTokenProvider @Inject constructor(
         }
 
         withContext(Dispatchers.Main) { awaitConsent(componentActivity, consentIntent) }
-        return requestAuthToken(email, null, notifyAuthFailure = false)
-            .getString(AccountManager.KEY_AUTHTOKEN)
+        return try {
+            withTimeout(TOKEN_TIMEOUT_MS) {
+                requestAuthToken(email, null, notifyAuthFailure = false)
+            }
+        } catch (e: TimeoutCancellationException) {
+            throw IllegalStateException("Timed out waiting for account manager", e)
+        }.getString(AccountManager.KEY_AUTHTOKEN)
             ?: throw IllegalStateException("Auth token is null")
     }
 
