@@ -67,21 +67,24 @@ jobs:
           fi
 
       - name: Check gplayapi freshness
+        # Informational only — never fails the workflow. A newer upstream release is a
+        # prompt to review the diff before bumping, not a breakage signal by itself.
         run: |
           set -uo pipefail
-          PINNED="$(grep -E '^gplayapi' gradle/libs.versions.toml | grep -oE '[0-9.]+' | head -n1)"
+          PINNED="$(grep -E '^gplayapi' gradle/libs.versions.toml | grep -oE '[0-9.]+' | head -n1 || true)"
           LATEST="$(curl -s --max-time 20 \
             'https://search.maven.org/solrsearch/select?q=g:%22com.auroraoss%22+AND+a:%22gplayapi%22&rows=1&wt=json' \
-            | grep -oE '"latestVersion":"[^"]+"' | cut -d'"' -f4)"
+            | grep -oE '"latestVersion":"[^"]+"' | cut -d'"' -f4 || true)"
           echo "pinned=$PINNED latest=$LATEST"
           {
             echo "### gplayapi version check"
             echo "- pinned in repo: \`$PINNED\`"
-            echo "- latest on Maven Central: \`$LATEST\`"
+            echo "- latest on Maven Central: \`${LATEST:-lookup failed}\`"
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -n "$LATEST" ] && [ "$PINNED" != "$LATEST" ]; then
             echo "::warning::gplayapi $LATEST available (repo pins $PINNED) — review the diff before bumping"
           fi
+          exit 0
 
   unit-tests:
     runs-on: ubuntu-latest

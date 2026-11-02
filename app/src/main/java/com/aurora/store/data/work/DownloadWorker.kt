@@ -766,10 +766,12 @@ class DownloadWorker @AssistedInject constructor(
                 totalBytes += patchFile.length() - accounted
                 accounted = patchFile.length()
             } else {
-                transfer(patch.url, patchFile, accounted, patch.maxSize) { length ->
+                // Named argument: the trailing-lambda syntax no longer applies since
+                // transfer() grew a non-function last parameter (fromScratch).
+                transfer(patch.url, patchFile, accounted, patch.maxSize, onLength = { length ->
                     totalBytes += length - accounted
                     accounted = length
-                }
+                })
             }
 
             withContext(Dispatchers.IO) {
