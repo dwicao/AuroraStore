@@ -102,11 +102,18 @@ jobs:
           fi
           if [ -z "${KEYSTORE_NAME}" ]; then KEYSTORE_NAME="release.keystore"; fi
           echo "${KEYSTORE_B64}" | base64 --decode > "app/${KEYSTORE_NAME}"
+          # NOTE: app/build.gradle.kts checks plain File("signing.properties"), which
+          # resolves against the JVM working dir (repo root, where gradlew runs),
+          # while storeFile = file(...) resolves against the app/ module dir.
+          # So the properties file must exist at the repo root, with STORE_FILE
+          # expressed relative to app/. A copy is also placed in app/ for good
+          # measure (e.g. when Gradle is invoked from inside app/).
           {
             echo "STORE_FILE=${KEYSTORE_NAME}"
             echo "KEY_ALIAS=${KEY_ALIAS}"
             echo "KEY_PASSWORD=${KEY_PASSWORD}"
-          } > app/signing.properties
+          } > signing.properties
+          cp signing.properties app/signing.properties
           echo "signing.properties created for alias '${KEY_ALIAS}'"
 
       - name: Grant execute permission for gradlew
@@ -123,7 +130,13 @@ jobs:
           APK_DIR="app/build/outputs/apk/${FLAVOR_LOWER}/release"
           echo "Listing ${APK_DIR}:"
           ls -lh "${APK_DIR}"
-          APK_PATH="$(ls "${APK_DIR}"/app-"${FLAVOR_LOWER}"-release.apk | head -n1)"
+          if [ -f "${APK_DIR}/app-${FLAVOR_LOWER}-release.apk" ]; then
+            APK_PATH="${APK_DIR}/app-${FLAVOR_LOWER}-release.apk"
+          else
+            echo "::error::Signed APK not found — the build produced an unsigned APK. signing.properties was not picked up; check the keystore restore step."
+            ls -lh "${APK_DIR}"
+            exit 1
+          fi
           echo "path=${APK_PATH}" >> "$GITHUB_OUTPUT"
           echo "APK: ${APK_PATH}"
 
