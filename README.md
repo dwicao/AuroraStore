@@ -13,6 +13,10 @@ Aurora Store works exactly like a door or a browser, allowing you to log in to y
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="90">](https://f-droid.org/packages/com.aurora.store/)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="90">](https://apt.izzysoft.de/fdroid/index/apk/com.aurora.store)
 
+## Screenshots
+
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-01.png" height="400"> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-03.png" height="400"> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-07.png" height="400"> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-08.png" height="400">
+
 ## Features
 
 - FOSS: Has GPLv3 licence
@@ -191,13 +195,6 @@ Please visit [Aurora Wiki](https://gitlab.com/AuroraOSS/AuroraStore/-/wikis/home
 - `android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION` to silently update apps
 - `android.permission.POST_NOTIFICATIONS` to notify user about ongoing downloads, available updates, and errors (optional)
 - `android.permission.USE_CREDENTIALS` to allow users to sign into their personal Google account via microG
-
-## Screenshots
-
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-01.png" height="400">
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-03.png" height="400">
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-07.png" height="400">
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-08.png" height="400">
 
 ## Translations
 
