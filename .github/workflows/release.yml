@@ -166,3 +166,85 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.apk.outputs.path }}
+
+  # Keeps updates.json (the in-app self-update feed) in sync with the release that
+  # was just published: version from the tag, versionCode from that tag's
+  # build.gradle.kts, size + sha256 from the uploaded APK, changelog from the
+  # release notes. Runs only for tag releases; pushing to master triggers no other
+  # workflow, so this cannot loop.
+  update-feed:
+    needs: [build-release]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Refresh updates.json from the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # Wait for the release asset (uploaded by the build job above).
+          for i in $(seq 1 20); do
+            ASSET_URL="$(gh release view "$TAG" --repo "$REPO" --json assets \
+              --jq '.assets[] | select(.name | endswith(".apk")) | .url' | head -n1 || true)"
+            if [ -n "$ASSET_URL" ]; then break; fi
+            echo "waiting for release asset... ($i)"
+            sleep 30
+          done
+          if [ -z "${ASSET_URL:-}" ]; then
+            echo "::error::no APK asset found on release $TAG"
+            exit 1
+          fi
+          gh release download "$TAG" --repo "$REPO" --pattern "*.apk" --dir /tmp/feed-apk
+          APK="$(ls /tmp/feed-apk/*.apk | head -n1)"
+          APK_NAME="$(basename "$APK")"
+          SIZE="$(stat -c%s "$APK")"
+          SHA256="$(sha256sum "$APK" | cut -d' ' -f1)"
+          VERSION_CODE="$(git show "$TAG:app/build.gradle.kts" \
+            | grep -oE 'versionCode = [0-9]+' | grep -oE '[0-9]+' | head -n1)"
+          VERSION_NAME="${TAG#v}"
+          BODY="$(gh release view "$TAG" --repo "$REPO" --json body --jq .body)"
+          python3 - "$TAG" "$VERSION_NAME" "$VERSION_CODE" "$SIZE" "$SHA256" "$BODY" "$APK_NAME" <<'EOF'
+          import json, sys
+          tag, version_name, version_code, size, sha256, body, apk_name = sys.argv[1:8]
+          feed = {
+              "version_name": version_name,
+              "version_code": version_code,
+              "download_url": f"https://github.com/dwicao/AuroraStore/releases/download/{tag}/{apk_name}",
+              "icon_url": "",
+              "sha1": "",
+              "sha256": sha256,
+              "changelog": body.strip() or f"Changelog : {tag} (fork)",
+              "size": size,
+              "last_commit": "",
+              "updated_on": "",
+              "timestamp": "0",
+          }
+          with open("updates.json", "w") as f:
+              json.dump(feed, f, indent = 2, ensure_ascii = False)
+              f.write("\n")
+          print(f"updates.json refreshed for {tag} (code {version_code}, {size} bytes)")
+          EOF
+
+      - name: Commit refreshed feed
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add updates.json
+          if git diff --cached --quiet; then
+            echo "updates.json unchanged"
+            exit 0
+          fi
+          git commit -m "Feed ${{ github.ref_name }} (auto-updated from release)"
+          git pull --rebase origin master
+          git push origin HEAD:master
