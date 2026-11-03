@@ -91,25 +91,42 @@ class SpoofProvider @Inject constructor(
      * [setVendingVersion] write into it.
      */
     val nativeDeviceProperties: Properties
-        get() = Properties().apply { putAll(cachedNativeDeviceProperties) }
+        get() = Properties().apply { putAll(readNativeDeviceProperties()) }
 
     /**
-     * Read once per process. [deviceProfile] backs every Play call through gplayapi's session
-     * supplier, and [NativeDeviceProperties.read] enumerates every EGL config, so reading it
-     * per call cost GPU-driver work on each request.
+     * The running device's real properties, read once per process: [deviceProfile] backs
+     * every Play call through gplayapi's session supplier, and
+     * [NativeDeviceProperties.read] enumerates every EGL config, so reading it per call
+     * costs GPU-driver work on each request.
      *
-     * Deliberately never refreshed mid-process: gplayapi only uses the signed-in session while
-     * its device fingerprint matches this profile, so a profile that moved under a running
-     * process (a display-size change, a keyboard plugged in) would silently drop every call to
-     * an anonymous session until restart. Frozen, the session keeps matching; the next cold
-     * start sees the new profile and AuthProvider re-authenticates against it.
+     * A failed read must not poison the process: `by lazy` would cache the exception
+     * and break every Play call until restart, so a failure falls back to an empty
+     * profile here and [deviceProfile]'s validation degrades that to the default
+     * profile with a log line.
+     *
+     * Deliberately never refreshed mid-process: gplayapi only uses the signed-in session
+     * while its device fingerprint matches this profile, so a profile that moved under a
+     * running process (a display-size change, a keyboard plugged in) would silently drop
+     * every call to an anonymous session until restart. Frozen, the session keeps matching;
+     * the next cold start sees the new profile and AuthProvider re-authenticates against it.
      */
-    private val cachedNativeDeviceProperties: Properties by lazy {
-        val properties = NativeDeviceProperties.read(context)
-        properties.setProperty("GSF.version", PINNED_GSF_VERSION)
-        properties.setProperty("Vending.version", PINNED_VENDING_VERSION)
-        properties.setProperty("Vending.versionString", PINNED_VENDING_VERSION_STRING)
-        if (isHuawei) stripHuaweiProperties(properties) else properties
+    @Volatile
+    private var cachedNativeDeviceProperties: Properties? = null
+
+    private fun readNativeDeviceProperties(): Properties {
+        cachedNativeDeviceProperties?.let { return it }
+        val fresh = runCatching {
+            val properties = NativeDeviceProperties.read(context)
+            properties.setProperty("GSF.version", PINNED_GSF_VERSION)
+            properties.setProperty("Vending.version", PINNED_VENDING_VERSION)
+            properties.setProperty("Vending.versionString", PINNED_VENDING_VERSION_STRING)
+            if (isHuawei) stripHuaweiProperties(properties) else properties
+        }.getOrElse { exception ->
+            Log.e(TAG, "Failed to read native device properties, using empty profile", exception)
+            Properties()
+        }
+        cachedNativeDeviceProperties = fresh
+        return fresh
     }
 
     val locale: Locale
@@ -188,10 +205,25 @@ class SpoofProvider @Inject constructor(
             .setRegion(Preferences.getString(context, LOCALE_SPOOF_COUNTRY))
             .build()
 
+    /**
+     * The stored custom spoof. A file that no longer parses (hand-edited, truncated by
+     * a crash mid-write) used to throw out of [deviceProperties] — above
+     * [deviceProfile]'s validation — and break every Play call. Instead the corrupt
+     * spoof is disabled here with a toast, falling back to the real device.
+     */
     private val spoofDeviceProperties: Properties
-        get() = json.decodeFromString<Properties>(
-            Preferences.getString(context, DEVICE_SPOOF_PROPERTIES)
-        )
+        get() = try {
+            json.decodeFromString<Properties>(
+                Preferences.getString(context, DEVICE_SPOOF_PROPERTIES)
+            )
+        } catch (exception: Exception) {
+            Log.e(TAG, "Stored device spoof is corrupt, disabling it", exception)
+            if (isDeviceSpoofEnabled) {
+                removeSpoofDeviceProperties()
+                context.toast(R.string.toast_spoof_device_invalid)
+            }
+            nativeDeviceProperties
+        }
 
     fun setSpoofLocale(locale: Locale) {
         Preferences.putBoolean(context, LOCALE_SPOOF_ENABLED, true)

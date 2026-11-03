@@ -321,14 +321,18 @@ class UpdateWorker @AssistedInject constructor(
         }
 
     /**
-     * Fetches Aurora Store's own update from the bundled release/nightly feed and maps
-     * it onto an [App] so it joins the regular update list. Nightly version codes never
-     * bump, so newness is decided by the build timestamp there; release uses the version
-     * code. Best-effort: any failure logs and yields no update.
+     * Fetches Aurora Store's own update and maps it onto an [App] so it joins the
+     * regular update list. Release builds read this fork's own feed
+     * ([Constants.UPDATE_URL_FORK]) — the upstream feed would offer upstream-signed
+     * APKs that cannot install over this fork's signature. Nightly keeps the
+     * upstream nightly feed. Newness is decided by version code on release;
+     * best-effort: any failure logs and yields no update.
      */
     private suspend fun getSelfUpdate(): App? = withContext(Dispatchers.IO) {
         val updateUrl = when (BuildType.CURRENT) {
-            BuildType.RELEASE -> Constants.UPDATE_URL_VANILLA
+            // NIGHTLY intentionally left on the upstream feed: this fork ships no
+            // nightlies, and BuildType.NIGHTLY never reaches release users.
+            BuildType.RELEASE -> Constants.UPDATE_URL_FORK
             BuildType.NIGHTLY -> Constants.UPDATE_URL_NIGHTLY
             else -> {
                 Log.i(TAG, "Self-updates are not available for this build!")

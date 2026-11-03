@@ -29,6 +29,15 @@ object Constants {
     const val UPDATE_URL_NIGHTLY =
         "https://auroraoss.com/downloads/AuroraStore/Feeds/nightly_feed.json"
 
+    /**
+     * This fork's own update feed: the `updates.json` at the repo root, served raw by
+     * GitHub. Same [SelfUpdate] schema as upstream's feed. A maintainer updates it on
+     * every release (version code must exceed the shipped one, plus the APK's size and
+     * SHA-256) — see the README's fork section for the ritual.
+     */
+    const val UPDATE_URL_FORK =
+        "https://raw.githubusercontent.com/dwicao/AuroraStore/master/updates.json"
+
     // Channel IDs carry a version suffix where the importance changed from a previous
     // release: Android ignores importance edits on an already-created channel, so a new ID
     // is the only way to roll out a lower importance. Retired IDs are listed in

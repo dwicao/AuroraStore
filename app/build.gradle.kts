@@ -65,7 +65,7 @@ configure<ApplicationExtension> {
             version = release(37)
         }
 
-        versionCode = 76
+        versionCode = 77
         versionName = "4.8.4"
 
         testInstrumentationRunner = "com.aurora.store.HiltInstrumentationTestRunner"
@@ -203,6 +203,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.navigation3)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.paging.runtime)
 

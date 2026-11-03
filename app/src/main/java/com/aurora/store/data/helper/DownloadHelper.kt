@@ -37,12 +37,18 @@ import com.aurora.store.util.PathUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Helper class to work with the [DownloadWorker].
@@ -61,6 +67,14 @@ class DownloadHelper @Inject constructor(
         private const val DOWNLOAD_APP = "DOWNLOAD_APP"
         private const val DOWNLOAD_UPDATE = "DOWNLOAD_UPDATE"
         private const val VERSION_CODE = "VERSION_CODE"
+
+        /**
+         * How often a lingering QUEUED row is re-checked while anything waits. Only a
+         * dropped expedited request strands a row with no worker behind it (and no DB
+         * change to wake the observer), so a slow poll that runs solely while the
+         * queue is non-empty is the cheapest net that still recovers within a minute.
+         */
+        private const val STUCK_QUEUE_CHECK_INTERVAL_MS = 60_000L
     }
 
     // Single stable StateFlow shared across consumers. Previously a `get()` accessor that
@@ -115,6 +129,7 @@ class DownloadHelper @Inject constructor(
         }.invokeOnCompletion {
             observeDownloads()
             observeInstalls()
+            watchStuckQueue()
         }
     }
 
@@ -215,6 +230,59 @@ class DownloadHelper @Inject constructor(
                 Log.e(TAG, "Failed to enqueue download worker", exception)
             }
         }.launchIn(AuroraApp.scope)
+    }
+
+    /**
+     * Safety net for the serial queue: an expedited request dropped by quota
+     * ([OutOfQuotaPolicy.DROP_WORK_REQUEST]) leaves a QUEUED row with no worker behind
+     * it, and since nothing then changes the row, [observeDownloads] never fires again
+     * — the download would sit queued forever. While anything waits, re-verify once a
+     * minute and re-trigger the oldest waiter that has no live work. Idle the rest of
+     * the time: the flow below only ticks while the queue is non-empty.
+     */
+    private fun watchStuckQueue() {
+        AuroraApp.scope.launch {
+            downloadDao.downloads()
+                .map { list -> list.any { it.status == DownloadStatus.QUEUED } }
+                .distinctUntilChanged()
+                .collectLatest { hasQueued ->
+                    while (hasQueued) {
+                        delay(STUCK_QUEUE_CHECK_INTERVAL_MS)
+                        val current = runCatching {
+                            downloadDao.downloads().first()
+                        }.getOrNull() ?: break
+                        // Another download running means the queue is draining normally;
+                        // a paused row never blocks it (PAUSED is not processing).
+                        if (current.any { it.status in DownloadStatus.processing }) continue
+                        val oldest = current.firstOrNull {
+                            it.status == DownloadStatus.QUEUED
+                        } ?: break
+                        if (!hasLiveWork(oldest)) {
+                            Log.w(
+                                TAG,
+                                "Re-triggering stuck queued download for ${oldest.packageName}"
+                            )
+                            trigger(oldest)
+                        }
+                    }
+                }
+        }
+    }
+
+    /**
+     * Whether the unique work for [download] still exists and hasn't finished. Errors
+     * fail open (assumed live): a duplicate trigger under KEEP is harmless, while a
+     * missed stuck row would hang the queue.
+     */
+    private suspend fun hasLiveWork(download: Download): Boolean = withContext(Dispatchers.IO) {
+        runCatching {
+            WorkManager.getInstance(context)
+                .getWorkInfosForUniqueWork(
+                    "$DOWNLOAD_WORKER/${download.packageName}/${download.versionCode}"
+                )
+                .get(10, TimeUnit.SECONDS)
+                .any { !it.state.isFinished }
+        }.getOrDefault(true)
     }
 
     /**

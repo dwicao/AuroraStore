@@ -36,6 +36,7 @@ preference = "1.2.1"
 processPhoenix = "3.0.0"
 protobufJavalite = "4.35.1"
 room = "2.8.4"
+securityCrypto = "1.0.0"
 serialization = "1.11.0"
 shizuku = "13.1.5"
 truth = "1.4.5"
@@ -66,6 +67,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
