@@ -43,8 +43,8 @@ Aurora Store works exactly like a door or a browser, allowing you to log in to y
 
 ## Fork differences (vs upstream AuroraOSS)
 
-This fork ships a few changes on top of upstream, mostly around reliability.
-Upstream behavior is unchanged everywhere else.
+This fork ships changes on top of upstream, mostly around reliability, downloads
+and security. Upstream behavior is unchanged everywhere else.
 
 - **Splash/auth hardening.** Session validation and re-mint are bounded by
   timeouts and cancellable, the splash screen gains a watchdog with an explicit
@@ -61,13 +61,25 @@ Upstream behavior is unchanged everywhere else.
 - **Play API boundary (`PlayGateway`).** All Play API calls go through a single
   choke point mapping failures onto a small `PlayError` taxonomy, emitting
   session-expired redirects uniformly and counting unexpected failures so an
-  upstream Google change shows up in logcat before it fully breaks. Background
+  upstream Google change shows up in logcat before it fully breaks. Previously
+  uncaught call sites (unarchive receiver, search suggestions, installed-list
+  details, capability probe) no longer crash on session rejection. Background
   workers (auth refresh, update check, per-account sessions) and the Accounts
   screen operations are time-bounded the same way.
 - **Dispenser health tracking.** Anonymous logins pick the healthiest dispenser
   (recent failures are skipped with exponential backoff) instead of pure random,
   the Dispenser screen shows per-URL backoff status, and a missing dispenser
   configuration points at Settings instead of a generic internal error.
+  Dispenser URLs must be HTTPS at every layer (dialog, ViewModel
+  normalization, network call) so tokens are never minted over cleartext.
+- **Auth material isolated from backups.** Sign-in state, account type, e-mail,
+  AAS/AUTH tokens, the saved session and the microG flag live in a dedicated
+  `auth_prefs.xml`, excluded from cloud and device-transfer backups in both
+  rules files (existing installs migrate transparently on next write). A logging
+  audit confirmed no tokens are printed or surfaced anywhere on the auth paths.
+  Note: the Room account rows still mirror these secrets; full separation would
+  require moving the account table to its own database, which was deliberately
+  deferred to avoid a data migration.
 - **Startup account reconciliation.** On cold start the Room account DB (source
   of truth) is reconciled against the legacy SharedPreferences mirror, and the
   stale sibling token is cleared on login — fixing drift from backup restores or
@@ -76,6 +88,12 @@ Upstream behavior is unchanged everywhere else.
   instead of looping, transient 5xx responses are retried with backoff, and the
   Exodus Privacy integration retries transient failures instead of failing
   silently on the first attempt.
+- **Pause/resume downloads.** Any active download can be paused per app (row,
+  bottom sheet, or app details screen) and resumed later from its partial files;
+  "pause all / resume all" exists in the Downloads menu and in each Updates
+  section header. Paused rows leave the serial download slot, are never
+  silently resumed by re-enqueues or retries, survive CacheWorker cleanups, and
+  the resume button seeds the displayed progress from bytes already on disk.
 - **CI.** `.github/workflows/release.yml` builds a signed release APK and
   attaches it to the GitHub Release on `v*` tags;
   `.github/workflows/nightly-health.yml` runs daily dispenser/Play probes, a
