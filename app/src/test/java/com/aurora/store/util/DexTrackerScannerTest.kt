@@ -73,7 +73,8 @@ class DexTrackerScannerTest {
     @Test
     fun exactClassNameMatches() {
         val apk = apkWith("classes.dex" to syntheticDex("Lcom/example/Foo;", "Lcom/other/Bar;"))
-        val found = DexTrackerScanner.scanApk(apk, mapOf(7 to "com.other.Bar"))
+        // Note: the synthetic DEX declares a single type pointing at the first string.
+        val found = DexTrackerScanner.scanApk(apk, mapOf(7 to "com.example.Foo"))
         assertThat(found).containsExactly(7)
     }
 
