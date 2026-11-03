@@ -26,10 +26,18 @@ import com.aurora.store.data.model.Report
  * Composable to display app's privacy report from ExodusPrivacy, supposed to be used as a part
  * of the Column with proper vertical arrangement spacing in the AppDetailsScreen.
  * @param report Report from Exodus Privacy for the app
+ * @param failed Whether the last fetch actually failed (as opposed to simply having no
+ * report for this app, which is a neutral state, not an error)
+ * @param loaded Whether a fetch has finished at all; before that the row shows progress
  * @param onNavigateToDetailsExodus Callback when the user navigates
  */
 @Composable
-fun Privacy(report: Report?, onNavigateToDetailsExodus: (() -> Unit)? = null) {
+fun Privacy(
+    report: Report?,
+    failed: Boolean = false,
+    loaded: Boolean = false,
+    onNavigateToDetailsExodus: (() -> Unit)? = null
+) {
     SectionHeader(
         title = stringResource(R.string.details_privacy),
         subtitle = stringResource(R.string.exodus_powered),
@@ -37,7 +45,11 @@ fun Privacy(report: Report?, onNavigateToDetailsExodus: (() -> Unit)? = null) {
     )
 
     val reportStatus = when {
-        report == null -> stringResource(R.string.failed_to_fetch_report)
+        report == null && !loaded -> stringResource(R.string.exodus_progress)
+
+        report == null && failed -> stringResource(R.string.failed_to_fetch_report)
+
+        report == null -> stringResource(R.string.no_privacy_report)
 
         report.id == -1 -> stringResource(R.string.exodus_progress)
 

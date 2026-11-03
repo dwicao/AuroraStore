@@ -71,7 +71,15 @@ configure<ApplicationExtension> {
         testInstrumentationRunner = "com.aurora.store.HiltInstrumentationTestRunner"
         testInstrumentationRunnerArguments["disableAnalytics"] = "true"
 
-        buildConfigField("String", "EXODUS_API_KEY", "\"bbe6ebae4ad45a9cbacb17d69739799b8df2c7ae\"")
+        // The bundled key is a shared public token and may be revoked upstream at any
+        // time (a dead key only degrades the tracker report UI, never auth). Override
+        // with your own Exodus token via `exodusApiKey` Gradle property, the
+        // EXODUS_API_KEY environment variable, or the release workflow's secret.
+        val exodusApiKey = providers.gradleProperty("exodusApiKey").orNull
+            ?.ifBlank { null }
+            ?: providers.environmentVariable("EXODUS_API_KEY").orNull?.ifBlank { null }
+            ?: "bbe6ebae4ad45a9cbacb17d69739799b8df2c7ae"
+        buildConfigField("String", "EXODUS_API_KEY", "\"$exodusApiKey\"")
         buildConfigField("long", "BUILD_TIMESTAMP", "${lastCommitTimestamp.get()}L")
 
         missingDimensionStrategy("device", "vanilla")

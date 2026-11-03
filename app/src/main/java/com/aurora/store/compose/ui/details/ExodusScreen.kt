@@ -81,16 +81,31 @@ fun ExodusScreen(
     val app by appDetailsViewModel.app.collectAsStateWithLifecycle()
     val report by appDetailsViewModel.exodusReport.collectAsStateWithLifecycle()
     val reports by appDetailsViewModel.exodusReports.collectAsStateWithLifecycle()
+    val exodusFailed by appDetailsViewModel.exodusFailed.collectAsStateWithLifecycle()
+    val exodusLoaded by appDetailsViewModel.exodusLoaded.collectAsStateWithLifecycle()
 
     val topAppBarTitle = when {
         windowAdaptiveInfo.isWindowCompact -> app!!.displayName
         else -> stringResource(R.string.details_privacy)
     }
 
-    when (report) {
-        null -> {
+    when {
+        report == null && !exodusLoaded -> {
+            LoadingScreen(topAppBarTitle = topAppBarTitle)
+        }
+
+        report == null && exodusFailed -> {
             ScreenContentError(
                 topAppBarTitle = topAppBarTitle,
+                onRequestAnalysis = { context.browse("${EXODUS_SUBMIT_PAGE}${app!!.packageName}") }
+            )
+        }
+
+        report == null -> {
+            // Fetch worked but Exodus has no report for this app: not an error.
+            ScreenContentError(
+                topAppBarTitle = topAppBarTitle,
+                message = stringResource(R.string.exodus_no_report),
                 onRequestAnalysis = { context.browse("${EXODUS_SUBMIT_PAGE}${app!!.packageName}") }
             )
         }
@@ -103,6 +118,30 @@ fun ExodusScreen(
                 onViewReport = { selected -> context.browse(EXODUS_REPORT_URL + selected.id) },
                 onRequestAnalysis = { context.browse("${EXODUS_SUBMIT_PAGE}${app!!.packageName}") }
             )
+        }
+    }
+}
+
+@Composable
+private fun LoadingScreen(
+    topAppBarTitle: String? = null,
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2()
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = topAppBarTitle,
+                navigationIcon = windowAdaptiveInfo.adaptiveNavigationIcon
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
     }
 }
@@ -275,6 +314,7 @@ private fun ExodusReportDialog(
 @Composable
 private fun ScreenContentError(
     topAppBarTitle: String? = null,
+    message: String = stringResource(R.string.failed_to_fetch_report),
     onRequestAnalysis: () -> Unit = {},
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2()
 ) {
@@ -289,7 +329,7 @@ private fun ScreenContentError(
         Placeholder(
             modifier = Modifier.padding(paddingValues),
             painter = painterResource(R.drawable.ic_disclaimer),
-            message = stringResource(R.string.failed_to_fetch_report),
+            message = message,
             actionLabel = stringResource(R.string.action_request_analysis),
             onAction = onRequestAnalysis
         )

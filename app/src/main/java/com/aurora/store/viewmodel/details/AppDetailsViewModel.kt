@@ -139,6 +139,14 @@ class AppDetailsViewModel @Inject constructor(
     private val _exodusReports = MutableStateFlow<List<Report>>(emptyList())
     val exodusReports = _exodusReports.asStateFlow()
 
+    /** True once a reports fetch finished without usable data (network/HTTP/parse). */
+    private val _exodusFailed = MutableStateFlow(false)
+    val exodusFailed = _exodusFailed.asStateFlow()
+
+    /** True once a reports fetch finished, successfully or not. */
+    private val _exodusLoaded = MutableStateFlow(false)
+    val exodusLoaded = _exodusLoaded.asStateFlow()
+
     private val _versionLookupInProgress = MutableStateFlow(false)
     val versionLookupInProgress = _versionLookupInProgress.asStateFlow()
 
@@ -600,10 +608,19 @@ class AppDetailsViewModel @Inject constructor(
 
     private fun fetchExodusPrivacyReport(packageName: String) {
         viewModelScope.launch {
-            val reports = exodusRepository.fetchReports(packageName)
-                .sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
-            _exodusReport.value = reports.firstOrNull()
-            _exodusReports.value = reports
+            _exodusFailed.value = false
+            val result = exodusRepository.fetchReports(packageName)
+            _exodusLoaded.value = true
+            result
+                .onSuccess { reports ->
+                    val sorted = reports.sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
+                    _exodusReport.value = sorted.firstOrNull()
+                    _exodusReports.value = sorted
+                }
+                .onFailure {
+                    _exodusFailed.value = true
+                    _exodusReport.value = null
+                }
         }
     }
 
@@ -619,9 +636,18 @@ class AppDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             _versionLookupInProgress.value = true
             try {
-                _exodusReports.value = exodusRepository.fetchReports(packageName)
-                    .sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
+                exodusRepository.fetchReports(packageName)
+                    .onSuccess { reports ->
+                        val sorted = reports
+                            .sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
+                        _exodusReports.value = sorted
+                        _exodusReport.value = sorted.firstOrNull()
+                        _exodusFailed.value = false
+                    }
+                    .onFailure { _exodusFailed.value = true }
             } finally {
+                // Runs on cancellation too, so the progress flag cannot stick.
+                _exodusLoaded.value = true
                 _versionLookupInProgress.value = false
             }
         }

@@ -141,6 +141,8 @@ fun AppDetailsScreen(
     val userReview by viewModel.userReview.collectAsStateWithLifecycle()
     val favorite by viewModel.favourite.collectAsStateWithLifecycle()
     val exodusReport by viewModel.exodusReport.collectAsStateWithLifecycle()
+    val exodusFailed by viewModel.exodusFailed.collectAsStateWithLifecycle()
+    val exodusLoaded by viewModel.exodusLoaded.collectAsStateWithLifecycle()
     val dataSafetyReport by viewModel.dataSafetyReport.collectAsStateWithLifecycle()
     val categoryIconUrl by viewModel.categoryIconUrl.collectAsStateWithLifecycle()
     val plexusScores by viewModel.plexusScores.collectAsStateWithLifecycle()
@@ -214,6 +216,8 @@ fun AppDetailsScreen(
                     dataSafetyReport = dataSafetyReport,
                     categoryIconUrl = categoryIconUrl,
                     exodusReport = exodusReport,
+                    exodusFailed = exodusFailed,
+                    exodusLoaded = exodusLoaded,
                     onNavigateTo = onNavigateTo,
                     onLoadMoreCluster = { cluster -> viewModel.loadMoreCluster(cluster) },
                     accounts = accounts,
@@ -338,6 +342,8 @@ private fun ScreenContentApp(
     dataSafetyReport: DataSafetyReport? = null,
     categoryIconUrl: String? = null,
     exodusReport: Report? = null,
+    exodusFailed: Boolean = false,
+    exodusLoaded: Boolean = false,
     onNavigateTo: (Destination) -> Unit = {},
     onLoadMoreCluster: (cluster: StreamCluster) -> Unit = {},
     accounts: List<Account> = emptyList(),
@@ -822,6 +828,8 @@ private fun ScreenContentApp(
                     item {
                         Privacy(
                             report = exodusReport,
+                            failed = exodusFailed,
+                            loaded = exodusLoaded,
                             onNavigateToDetailsExodus = if (exodusReport != null &&
                                 exodusReport.id != -1
                             ) {

@@ -90,7 +90,13 @@ and security. Upstream behavior is unchanged everywhere else.
 - **Download hardening.** Range-rejected (416) partials restart from zero once
   instead of looping, transient 5xx responses are retried with backoff, and the
   Exodus Privacy integration retries transient failures instead of failing
-  silently on the first attempt.
+  silently on the first attempt. Its per-app reports distinguish "couldn't
+  fetch" (HTTP/network/parse failure, with the bundled shared API token
+  currently revoked upstream) from "no report for this app", instead of showing
+  a failure for both. To restore live reports, create a free token at
+  reports.exodus-privacy.eu.org and supply it as the `exodusApiKey` Gradle
+  property, the `EXODUS_API_KEY` environment variable, or the release
+  workflow's `EXODUS_API_KEY` secret — no code changes needed.
 - **Pause/resume downloads.** Any active download can be paused per app (row,
   bottom sheet, or app details screen) and resumed later from its partial files;
   "pause all / resume all" exists in the Downloads menu and in each Updates

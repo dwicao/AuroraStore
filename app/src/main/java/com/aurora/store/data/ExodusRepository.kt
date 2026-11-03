@@ -102,17 +102,26 @@ class ExodusRepository @Inject constructor(
         else -> false
     }
 
-    suspend fun fetchReports(packageName: String): List<Report> = withContext(Dispatchers.IO) {
-        try {
-            val response = withRetry("fetchReports") {
-                get("${Constants.EXODUS_SEARCH_URL}$packageName", authHeaders)
-            }
-            parseReports(response, packageName)
-        } catch (exception: Exception) {
-            Log.e(TAG, "Failed to fetch exodus reports", exception)
-            emptyList()
+    /**
+     * Reports for [packageName]. Failure (network, HTTP error such as a revoked API
+     * token, unparseable body) is a [Result.failure]; an empty list means the fetch
+     * worked but Exodus simply has no report for this app. Callers must render those
+     * two cases differently instead of lumping both into "failed".
+     */
+    suspend fun fetchReports(packageName: String): Result<List<Report>> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val response = withRetry("fetchReports") {
+                    get("${Constants.EXODUS_SEARCH_URL}$packageName", authHeaders)
+                }
+                if (response.isBlank()) return@runCatching emptyList()
+                parseReports(response, packageName).also {
+                    if (it.isEmpty()) {
+                        Log.w(TAG, "Exodus returned no usable report for $packageName")
+                    }
+                }
+            }.onFailure { Log.e(TAG, "Failed to fetch exodus reports", it) }
         }
-    }
 
     private fun parseReports(response: String, packageName: String): List<Report> = try {
         val exodusObject = JSONObject(response).getJSONObject(packageName)
@@ -171,7 +180,11 @@ class ExodusRepository @Inject constructor(
     suspend fun getNewTrackers(
         packageName: String,
         installedVersionCode: Long
-    ): List<ExodusTracker> = computeNewTrackers(fetchReports(packageName), installedVersionCode)
+    ): List<ExodusTracker> =
+        computeNewTrackers(
+            fetchReports(packageName).getOrDefault(emptyList()),
+            installedVersionCode
+        )
 
     suspend fun computeNewTrackers(
         reports: List<Report>,
