@@ -105,7 +105,7 @@ fun ExodusScreen(
             // Fetch worked but Exodus has no report for this app: not an error.
             ScreenContentError(
                 topAppBarTitle = topAppBarTitle,
-                message = stringResource(R.string.exodus_no_report),
+                message = stringResource(R.string.no_privacy_report),
                 onRequestAnalysis = { context.browse("${EXODUS_SUBMIT_PAGE}${app!!.packageName}") }
             )
         }
