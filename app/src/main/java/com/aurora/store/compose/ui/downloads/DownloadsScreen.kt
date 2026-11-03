@@ -91,9 +91,13 @@ fun DownloadsScreen(
         onSortChange = { viewModel.updateSort(it) },
         onNavigateTo = onNavigateTo,
         onCancelAll = { viewModel.cancelAll() },
+        onPauseAll = { viewModel.pauseAll() },
+        onResumeAll = { viewModel.resumeAll() },
         onForceClearAll = { viewModel.clearAll() },
         onClearFinished = { viewModel.clearFinished() },
         onCancel = { packageName -> viewModel.cancel(packageName) },
+        onPause = { packageName -> viewModel.pause(packageName) },
+        onResume = { packageName -> viewModel.resume(packageName) },
         onInstall = { download -> viewModel.install(download) },
         onClear = { download ->
             viewModel.clear(download.packageName, download.versionCode)
@@ -112,10 +116,14 @@ private fun ScreenContent(
     onSortChange: (DownloadSort) -> Unit = {},
     onNavigateTo: (Destination) -> Unit = {},
     onCancel: (packageName: String) -> Unit = {},
+    onPause: (packageName: String) -> Unit = {},
+    onResume: (packageName: String) -> Unit = {},
     onClear: (download: Download) -> Unit = {},
     onExport: (download: Download) -> Unit = {},
     onInstall: (download: Download) -> Unit = {},
     onCancelAll: () -> Unit = {},
+    onPauseAll: () -> Unit = {},
+    onResumeAll: () -> Unit = {},
     onForceClearAll: () -> Unit = {},
     onClearFinished: () -> Unit = {}
 ) {
@@ -147,6 +155,8 @@ private fun ScreenContent(
             onDismiss = { actionsTarget = null },
             onShowDetails = { onNavigateTo(Destination.AppDetails(target.packageName)) },
             onCancel = { onCancel(target.packageName) },
+            onPause = { onPause(target.packageName) },
+            onResume = { onResume(target.packageName) },
             onInstall = { onInstall(target) },
             onExport = { onExport(target) },
             onClear = { onClear(target) }
@@ -158,6 +168,8 @@ private fun ScreenContent(
         DownloadsMenu { menuItem ->
             when (menuItem) {
                 MenuItem.CANCEL_ALL -> onCancelAll()
+                MenuItem.PAUSE_ALL -> onPauseAll()
+                MenuItem.RESUME_ALL -> onResumeAll()
                 MenuItem.FORCE_CLEAR_ALL -> onForceClearAll()
                 MenuItem.CLEAR_FINISHED -> onClearFinished()
             }

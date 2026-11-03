@@ -55,6 +55,14 @@ fun DownloadsMenu(
                 onClick = { onClick(MenuItem.CANCEL_ALL) }
             )
             DropdownMenuItem(
+                text = { Text(text = stringResource(R.string.download_pause_all)) },
+                onClick = { onClick(MenuItem.PAUSE_ALL) }
+            )
+            DropdownMenuItem(
+                text = { Text(text = stringResource(R.string.download_resume_all)) },
+                onClick = { onClick(MenuItem.RESUME_ALL) }
+            )
+            DropdownMenuItem(
                 text = { Text(text = stringResource(R.string.download_clear_finished)) },
                 onClick = { onClick(MenuItem.CLEAR_FINISHED) }
             )

@@ -10,6 +10,8 @@ package com.aurora.store.compose.ui.downloads.menu
  */
 enum class MenuItem {
     CANCEL_ALL,
+    PAUSE_ALL,
+    RESUME_ALL,
     FORCE_CLEAR_ALL,
     CLEAR_FINISHED
 }

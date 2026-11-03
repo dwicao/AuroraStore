@@ -112,7 +112,23 @@ class UpdatesViewModel @Inject constructor(
         viewModelScope.launch { downloadHelper.cancelDownload(packageName) }
     }
 
+    fun pauseDownload(packageName: String) {
+        viewModelScope.launch { downloadHelper.pauseDownload(packageName) }
+    }
+
+    fun resumeDownload(packageName: String) {
+        viewModelScope.launch { downloadHelper.resumeDownload(packageName) }
+    }
+
     fun cancelAll() {
         viewModelScope.launch { downloadHelper.cancelAll(true) }
+    }
+
+    fun pauseAll() {
+        viewModelScope.launch { downloadHelper.pauseAllDownloads(true) }
+    }
+
+    fun resumeAll() {
+        viewModelScope.launch { downloadHelper.resumeAllDownloads(true) }
     }
 }

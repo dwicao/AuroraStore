@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.aurora.store.R
 import com.aurora.store.compose.composable.app.AnimatedAppIcon
+import com.aurora.store.data.model.DownloadStatus
 import com.aurora.store.data.room.download.Download
 import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.PathUtil
@@ -46,6 +47,8 @@ fun DownloadActionsSheet(
     onDismiss: () -> Unit,
     onShowDetails: () -> Unit,
     onCancel: () -> Unit,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
     onInstall: () -> Unit,
     onExport: () -> Unit,
     onClear: () -> Unit
@@ -75,10 +78,29 @@ fun DownloadActionsSheet(
                 modifier = Modifier.padding(vertical = dimensionResource(R.dimen.spacing_xsmall))
             )
 
-            if (download.isRunning) {
+            if (download.isActive) {
+                Item(
+                    label = stringResource(R.string.action_pause),
+                    onClick = {
+                        onPause()
+                        onDismiss()
+                    }
+                )
+            }
+
+            if (download.status == DownloadStatus.PAUSED) {
+                Item(
+                    label = stringResource(R.string.action_resume),
+                    onClick = {
+                        onResume()
+                        onDismiss()
+                    }
+                )
+            }
+
+            if (download.isRunning || download.status == DownloadStatus.PAUSED) {
                 Item(
                     label = stringResource(R.string.action_cancel),
-                    enabled = download.isRunning,
                     onClick = {
                         onCancel()
                         onDismiss()

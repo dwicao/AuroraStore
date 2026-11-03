@@ -182,6 +182,13 @@ class DownloadWorker @AssistedInject constructor(
             return Result.success()
         }
 
+        // A pause that landed after the work was enqueued but before it started must not
+        // download: the row stays PAUSED with its partials intact for an explicit resume.
+        if (download.status == DownloadStatus.PAUSED) {
+            Log.i(TAG, "Download for ${download.packageName} is paused, nothing to do")
+            return Result.success()
+        }
+
         // The icon only decorates the progress notification. Fetching it is best-effort: a
         // failure (unreachable/pinned host, non-HTTP url, undecodable image) must never abort
         // the download itself.
@@ -316,11 +323,15 @@ class DownloadWorker @AssistedInject constructor(
                 download.downloadedFiles++
             }
         } catch (exception: Exception) {
-            // Only purge partial files on a genuine user/app cancellation. A stop caused
-            // by lost connectivity, quota or device-state must keep the partials so the
-            // retry resumes instead of re-downloading from scratch (this was the source of
+            // Only purge partial files on a genuine user/app cancellation. A pause stops
+            // the worker the same way a cancel does, so it must be excluded explicitly —
+            // pausing keeps the partials for resume. A stop caused by lost connectivity,
+            // quota or device-state must also keep the partials so the retry resumes
+            // instead of re-downloading from scratch (this was the source of
             // downloads appearing to "restart" on a flaky network).
-            if (exception is DownloadCancelledException && isCancelledByUser()) {
+            if (exception is DownloadCancelledException && isCancelledByUser() &&
+                !isPausedByUser()
+            ) {
                 Log.i(TAG, "Download cancelled by user for ${download.packageName}")
                 runCatching { files.forEach { deleteFile(it) } }
             }
@@ -392,6 +403,15 @@ class DownloadWorker @AssistedInject constructor(
     }
 
     /**
+     * Whether the row was paused while this worker was stopping. Pause and cancel both
+     * stop the worker (via the same WorkManager cancellation), but only cancel drops the
+     * partials — so every stop path checks this first and keeps partials when paused.
+     */
+    private suspend fun isPausedByUser(): Boolean = runCatching {
+        downloadDao.getDownload(download.packageName)?.status == DownloadStatus.PAUSED
+    }.getOrDefault(false)
+
+    /**
      * Transient errors worth retrying once connectivity returns. Walks the cause chain so a
      * wrapped network error is still recognised.
      */
@@ -416,6 +436,16 @@ class DownloadWorker @AssistedInject constructor(
     private suspend fun onFailure(exception: Exception): Result {
         return withContext(NonCancellable) {
             Log.i(TAG, "Job failed: ${download.packageName}", exception)
+
+            // Pause wins over every failure path below: the user held the download back,
+            // so keep PAUSED with partials intact instead of recording CANCELLED/FAILED
+            // or burning a WorkManager retry. (The retry gate below would also refuse a
+            // cancelled run, but it would record CANCELLED first.)
+            if (isPausedByUser()) {
+                Log.i(TAG, "Download paused by user for ${download.packageName}")
+                notifyStatus(DownloadStatus.PAUSED)
+                return@withContext Result.success()
+            }
 
             val cancelledByUser = isCancelledByUser()
 
@@ -1010,10 +1040,12 @@ class DownloadWorker @AssistedInject constructor(
             // Internal phases the user doesn't need a separate notification for: the ongoing
             // foreground progress notification already conveys that work is in progress.
             // Clear any stale per-app notification (e.g. a prior failure being retried) so it
-            // doesn't linger.
+            // doesn't linger. PAUSED clears it too — the row in Downloads/Updates shows the
+            // paused state, and posting a notification for a held-back download is noise.
             DownloadStatus.PURCHASING,
             DownloadStatus.VERIFYING,
-            DownloadStatus.CANCELLED -> {
+            DownloadStatus.CANCELLED,
+            DownloadStatus.PAUSED -> {
                 notificationManager.cancel(download.packageName.hashCode())
                 return
             }

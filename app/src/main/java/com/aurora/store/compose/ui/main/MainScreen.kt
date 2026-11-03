@@ -339,6 +339,14 @@ fun MainScreen(
                                 }
                             },
                             onCancelAll = { updatesViewModel.cancelAll() },
+                            onPauseUpdate = { packageName ->
+                                updatesViewModel.pauseDownload(packageName)
+                            },
+                            onResumeUpdate = { packageName ->
+                                updatesViewModel.resumeDownload(packageName)
+                            },
+                            onPauseAll = { updatesViewModel.pauseAll() },
+                            onResumeAll = { updatesViewModel.resumeAll() },
                             checkingPackages = checkingJobs.keys
                         )
                     }

@@ -275,6 +275,13 @@ class DownloadHelper @Inject constructor(
     private suspend fun enqueue(download: Download) {
         val existing = getDownload(download.packageName)
         if (existing != null && existing.versionCode == download.versionCode) {
+            // A paused download stays paused: re-enqueues (e.g. the periodic update
+            // check running while the user held something back) must not silently
+            // resume it. Resume is always explicit via resumeDownload().
+            if (existing.status == DownloadStatus.PAUSED) {
+                Log.i(TAG, "Keeping ${download.packageName} paused, skipping enqueue")
+                return
+            }
             if (existing.canInstall(context)) {
                 Log.i(TAG, "${download.packageName} already downloaded, installing directly")
                 runCatching {
@@ -328,12 +335,67 @@ class DownloadHelper @Inject constructor(
      */
     suspend fun retryDownload(packageName: String) {
         val existing = getDownload(packageName) ?: return
-        if (existing.isActive) {
+        if (existing.isActive || existing.status == DownloadStatus.PAUSED) {
             Log.i(TAG, "Skipping retry for $packageName; already ${existing.status}")
             return
         }
         Log.i(TAG, "Retrying download for $packageName")
         downloadDao.updateStatus(packageName, DownloadStatus.QUEUED)
+    }
+
+    /**
+     * Halts an in-flight or queued download but keeps everything needed to resume it:
+     * the row stays [DownloadStatus.PAUSED] (so it no longer occupies the serial
+     * download slot) and all partial files stay on disk. Resume with [resumeDownload].
+     * No-op unless the download is currently active.
+     * @param packageName Name of the package to pause
+     */
+    suspend fun pauseDownload(packageName: String) {
+        val existing = getDownload(packageName) ?: return
+        if (!existing.isActive) {
+            Log.i(TAG, "Skipping pause for $packageName; already ${existing.status}")
+            return
+        }
+        Log.i(TAG, "Pausing download for $packageName")
+        downloadDao.updateStatus(packageName, DownloadStatus.PAUSED)
+        // The worker notices the stop at its next chunk boundary and backs off in
+        // onFailure once it sees the PAUSED row, keeping the partials.
+        WorkManager.getInstance(context).cancelAllWorkByTag("$PACKAGE_NAME:$packageName")
+    }
+
+    /**
+     * Resumes a paused download from its partial files. No-op unless paused.
+     * @param packageName Name of the package to resume
+     */
+    suspend fun resumeDownload(packageName: String) {
+        val existing = getDownload(packageName) ?: return
+        if (existing.status != DownloadStatus.PAUSED) {
+            Log.i(TAG, "Skipping resume for $packageName; status is ${existing.status}")
+            return
+        }
+        Log.i(TAG, "Resuming download for $packageName")
+        downloadDao.updateStatus(packageName, DownloadStatus.QUEUED)
+    }
+
+    /**
+     * Pauses every active download (and, with [updatesOnly], only updates), keeping all
+     * partials. Queued items that never started keep their place behind the pause.
+     */
+    suspend fun pauseAllDownloads(updatesOnly: Boolean = false) {
+        downloadDao.downloads().firstOrNull()
+            ?.filter { it.isActive }
+            ?.filter { if (updatesOnly) it.isInstalled else true }
+            ?.forEach { pauseDownload(it.packageName) }
+    }
+
+    /**
+     * Resumes every paused download (and, with [updatesOnly], only updates).
+     */
+    suspend fun resumeAllDownloads(updatesOnly: Boolean = false) {
+        downloadDao.downloads().firstOrNull()
+            ?.filter { it.status == DownloadStatus.PAUSED }
+            ?.filter { if (updatesOnly) it.isInstalled else true }
+            ?.forEach { resumeDownload(it.packageName) }
     }
 
     /**
@@ -388,7 +450,8 @@ class DownloadHelper @Inject constructor(
     }
 
     /**
-     * Cancels all the ongoing and queued downloads
+     * Cancels all the ongoing and queued downloads. Paused downloads are cancelled too:
+     * cancel means giving up (partials are dropped), while pausing is what keeps them.
      * @param updatesOnly Whether to cancel only updates, defaults to false
      */
     suspend fun cancelAll(updatesOnly: Boolean = false) {
@@ -397,7 +460,11 @@ class DownloadHelper @Inject constructor(
         // OS-level install for COMPLETED entries is wrapped in NonCancellable inside the
         // worker and cannot be aborted — if it succeeds, the update row is removed via
         // InstallerEvent.Installed; if it fails, the user can re-trigger an update.
-        val cancellableStatuses = setOf(DownloadStatus.QUEUED, DownloadStatus.COMPLETED)
+        val cancellableStatuses = setOf(
+            DownloadStatus.QUEUED,
+            DownloadStatus.COMPLETED,
+            DownloadStatus.PAUSED
+        )
         downloadDao.downloads().firstOrNull()
             ?.filter { it.status in cancellableStatuses }
             ?.filter { if (updatesOnly) it.isInstalled else true }

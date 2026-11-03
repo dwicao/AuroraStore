@@ -42,6 +42,8 @@ fun AppUpdateItem(
     onClick: () -> Unit = {},
     onUpdate: () -> Unit = {},
     onCancel: () -> Unit = {},
+    onPause: () -> Unit = {},
+    onResume: () -> Unit = {},
     onUnignore: (() -> Unit)? = null
 ) {
     // Only the INSTALLING status shows as "Installing"; a downloaded-but-not-installed
@@ -49,6 +51,7 @@ fun AppUpdateItem(
     // tracker check, shown with the same indeterminate progress + Cancel as an active download.
     val inProgress = isChecking ||
         (download != null && !download.isFinished && !download.isAwaitingInstall)
+    val paused = download?.status == DownloadStatus.PAUSED
     val installing = download?.status == DownloadStatus.INSTALLING
     val shownSize = if (update.downloadSize > 0) update.downloadSize else update.size
     val progress = if (download?.status == DownloadStatus.DOWNLOADING) {
@@ -114,9 +117,27 @@ fun AppUpdateItem(
                 }
             }
 
+            paused -> {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedButton(onClick = onResume) {
+                        Text(stringResource(R.string.action_resume))
+                    }
+                    Spacer(Modifier.width(dimensionResource(R.dimen.spacing_small)))
+                    OutlinedButton(onClick = onCancel) {
+                        Text(stringResource(R.string.action_cancel))
+                    }
+                }
+            }
+
             inProgress -> {
-                OutlinedButton(onClick = onCancel) {
-                    Text(stringResource(R.string.action_cancel))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedButton(onClick = onPause) {
+                        Text(stringResource(R.string.action_pause))
+                    }
+                    Spacer(Modifier.width(dimensionResource(R.dimen.spacing_small)))
+                    OutlinedButton(onClick = onCancel) {
+                        Text(stringResource(R.string.action_cancel))
+                    }
                 }
             }
 

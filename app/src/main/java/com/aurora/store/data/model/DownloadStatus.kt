@@ -19,7 +19,15 @@ enum class DownloadStatus(@StringRes val localized: Int) {
     PURCHASING(R.string.preparing_to_install),
     AWAITING_INSTALL(R.string.status_awaiting_install),
     INSTALLING(R.string.status_installing),
-    INSTALLED(R.string.status_installed);
+    INSTALLED(R.string.status_installed),
+
+    /**
+     * Held back by the user: partial files are kept on disk and the row no longer
+     * occupies the serial download slot, so other queued downloads proceed while
+     * this one waits for an explicit resume. Appended last so existing persisted
+     * rows are unaffected.
+     */
+    PAUSED(R.string.status_paused);
 
     companion object {
         val finished = setOf(FAILED, CANCELLED, COMPLETED, INSTALLED)

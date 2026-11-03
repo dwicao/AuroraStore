@@ -495,7 +495,11 @@ class AppDetailsViewModel @Inject constructor(
             download.timeRemaining
         )
 
-        DownloadStatus.QUEUED -> AppState.Queued
+        DownloadStatus.QUEUED,
+        // A paused download waits for an explicit resume from Downloads/Updates; surface
+        // it as queued so the cancel action stays available instead of a dead update
+        // button (tapping update on a paused row is a no-op by design).
+        DownloadStatus.PAUSED -> AppState.Queued
 
         DownloadStatus.PURCHASING -> AppState.Purchasing
 

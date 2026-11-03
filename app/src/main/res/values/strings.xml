@@ -61,6 +61,7 @@
     <string name="action_blacklist_add">"Add to blacklist"</string>
     <string name="action_buy">"Buy @ %1$s"</string>
     <string name="action_cancel">"Cancel"</string>
+    <string name="action_pause">"Pause"</string>
     <string name="action_clear">"Clear"</string>
     <string name="action_close">"Close"</string>
     <string name="action_copy">"Copy"</string>
@@ -159,6 +160,8 @@
     <string name="details_your_review">"Your review"</string>
     <string name="details_think_this_app">"What do you think about this app?"</string>
     <string name="download_cancel_all">"Cancel all"</string>
+    <string name="download_pause_all">"Pause all"</string>
+    <string name="download_resume_all">"Resume all"</string>
     <string name="download_canceled">"Cancelled"</string>
     <string name="download_clear_finished">Clear finished</string>
     <string name="download_completed">"Download completed"</string>
@@ -627,6 +630,7 @@
     <string name="status_installing">Installing</string>
     <string name="status_installed">Installed</string>
     <string name="status_awaiting_install">Waiting for confirmation</string>
+    <string name="status_paused">Paused</string>
 
     <!-- Notifications -->
     <string name="notification_install_prompt_pending">Tap to finish installing</string>

@@ -63,9 +63,33 @@ class DownloadsViewModel @Inject constructor(
         }
     }
 
+    fun pause(packageName: String) {
+        viewModelScope.launch(NonCancellable) {
+            downloadHelper.pauseDownload(packageName)
+        }
+    }
+
+    fun resume(packageName: String) {
+        viewModelScope.launch(NonCancellable) {
+            downloadHelper.resumeDownload(packageName)
+        }
+    }
+
     fun cancelAll() {
         viewModelScope.launch(NonCancellable) {
             downloadHelper.cancelAll()
+        }
+    }
+
+    fun pauseAll() {
+        viewModelScope.launch(NonCancellable) {
+            downloadHelper.pauseAllDownloads()
+        }
+    }
+
+    fun resumeAll() {
+        viewModelScope.launch(NonCancellable) {
+            downloadHelper.resumeAllDownloads()
         }
     }
 

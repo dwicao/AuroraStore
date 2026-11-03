@@ -6,6 +6,7 @@
 package com.aurora.store.compose.ui.updates
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -42,6 +43,10 @@ fun UpdatesScreen(
     onRequestUpdateAll: (List<Update>) -> Unit = {},
     onCancelUpdate: (String) -> Unit = {},
     onCancelAll: () -> Unit = {},
+    onPauseUpdate: (String) -> Unit = {},
+    onResumeUpdate: (String) -> Unit = {},
+    onPauseAll: () -> Unit = {},
+    onResumeAll: () -> Unit = {},
     checkingPackages: Set<String> = emptySet()
 ) {
     val context = LocalContext.current
@@ -85,6 +90,10 @@ fun UpdatesScreen(
 
     val mainAnyActive = mainEntries.any { it.value.isActive() }
     val approvalAnyActive = approvalEntries.any { it.value.isActive() }
+    val mainAnyPausable = mainEntries.any { it.value?.isActive == true }
+    val approvalAnyPausable = approvalEntries.any { it.value?.isActive == true }
+    val mainAnyPaused = mainEntries.any { it.value?.status == DownloadStatus.PAUSED }
+    val approvalAnyPaused = approvalEntries.any { it.value?.status == DownloadStatus.PAUSED }
 
     PullToRefreshBox(
         modifier = Modifier.fillMaxSize(),
@@ -144,7 +153,9 @@ fun UpdatesScreen(
                                 // no app details page to open.
                                 onClick = {},
                                 onUpdate = { onRequestUpdate(update) },
-                                onCancel = { onCancelUpdate(update.packageName) }
+                                onCancel = { onCancelUpdate(update.packageName) },
+                                onPause = { onPauseUpdate(update.packageName) },
+                                onResume = { onResumeUpdate(update.packageName) }
                             )
                         }
                     }
@@ -158,25 +169,31 @@ fun UpdatesScreen(
                                     R.string.updates_available
                                 }
                             )
-                            val actionLabel = stringResource(
-                                if (mainAnyActive) {
-                                    R.string.download_cancel_all
-                                } else {
-                                    R.string.action_update_all
-                                }
-                            )
                             SectionHeader(
                                 title = title,
                                 trailing = {
-                                    TextButton(
-                                        onClick = {
-                                            if (mainAnyActive) {
-                                                onCancelAll()
-                                            } else {
-                                                onRequestUpdateAll(mainEntries.map { it.key })
+                                    Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))) {
+                                        if (mainAnyPausable) {
+                                            TextButton(onClick = onPauseAll) {
+                                                Text(stringResource(R.string.download_pause_all))
+                                            }
+                                        } else if (mainAnyPaused) {
+                                            TextButton(onClick = onResumeAll) {
+                                                Text(stringResource(R.string.download_resume_all))
+                                            }
+                                        } else {
+                                            TextButton(
+                                                onClick = {
+                                                    onRequestUpdateAll(mainEntries.map { it.key })
+                                                }
+                                            ) { Text(stringResource(R.string.action_update_all)) }
+                                        }
+                                        if (mainAnyActive) {
+                                            TextButton(onClick = onCancelAll) {
+                                                Text(stringResource(R.string.download_cancel_all))
                                             }
                                         }
-                                    ) { Text(actionLabel) }
+                                    }
                                 }
                             )
                         }
@@ -186,34 +203,42 @@ fun UpdatesScreen(
                             onNavigateTo = onNavigateTo,
                             onRequestUpdate = onRequestUpdate,
                             onCancelUpdate = onCancelUpdate,
+                            onPauseUpdate = onPauseUpdate,
+                            onResumeUpdate = onResumeUpdate,
                             checkingPackages = checkingPackages
                         )
                     }
 
                     if (approvalEntries.isNotEmpty()) {
                         item(key = "header_approval") {
-                            val actionLabel = stringResource(
-                                if (approvalAnyActive) {
-                                    R.string.download_cancel_all
-                                } else {
-                                    R.string.action_update_all
-                                }
-                            )
                             SectionHeader(
                                 title = stringResource(R.string.updates_approval_header),
                                 subtitle = stringResource(R.string.updates_approval_desc),
                                 trailing = {
-                                    TextButton(
-                                        onClick = {
-                                            if (approvalAnyActive) {
-                                                onCancelAll()
-                                            } else {
-                                                onRequestUpdateAll(
-                                                    approvalEntries.map { it.key }
-                                                )
+                                    Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))) {
+                                        if (approvalAnyPausable) {
+                                            TextButton(onClick = onPauseAll) {
+                                                Text(stringResource(R.string.download_pause_all))
+                                            }
+                                        } else if (approvalAnyPaused) {
+                                            TextButton(onClick = onResumeAll) {
+                                                Text(stringResource(R.string.download_resume_all))
+                                            }
+                                        } else {
+                                            TextButton(
+                                                onClick = {
+                                                    onRequestUpdateAll(
+                                                        approvalEntries.map { it.key }
+                                                    )
+                                                }
+                                            ) { Text(stringResource(R.string.action_update_all)) }
+                                        }
+                                        if (approvalAnyActive) {
+                                            TextButton(onClick = onCancelAll) {
+                                                Text(stringResource(R.string.download_cancel_all))
                                             }
                                         }
-                                    ) { Text(actionLabel) }
+                                    }
                                 }
                             )
                         }
@@ -223,6 +248,8 @@ fun UpdatesScreen(
                             onNavigateTo = onNavigateTo,
                             onRequestUpdate = onRequestUpdate,
                             onCancelUpdate = onCancelUpdate,
+                            onPauseUpdate = onPauseUpdate,
+                            onResumeUpdate = onResumeUpdate,
                             checkingPackages = checkingPackages
                         )
                     }
@@ -240,6 +267,8 @@ fun UpdatesScreen(
                             onNavigateTo = onNavigateTo,
                             onRequestUpdate = onRequestUpdate,
                             onCancelUpdate = onCancelUpdate,
+                            onPauseUpdate = onPauseUpdate,
+                            onResumeUpdate = onResumeUpdate,
                             checkingPackages = checkingPackages
                         )
                     }
@@ -280,6 +309,8 @@ private fun LazyListScope.updateItems(
     onNavigateTo: (Destination) -> Unit,
     onRequestUpdate: (Update) -> Unit,
     onCancelUpdate: (String) -> Unit,
+    onPauseUpdate: (String) -> Unit,
+    onResumeUpdate: (String) -> Unit,
     checkingPackages: Set<String>
 ) {
     items(
@@ -294,7 +325,9 @@ private fun LazyListScope.updateItems(
                 onNavigateTo(Destination.AppUpdate(update))
             },
             onUpdate = { onRequestUpdate(update) },
-            onCancel = { onCancelUpdate(update.packageName) }
+            onCancel = { onCancelUpdate(update.packageName) },
+            onPause = { onPauseUpdate(update.packageName) },
+            onResume = { onResumeUpdate(update.packageName) }
         )
     }
 }
