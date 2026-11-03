@@ -1,9 +1,13 @@
 {
-  "version_name": "4.6.4",
-  "version_code": 65,
-  "aurora_build": "https://www.auroraoss.com/AuroraStore/Release/AuroraStore-4.6.4.apk",
-  "fdroid_build": "",
-  "changelog": "Changelog : v4.6.4\n • Fixed issues with shared library installation for apps like Chrome and WebView\n •Support for login into personal account using microG\n • Fixed an issue with auth verification",
-  "size": 7431013,
-  "updated_on": "Jan 10, 2024"
+  "version_name": "4.8.4",
+  "version_code": "77",
+  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.12/app-vanilla-release.apk",
+  "icon_url": "",
+  "sha1": "",
+  "sha256": "1f84b6f52986b9705582fedd4bc6d1fb5a1c83f26e1bd7edf5fbb5d1b2fe1f22",
+  "changelog": "Changelog : v4.8.12 (fork)\n • Stuck download queue watchdog\n • Spoof hardening (no more poisoned native read / corrupt spoof crashes)\n • Auth prefs encrypted with Android Keystore key\n • Self-update feed points at this fork's releases",
+  "size": "10145683",
+  "last_commit": "",
+  "updated_on": "Nov 3, 2026",
+  "timestamp": "0"
 }

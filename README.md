@@ -92,13 +92,34 @@ and security. Upstream behavior is unchanged everywhere else.
   bottom sheet, or app details screen) and resumed later from its partial files;
   "pause all / resume all" exists in the Downloads menu and in each Updates
   section header. Paused rows leave the serial download slot, are never
-  silently resumed by re-enqueues or retries, survive CacheWorker cleanups, and
-  the resume button seeds the displayed progress from bytes already on disk.
+  silently resumed by re-enqueues or retries, survive CacheWorker cleanups,
+  the resume button seeds the displayed progress from bytes already on disk,
+  and a stuck-queue watchdog re-triggers QUEUED rows left behind by a dropped
+  expedited request. The app-details screen shows Pause (+Cancel) while
+  downloading and Resume (+Cancel) while paused, and goes back to Open when
+  done.
+- **Spoof hardening.** A failed native property read no longer poisons the
+  process (falls back to an empty profile, degrading to the default profile via
+  the existing validation), and a corrupt stored spoof disables itself with a
+  toast instead of throwing out of every Play call.
+- **Auth material encrypted at rest.** `auth_prefs.xml` is an
+  `EncryptedSharedPreferences` backed by an Android Keystore key (plain private
+  file as fallback, migrated once), on top of the backup exclusion below.
+- **Self-update from this fork's releases.** Release builds read
+  `updates.json` at the repo root (served raw by GitHub) instead of upstream's
+  feed — whose APKs could never install over this fork's signature. The feed
+  follows the `SelfUpdate` schema (`version_code` as string); the version code
+  in `app/build.gradle.kts` must keep increasing with each fork release.
 - **CI.** `.github/workflows/release.yml` builds a signed release APK and
   attaches it to the GitHub Release on `v*` tags;
   `.github/workflows/nightly-health.yml` runs daily dispenser/Play probes, a
   gplayapi freshness check, and the JVM unit tests as an early warning for
   upstream breakage.
+
+Per-release ritual for the maintainer: bump `versionCode`, tag, let CI publish
+the release, then fill `updates.json` (`version_code`, `download_url` pointing
+at the release asset, `size`, `sha256` of the APK, changelog) and commit it —
+the next update check on installed forks picks the fork update up automatically.
 
 Releases from this fork are signed with a different key than upstream:
 
