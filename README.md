@@ -10,8 +10,7 @@ Aurora Store works exactly like a door or a browser, allowing you to log in to y
 
 *_Please note that Aurora Store does not have any approval, sponsorship or authorization from Google, Google Play, any apps downloaded through Aurora Store or any app developers; neither does Aurora Store have any affiliation, cooperation or connection with them._*
 
-[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="90">](https://f-droid.org/packages/com.aurora.store/)
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="90">](https://apt.izzysoft.de/fdroid/index/apk/com.aurora.store)
+[<img src="https://img.shields.io/github/v/release/dwicao/AuroraStore?label=Download%20APK&color=brightgreen" alt="Download APK from GitHub Releases">](https://github.com/dwicao/AuroraStore/releases)
 
 ## Screenshots
 
@@ -155,15 +154,18 @@ Aurora Store is developed with the help of AI tooling. Here is what that means.
 
 ## Downloads
 
-Please only download the latest stable releases from one of these sources:
+This is a fork — get the signed APKs from this repo's releases:
+
+- [GitHub Releases](https://github.com/dwicao/AuroraStore/releases) (signed with the [fork key](#fork-differences-vs-upstream-auroraoss))
+
+The upstream channels below carry upstream builds signed with upstream's key,
+which will not install over this fork (and vice versa):
 
 - [Official website](https://auroraoss.com/)
 - [GitLab Releases](https://gitlab.com/AuroraOSS/AuroraStore/-/releases)
 - [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.aurora.store) (reproducible)
 - [F-Droid](https://f-droid.org/packages/com.aurora.store/) (signed by F-Droid, [more details](https://f-droid.org/docs/Signing_Process/))
 - [App Gallery](https://appgallery.huawei.com/app/C110907863) (limited to certain countries)
-
-You can also get latest debug builds signed with AOSP test keys for testing latest changes from our [GitLab Package Registry](https://gitlab.com/AuroraOSS/AuroraStore/-/packages/24103616).
 
 ## Certificate Fingerprints
 
