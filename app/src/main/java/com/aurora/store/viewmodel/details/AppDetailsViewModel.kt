@@ -136,6 +136,10 @@ class AppDetailsViewModel @Inject constructor(
     private val _exodusReport = MutableStateFlow<Report?>(Report())
     val exodusReport = _exodusReport.asStateFlow()
 
+    /** True when the shown report was scanned on-device rather than fetched. */
+    private val _exodusLocal = MutableStateFlow(false)
+    val exodusLocal = _exodusLocal.asStateFlow()
+
     private val _exodusReports = MutableStateFlow<List<Report>>(emptyList())
     val exodusReports = _exodusReports.asStateFlow()
 
@@ -609,18 +613,30 @@ class AppDetailsViewModel @Inject constructor(
     private fun fetchExodusPrivacyReport(packageName: String) {
         viewModelScope.launch {
             _exodusFailed.value = false
-            val result = exodusRepository.fetchReports(packageName)
+            _exodusLocal.value = false
+            val remote = exodusRepository.fetchReports(packageName)
             _exodusLoaded.value = true
-            result
-                .onSuccess { reports ->
-                    val sorted = reports.sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
-                    _exodusReport.value = sorted.firstOrNull()
-                    _exodusReports.value = sorted
-                }
-                .onFailure {
-                    _exodusFailed.value = true
-                    _exodusReport.value = null
-                }
+            val sorted = remote.getOrDefault(emptyList())
+                .sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
+            if (sorted.isNotEmpty()) {
+                _exodusReport.value = sorted.firstOrNull()
+                _exodusReports.value = sorted
+                return@launch
+            }
+            // Remote came back empty (or failed outright): fall back to scanning an
+            // on-device APK of this exact version, if one is downloaded or installed.
+            val current = app.value
+            val local = current?.let {
+                exodusRepository.scanLocalReport(it.packageName, it.versionCode, it.versionName)
+            }
+            if (local != null) {
+                _exodusReport.value = local
+                _exodusReports.value = listOf(local)
+                _exodusLocal.value = true
+            } else {
+                _exodusReport.value = null
+                _exodusFailed.value = remote.isFailure
+            }
         }
     }
 

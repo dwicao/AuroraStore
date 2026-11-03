@@ -14,14 +14,20 @@ import com.aurora.store.data.model.ExodusReport
 import com.aurora.store.data.model.ExodusTracker
 import com.aurora.store.data.model.Report
 import com.aurora.store.data.model.TrackersResponse
+import com.aurora.store.data.room.download.DownloadDao
 import com.aurora.store.data.room.exodus.TrackerDao
 import com.aurora.store.data.room.exodus.TrackerEntity
+import com.aurora.store.util.DexTrackerScanner
+import com.aurora.store.util.PackageUtil
+import com.aurora.store.util.PathUtil
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_LAST_TRACKER_SYNC
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,6 +47,7 @@ class ExodusRepository @Inject constructor(
     private val okHttpClient: OkHttpClient,
     private val json: Json,
     private val trackerDao: TrackerDao,
+    private val downloadDao: DownloadDao,
     @ApplicationContext private val context: Context
 ) {
 
@@ -205,4 +212,89 @@ class ExodusRepository @Inject constructor(
         val newIds = newestReport.trackers.toSet() - installedReport.trackers.toSet()
         return resolveTrackers(newIds.toList())
     }
+
+    /**
+     * Scans an on-device APK for this package/version and builds a [Report] shaped
+     * exactly like a server one (negative id marks it device-scanned). Preferred
+     * sources in order: a downloaded-but-not-yet-installed copy of this exact
+     * version, then the installed copy when its version matches. Returns null when
+     * no matching APK is on disk or no tracker definition matched anything usable.
+     *
+     * This is the offline fallback for the token-gated reports endpoint: no network,
+     * no account, and nothing identifying leaves the device.
+     */
+    suspend fun scanLocalReport(
+        packageName: String,
+        versionCode: Long,
+        versionName: String
+    ): Report? = withContext(Dispatchers.IO) {
+        val files = localApkFiles(packageName, versionCode)
+        if (files.isEmpty()) return@withContext null
+
+        val key = ScanKey(
+            packageName,
+            versionCode,
+            files.joinToString("|") { "${it.absolutePath}:${it.length()}:${it.lastModified()}" }
+        )
+        val cached = localScanCache[key]
+        val ids = cached ?: run {
+            val signatures = trackerDao.getAll()
+                .associate { it.id to it.signature }
+                .filterValues { it.isNotBlank() }
+            if (signatures.isEmpty()) return@withContext null
+            val found = files.flatMapTo(mutableSetOf()) { DexTrackerScanner.scanApk(it, signatures) }
+            if (localScanCache.size >= MAX_CACHED_SCANS) localScanCache.clear()
+            localScanCache[key] = found
+            found
+        }
+
+        Report(
+            id = LOCAL_SCAN_REPORT_ID,
+            version = versionName,
+            versionCode = versionCode.toString(),
+            trackers = ids.toList()
+        )
+    }
+
+    private fun localApkFiles(packageName: String, versionCode: Long): List<File> {
+        // A downloaded copy of this exact version wins: it is the build the user is
+        // about to install, while the installed copy may be older.
+        val download = runCatching { downloadDao.getDownload(packageName) }.getOrNull()
+        if (download != null && download.versionCode == versionCode) {
+            val downloaded = (download.fileList + download.sharedLibs.flatMap { it.fileList })
+                .map { PathUtil.getLocalFile(context, it, download) }
+                .filter { it.isFile }
+            if (downloaded.isNotEmpty()) return downloaded
+        }
+        // Otherwise the installed copy, but only when it really is this version —
+        // scanning the old APK and presenting it as the new build would lie.
+        if (PackageUtil.isInstalled(context, packageName) &&
+            PackageUtil.getInstalledVersionCode(context, packageName) == versionCode
+        ) {
+            val info = runCatching {
+                PackageUtil.getPackageInfo(context, packageName)
+            }.getOrNull()
+            val paths = buildList {
+                info?.applicationInfo?.sourceDir?.let { add(it) }
+                info?.applicationInfo?.splitSourceDirs?.filterNotNull()?.let { addAll(it) }
+            }
+            return paths.map(::File).filter { it.isFile }
+        }
+        return emptyList()
+    }
+
+    companion object {
+        /** Sentinel id for device-scanned reports (server ids are >= 1, -1 is progress). */
+        const val LOCAL_SCAN_REPORT_ID = -2
+
+        private const val MAX_CACHED_SCANS = 64
+    }
+
+    private data class ScanKey(
+        val packageName: String,
+        val versionCode: Long,
+        val filesFingerprint: String
+    )
+
+    private val localScanCache = ConcurrentHashMap<ScanKey, Set<Int>>()
 }

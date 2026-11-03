@@ -23,6 +23,9 @@ interface TrackerDao {
     @Query("SELECT * FROM exodus_tracker WHERE id IN (:ids)")
     suspend fun getByIds(ids: List<Int>): List<TrackerEntity>
 
+    @Query("SELECT * FROM exodus_tracker")
+    suspend fun getAll(): List<TrackerEntity>
+
     @Query("SELECT COUNT(*) FROM exodus_tracker")
     suspend fun count(): Int
 
