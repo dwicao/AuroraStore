@@ -69,6 +69,7 @@ import com.aurora.store.data.event.InstallerEvent
 import com.aurora.store.data.model.AccountType
 import com.aurora.store.data.providers.AccountProvider
 import com.aurora.store.data.providers.AuthProvider
+import com.aurora.store.util.AuthPrefs
 import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.Preferences
 import dagger.hilt.EntryPoint
@@ -113,7 +114,7 @@ fun NavDisplay(startDestination: NavKey) {
     val context = LocalContext.current
 
     fun isMicroGAuthInvalidated(): Boolean =
-        Preferences.getBoolean(context, Preferences.PREFERENCE_AUTH_VIA_MICROG, false) &&
+        AuthPrefs.getBoolean(context, Preferences.PREFERENCE_AUTH_VIA_MICROG, false) &&
             AccountProvider.getAccountType(context) == AccountType.GOOGLE &&
             !PackageUtil.hasSupportedMicroGVariant(context)
 

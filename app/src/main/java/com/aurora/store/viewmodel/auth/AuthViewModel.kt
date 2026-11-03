@@ -24,6 +24,7 @@ import com.aurora.store.data.providers.AccountProvider
 import com.aurora.store.data.providers.AuthProvider
 import com.aurora.store.data.providers.GoogleAccountTokenProvider
 import com.aurora.store.util.AC2DMTask
+import com.aurora.store.util.AuthPrefs
 import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.Preferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -229,14 +230,14 @@ class AuthViewModel @Inject constructor(
                     val aasToken = response["Token"]
                     if (aasToken != null) {
                         val accountEmail = response["Email"]?.takeIf { it.isNotBlank() } ?: email
-                        Preferences.putString(context, Constants.ACCOUNT_EMAIL_PLAIN, accountEmail)
-                        Preferences.putString(context, Constants.ACCOUNT_AAS_PLAIN, aasToken)
+                        AuthPrefs.putString(context, Constants.ACCOUNT_EMAIL_PLAIN, accountEmail)
+                        AuthPrefs.putString(context, Constants.ACCOUNT_AAS_PLAIN, aasToken)
                         AuroraApp.events.send(
                             AuthEvent.GoogleLogin(true, accountEmail, aasToken)
                         )
                     } else {
-                        Preferences.putString(context, Constants.ACCOUNT_EMAIL_PLAIN, "")
-                        Preferences.putString(context, Constants.ACCOUNT_AAS_PLAIN, "")
+                        AuthPrefs.putString(context, Constants.ACCOUNT_EMAIL_PLAIN, "")
+                        AuthPrefs.putString(context, Constants.ACCOUNT_AAS_PLAIN, "")
                         AuroraApp.events.send(AuthEvent.GoogleLogin(false, "", ""))
                     }
                 } else {
@@ -269,9 +270,10 @@ class AuthViewModel @Inject constructor(
      * The empty-dispenser-set signal from [AuthProvider.buildAnonymousAuthData]: it means
      * the user has no dispenser configured at all (as opposed to all of them failing),
      * so the error must point at Settings instead of a generic "internal error".
+     * Also covers the cleartext-dispenser refusal, which is a configuration problem too.
      */
     private fun isDispenserMisconfigured(exception: Throwable): Boolean =
-        exception is IllegalStateException &&
+        (exception is IllegalStateException || exception is IllegalArgumentException) &&
             exception.message?.contains("dispenser", ignoreCase = true) == true
 
     fun retry() {
@@ -383,7 +385,7 @@ class AuthViewModel @Inject constructor(
             )
             // Record whether this Google session relies on microG's AccountManager so we
             // can warn the user if microG is later uninstalled.
-            Preferences.putBoolean(
+            AuthPrefs.putBoolean(
                 context,
                 Preferences.PREFERENCE_AUTH_VIA_MICROG,
                 accountType == AccountType.GOOGLE &&
@@ -393,7 +395,7 @@ class AuthViewModel @Inject constructor(
             authProvider.persistAccount(
                 authData = authData,
                 accountType = accountType,
-                authViaMicroG = Preferences.getBoolean(
+                authViaMicroG = AuthPrefs.getBoolean(
                     context,
                     Preferences.PREFERENCE_AUTH_VIA_MICROG,
                     false

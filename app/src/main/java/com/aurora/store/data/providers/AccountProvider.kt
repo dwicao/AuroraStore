@@ -9,13 +9,47 @@ import android.content.Context
 import com.aurora.Constants
 import com.aurora.gplayapi.session.TokenType
 import com.aurora.store.data.model.AccountType
+import com.aurora.store.util.AuthPrefs
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_AUTH_DATA
 
+/**
+ * Legacy single-account mirror of the Room account table (see [AuthProvider]: the DB is
+ * the source of truth, these prefs are what the login gate and the token-mint paths
+ * read). All secrets live in [AuthPrefs]' isolated file — excluded from cloud and
+ * device-transfer backups — never in the default SharedPreferences.
+ *
+ * Reads fall back to the pre-isolation default prefs once, so existing installs
+ * migrate transparently; every write goes to the new file and clears the legacy key.
+ */
 object AccountProvider {
 
+    private fun getString(context: Context, key: String): String {
+        val isolated = AuthPrefs.getString(context, key)
+        if (isolated.isNotEmpty()) return isolated
+        return Preferences.getString(context, key)
+    }
+
+    private fun putString(context: Context, key: String, value: String) {
+        AuthPrefs.putString(context, key, value)
+        Preferences.remove(context, key)
+    }
+
+    private fun getBoolean(context: Context, key: String): Boolean =
+        AuthPrefs.getBoolean(context, key) || Preferences.getBoolean(context, key)
+
+    private fun putBoolean(context: Context, key: String, value: Boolean) {
+        AuthPrefs.putBoolean(context, key, value)
+        Preferences.remove(context, key)
+    }
+
+    private fun remove(context: Context, key: String) {
+        AuthPrefs.remove(context, key)
+        Preferences.remove(context, key)
+    }
+
     fun getAccountType(context: Context): AccountType {
-        val rawType = Preferences.getString(context, Constants.ACCOUNT_TYPE)
+        val rawType = getString(context, Constants.ACCOUNT_TYPE)
         return when (rawType) {
             "GOOGLE" -> AccountType.GOOGLE
             else -> AccountType.ANONYMOUS
@@ -23,17 +57,17 @@ object AccountProvider {
     }
 
     fun isLoggedIn(context: Context): Boolean =
-        Preferences.getBoolean(context, Constants.ACCOUNT_SIGNED_IN, false)
+        getBoolean(context, Constants.ACCOUNT_SIGNED_IN)
 
     fun getLoginEmail(context: Context): String? {
-        val email = Preferences.getString(context, Constants.ACCOUNT_EMAIL_PLAIN)
+        val email = getString(context, Constants.ACCOUNT_EMAIL_PLAIN)
         return email.ifBlank { null }
     }
 
     fun getLoginToken(context: Context): Pair<String, TokenType>? {
-        val email = Preferences.getString(context, Constants.ACCOUNT_EMAIL_PLAIN)
-        val aasToken = Preferences.getString(context, Constants.ACCOUNT_AAS_PLAIN)
-        val authToken = Preferences.getString(context, Constants.ACCOUNT_AUTH_PLAIN)
+        val email = getString(context, Constants.ACCOUNT_EMAIL_PLAIN)
+        val aasToken = getString(context, Constants.ACCOUNT_AAS_PLAIN)
+        val authToken = getString(context, Constants.ACCOUNT_AUTH_PLAIN)
 
         if (email.isBlank() && (aasToken.isBlank() || authToken.isBlank())) return null
 
@@ -48,29 +82,29 @@ object AccountProvider {
         tokenType: TokenType,
         accountType: AccountType
     ) {
-        Preferences.putBoolean(context, Constants.ACCOUNT_SIGNED_IN, true)
-        Preferences.putString(context, Constants.ACCOUNT_EMAIL_PLAIN, email)
-        Preferences.putString(context, Constants.ACCOUNT_TYPE, accountType.name)
+        putBoolean(context, Constants.ACCOUNT_SIGNED_IN, true)
+        putString(context, Constants.ACCOUNT_EMAIL_PLAIN, email)
+        putString(context, Constants.ACCOUNT_TYPE, accountType.name)
 
         if (tokenType == TokenType.AAS) {
-            Preferences.putString(context, Constants.ACCOUNT_AAS_PLAIN, token)
+            putString(context, Constants.ACCOUNT_AAS_PLAIN, token)
             // The other token must not survive: getLoginToken() prefers a non-blank AAS,
             // so a stale AAS would shadow a fresh AUTH token (and vice versa) after an
             // account-type switch, minting sessions for the wrong credential.
-            Preferences.remove(context, Constants.ACCOUNT_AUTH_PLAIN)
+            remove(context, Constants.ACCOUNT_AUTH_PLAIN)
         } else {
-            Preferences.putString(context, Constants.ACCOUNT_AUTH_PLAIN, token)
-            Preferences.remove(context, Constants.ACCOUNT_AAS_PLAIN)
+            putString(context, Constants.ACCOUNT_AUTH_PLAIN, token)
+            remove(context, Constants.ACCOUNT_AAS_PLAIN)
         }
     }
 
     fun logout(context: Context) {
-        Preferences.remove(context, PREFERENCE_AUTH_DATA)
-        Preferences.remove(context, Constants.ACCOUNT_SIGNED_IN)
-        Preferences.remove(context, Constants.ACCOUNT_TYPE)
-        Preferences.remove(context, Constants.ACCOUNT_EMAIL_PLAIN)
-        Preferences.remove(context, Constants.ACCOUNT_AAS_PLAIN)
-        Preferences.remove(context, Constants.ACCOUNT_AUTH_PLAIN)
-        Preferences.remove(context, Preferences.PREFERENCE_AUTH_VIA_MICROG)
+        remove(context, PREFERENCE_AUTH_DATA)
+        remove(context, Constants.ACCOUNT_SIGNED_IN)
+        remove(context, Constants.ACCOUNT_TYPE)
+        remove(context, Constants.ACCOUNT_EMAIL_PLAIN)
+        remove(context, Constants.ACCOUNT_AAS_PLAIN)
+        remove(context, Constants.ACCOUNT_AUTH_PLAIN)
+        remove(context, Preferences.PREFERENCE_AUTH_VIA_MICROG)
     }
 }

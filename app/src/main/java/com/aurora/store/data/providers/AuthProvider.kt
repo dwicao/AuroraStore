@@ -27,6 +27,7 @@ import com.aurora.store.data.model.AccountType
 import com.aurora.store.data.model.Auth
 import com.aurora.store.data.play.PlayErrors
 import com.aurora.store.data.room.account.Account
+import com.aurora.store.util.AuthPrefs
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_AUTH_DATA
 import com.aurora.store.util.Preferences.PREFERENCE_DISPENSER_URLS
@@ -305,6 +306,13 @@ class AuthProvider @Inject constructor(
 
     @Throws(IOException::class)
     private fun postToDispenser(url: String, body: ByteArray): Response {
+        // Last line of defense: auth tokens are minted through here, so a cleartext
+        // URL must fail loudly instead of leaking credentials on the wire. UI and
+        // ViewModel layers normalize to https first; this guards anything else that
+        // reaches the network (old prefs, restored backups, custom builds).
+        require(url.toHttpUrl().scheme == "https") {
+            "Dispenser URL must use HTTPS, refusing cleartext auth: $url"
+        }
         val headers = mapOf(
             "User-Agent" to "${APPLICATION_ID}-${VERSION_NAME}-${VERSION_CODE}"
         ).toHeaders()
@@ -424,8 +432,8 @@ class AuthProvider @Inject constructor(
         }
         val token = account.aasToken ?: account.authToken.orEmpty()
         AccountProvider.login(context, account.email, token, account.tokenType, account.type)
-        account.authDataJson?.let { Preferences.putString(context, PREFERENCE_AUTH_DATA, it) }
-        Preferences.putBoolean(
+        account.authDataJson?.let { AuthPrefs.putString(context, PREFERENCE_AUTH_DATA, it) }
+        AuthPrefs.putBoolean(
             context,
             Preferences.PREFERENCE_AUTH_VIA_MICROG,
             account.authViaMicroG
@@ -478,14 +486,14 @@ class AuthProvider @Inject constructor(
      * Saves given [AuthenticatedSession]
      */
     fun saveAuthData(authData: AuthenticatedSession) {
-        Preferences.putString(context, PREFERENCE_AUTH_DATA, json.encodeToString(authData))
+        AuthPrefs.putString(context, PREFERENCE_AUTH_DATA, json.encodeToString(authData))
     }
 
     /**
      * Removes saved session
      */
     fun removeAuthData(context: Context) {
-        Preferences.remove(context, PREFERENCE_AUTH_DATA)
+        AuthPrefs.remove(context, PREFERENCE_AUTH_DATA)
     }
 
     /**

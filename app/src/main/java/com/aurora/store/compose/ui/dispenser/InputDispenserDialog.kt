@@ -43,6 +43,9 @@ fun InputDispenserDialog(onAdd: (url: String) -> Unit = {}, onDismiss: () -> Uni
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     var url by remember { mutableStateOf(TextFieldValue()) }
+    val isHttps = url.text.trim().startsWith("https://", ignoreCase = true)
+    val showSchemeError = url.text.isNotBlank() &&
+        Patterns.WEB_URL.matcher(url.text.trim()).matches() && !isHttps
 
     LaunchedEffect(focusRequester) {
         awaitFrame()
@@ -67,6 +70,12 @@ fun InputDispenserDialog(onAdd: (url: String) -> Unit = {}, onDismiss: () -> Uni
                     onValueChange = { url = it },
                     shape = RoundedCornerShape(10.dp),
                     singleLine = true,
+                    isError = showSchemeError,
+                    supportingText = {
+                        if (showSchemeError) {
+                            Text(text = stringResource(R.string.add_dispenser_https_error))
+                        }
+                    },
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
             }
@@ -74,8 +83,8 @@ fun InputDispenserDialog(onAdd: (url: String) -> Unit = {}, onDismiss: () -> Uni
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                onClick = { onAdd(url.text) },
-                enabled = Patterns.WEB_URL.matcher(url.text).matches()
+                onClick = { onAdd(url.text.trim()) },
+                enabled = isHttps
             ) {
                 Text(text = stringResource(R.string.add))
             }

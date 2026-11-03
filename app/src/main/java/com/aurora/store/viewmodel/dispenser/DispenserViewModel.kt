@@ -43,8 +43,20 @@ class DispenserViewModel @Inject constructor(
     val health = _health.asStateFlow()
 
     fun addDispenser(url: String) {
+        // Defense in depth (the dialog already gates on https): normalize schemeless
+        // input to https, and upgrade an explicit http:// rather than ever storing a
+        // cleartext dispenser URL.
+        val normalized = url.trim().let {
+            when {
+                it.startsWith("https://", ignoreCase = true) -> it
+                it.startsWith("http://", ignoreCase = true) ->
+                    "https://" + it.substringAfter("://")
+
+                else -> "https://$it"
+            }
+        }
         _dispensers = _dispensers.toMutableSet().apply {
-            add(url)
+            add(normalized)
         }
         refreshHealth()
     }

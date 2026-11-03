@@ -11,6 +11,11 @@
         <exclude
             domain="external"
             path="Downloads/" />
+        <!-- Auth tokens/session live in their own prefs file: exclude exactly that
+             file so a backup never carries credentials, without wiping settings. -->
+        <exclude
+            domain="sharedpref"
+            path="auth_prefs.xml" />
     </cloud-backup>
     <device-transfer>
         <exclude
@@ -19,5 +24,8 @@
         <exclude
             domain="external"
             path="Downloads/" />
+        <exclude
+            domain="sharedpref"
+            path="auth_prefs.xml" />
     </device-transfer>
 </data-extraction-rules>

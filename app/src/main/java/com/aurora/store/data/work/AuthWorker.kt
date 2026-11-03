@@ -17,6 +17,7 @@ import com.aurora.store.data.model.AccountType
 import com.aurora.store.data.providers.AccountProvider
 import com.aurora.store.data.providers.AuthProvider
 import com.aurora.store.data.providers.GoogleAccountTokenProvider
+import com.aurora.store.util.AuthPrefs
 import com.aurora.store.util.Preferences
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -98,7 +99,7 @@ open class AuthWorker @AssistedInject constructor(
             authProvider.persistAccount(
                 authData = authData,
                 accountType = accountType,
-                authViaMicroG = Preferences.getBoolean(
+                authViaMicroG = AuthPrefs.getBoolean(
                     context,
                     Preferences.PREFERENCE_AUTH_VIA_MICROG,
                     false
