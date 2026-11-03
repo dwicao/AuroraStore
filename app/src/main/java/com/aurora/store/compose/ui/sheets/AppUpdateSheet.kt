@@ -86,8 +86,13 @@ fun AppUpdateSheet(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
+            // Aurora's own update has no useful Play details page (and fetching one
+            // can fail outright), so it goes straight to the actions instead of
+            // offering a dead-end "App details" button.
+            val showDetailsButton = update.packageName != context.packageName
             AppHeader(
                 update = update,
+                showDetailsButton = showDetailsButton,
                 onShowDetails = {
                     onNavigateTo(Destination.AppDetails(update.packageName))
                     onDismiss()
@@ -192,7 +197,11 @@ fun AppUpdateSheet(
 }
 
 @Composable
-private fun AppHeader(update: Update, onShowDetails: () -> Unit) {
+private fun AppHeader(
+    update: Update,
+    showDetailsButton: Boolean = true,
+    onShowDetails: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -236,8 +245,10 @@ private fun AppHeader(update: Update, onShowDetails: () -> Unit) {
             )
         }
 
-        FilledTonalButton(onClick = onShowDetails) {
-            Text(stringResource(R.string.updates_app_details))
+        if (showDetailsButton) {
+            FilledTonalButton(onClick = onShowDetails) {
+                Text(stringResource(R.string.updates_app_details))
+            }
         }
     }
 }

@@ -26,6 +26,20 @@ val lastCommitTimestamp = providers.exec {
     commandLine("git", "log", "-1", "--format=%ct")
 }.standardOutput.asText.map { it.trim() }
 
+/**
+ * The in-app version follows the fork's release tags (v4.8.15 -> "4.8.15") instead of
+ * a hardcoded upstream version, so the app, the Updates screen and the self-update
+ * feed never disagree about what is installed. Falls back to the last known version
+ * when git tags are unavailable (e.g. shallow/local builds without tags).
+ */
+val appVersionName: String = try {
+    providers.exec {
+        commandLine("git", "describe", "--tags", "--abbrev=0", "--match", "v*")
+    }.standardOutput.asText.get().trim().removePrefix("v").ifBlank { "4.8.4" }
+} catch (_: Exception) {
+    "4.8.4"
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -65,8 +79,8 @@ configure<ApplicationExtension> {
             version = release(37)
         }
 
-        versionCode = 79
-        versionName = "4.8.4"
+        versionCode = 80
+        versionName = appVersionName
 
         testInstrumentationRunner = "com.aurora.store.HiltInstrumentationTestRunner"
         testInstrumentationRunnerArguments["disableAnalytics"] = "true"

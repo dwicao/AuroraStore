@@ -52,6 +52,10 @@ object NotificationUtil {
     private const val SUMMARY_ID_INSTALLED = 1_000_001
     private const val SUMMARY_ID_FAILED = 1_000_002
 
+    // Index of the Updates tab in MainScreen's MainTab (APPS, GAMES, UPDATES).
+    // Update-related notifications land here.
+    private const val UPDATES_TAB_INDEX = 2
+
     // Successful installs are informational, so they expire on their own rather than
     // lingering. Failures are actionable and persist until handled.
     private val INSTALLED_TIMEOUT_MS = TimeUnit.HOURS.toMillis(6)
@@ -174,7 +178,7 @@ object NotificationUtil {
         val builder = NotificationCompat.Builder(context, channelId)
         builder.setSmallIcon(R.drawable.ic_aurora)
         builder.setContentTitle(download.displayName)
-        builder.setContentIntent(getContentIntentForDetails(context, download.packageName))
+        builder.setContentIntent(getContentIntentForPackage(context, download.packageName))
         builder.setLargeIcon(largeIcon)
 
         val cancelIntent = Intent(context, DownloadCancelReceiver::class.java).apply {
@@ -212,7 +216,7 @@ object NotificationUtil {
                 builder.setContentText(context.getString(R.string.download_completed))
                 builder.setAutoCancel(true)
                 builder.setCategory(Notification.CATEGORY_STATUS)
-                builder.setContentIntent(getContentIntentForDetails(context, download.packageName))
+                builder.setContentIntent(getContentIntentForPackage(context, download.packageName))
 
                 // Show install action if app cannot be silently installed
                 if (!AppInstaller.canInstallSilently(
@@ -281,7 +285,7 @@ object NotificationUtil {
         .setLargeIcon(PackageUtil.getIconForPackage(context, packageName))
         .setContentTitle(displayName)
         .setContentText(context.getString(R.string.installer_status_success))
-        .setContentIntent(getContentIntentForDetails(context, packageName))
+        .setContentIntent(getContentIntentForPackage(context, packageName))
         .setCategory(Notification.CATEGORY_STATUS)
         .setGroup(GROUP_INSTALLED)
         .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
@@ -298,7 +302,7 @@ object NotificationUtil {
         .setSmallIcon(R.drawable.ic_aurora)
         .setContentTitle(displayName)
         .setContentText(content)
-        .setContentIntent(getContentIntentForDetails(context, packageName))
+        .setContentIntent(getContentIntentForPackage(context, packageName))
         .setCategory(Notification.CATEGORY_ERROR)
         .setGroup(GROUP_FAILED)
         .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
@@ -665,6 +669,20 @@ object NotificationUtil {
             false
         )
     }
+
+    /**
+     * Deep-link target for notifications about a download/install of [packageName].
+     * Aurora's own package never goes to AppDetails: there is no useful Play page for
+     * it in this flow, and a failed fetch would strand the user on an error screen
+     * that is alone in the back stack (back would just exit the app). It lands on the
+     * Updates tab instead, where the self-update row can be acted on directly.
+     */
+    private fun getContentIntentForPackage(context: Context, packageName: String): PendingIntent? =
+        if (packageName == context.packageName) {
+            getContentIntentForMain(context, initialTab = UPDATES_TAB_INDEX)
+        } else {
+            getContentIntentForDetails(context, packageName)
+        }
 
     private fun getContentIntentForMain(context: Context, initialTab: Int): PendingIntent? {
         val intent = Intent(context, ComposeActivity::class.java).apply {

@@ -223,7 +223,29 @@ fun NavDisplay(startDestination: NavKey) {
     }
 
     NavDisplay(
-        onBack = { backstack.removeLastOrNull() },
+        onBack = {
+            // A deep link (notification, archived-app unarchive, external intent) can
+            // leave a detail screen alone in the back stack. Popping it would empty the
+            // stack and exit the app, which reads as "back is broken / the app closed
+            // itself". Home is the only sane place to go from there instead.
+            // Splash/Onboarding/Main keep the default behavior (exit / no-op).
+            val last = backstack.lastOrNull()
+            if (backstack.size <= 1 && last != null &&
+                last !is Screen.Main && last !is Screen.Splash && last !is Screen.Onboarding
+            ) {
+                backstack.clear()
+                backstack.add(
+                    Screen.Main(
+                        Preferences.getInteger(
+                            context,
+                            Preferences.PREFERENCE_DEFAULT_SELECTED_TAB
+                        )
+                    )
+                )
+            } else {
+                backstack.removeLastOrNull()
+            }
+        },
         backStack = backstack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
