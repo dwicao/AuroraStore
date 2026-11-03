@@ -332,8 +332,14 @@ class DownloadWorker @AssistedInject constructor(
             if (exception is DownloadCancelledException && isCancelledByUser() &&
                 !isPausedByUser()
             ) {
-                Log.i(TAG, "Download cancelled by user for ${download.packageName}")
-                runCatching { files.forEach { deleteFile(it) } }
+                // Re-read the row immediately before deleting: a pause that landed after
+                // the checks above must not lose its partials to a stale decision.
+                if (isPausedByUser()) {
+                    Log.i(TAG, "Pause landed during stop for ${download.packageName}")
+                } else {
+                    Log.i(TAG, "Download cancelled by user for ${download.packageName}")
+                    runCatching { files.forEach { deleteFile(it) } }
+                }
             }
 
             return onFailure(exception)

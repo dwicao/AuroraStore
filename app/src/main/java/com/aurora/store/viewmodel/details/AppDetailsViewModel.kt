@@ -442,6 +442,19 @@ class AppDetailsViewModel @Inject constructor(
         viewModelScope.launch { downloadHelper.cancelDownload(app.packageName) }
     }
 
+    fun pauseDownload(app: App) {
+        viewModelScope.launch { downloadHelper.pauseDownload(app.packageName) }
+    }
+
+    fun resumeDownload(app: App) {
+        viewModelScope.launch { downloadHelper.resumeDownload(app.packageName) }
+    }
+
+    /** True while this app's download row is paused, so the actions show Resume. */
+    val isDownloadPaused: StateFlow<Boolean> = download
+        .map { it?.status == DownloadStatus.PAUSED }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     fun toggleFavourite(app: App) {
         viewModelScope.launch(Dispatchers.IO) {
             if (favourite.value) {

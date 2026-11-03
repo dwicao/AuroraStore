@@ -328,6 +328,22 @@ class DownloadHelper @Inject constructor(
     }
 
     /**
+     * Bytes already on disk for [download]: final files plus `.tmp` partials (a patch's
+     * `.patch`/`.patched` sidecars count too). Single place both pause logging and the
+     * resume progress seeding read from, so the two can never disagree.
+     */
+    private fun partialBytesOnDisk(download: Download): Long =
+        (download.fileList + download.sharedLibs.flatMap { it.fileList }).sumOf { gFile ->
+            val local = PathUtil.getLocalFile(context, gFile, download)
+            val partial = PathUtil.getPartialFile(local)
+            when {
+                partial.exists() -> partial.length()
+                local.exists() -> local.length()
+                else -> 0L
+            }
+        }
+
+    /**
      * Re-queues a previously failed (or otherwise inactive) download so it runs again. The
      * worker resumes from any verified files on disk, so a retry after an install failure
      * re-installs without re-downloading. No-op if the download is already active.
@@ -356,7 +372,11 @@ class DownloadHelper @Inject constructor(
             Log.i(TAG, "Skipping pause for $packageName; already ${existing.status}")
             return
         }
-        Log.i(TAG, "Pausing download for $packageName")
+        Log.i(
+            TAG,
+            "Pausing download for $packageName with " +
+                "${partialBytesOnDisk(existing)} partial bytes kept for resume"
+        )
         downloadDao.updateStatus(packageName, DownloadStatus.PAUSED)
         // The worker notices the stop at its next chunk boundary and backs off in
         // onFailure once it sees the PAUSED row, keeping the partials.
@@ -377,18 +397,10 @@ class DownloadHelper @Inject constructor(
             return
         }
         Log.i(TAG, "Resuming download for $packageName")
-        val onDisk = (existing.fileList + existing.sharedLibs.flatMap { it.fileList })
-            .sumOf { gFile ->
-                val local = PathUtil.getLocalFile(context, gFile, existing)
-                val partial = PathUtil.getPartialFile(local)
-                when {
-                    partial.exists() -> partial.length()
-                    local.exists() -> local.length()
-                    else -> 0L
-                }
-            }
+        val onDisk = partialBytesOnDisk(existing)
         if (existing.size > 0) {
             val progress = ((onDisk * 100) / existing.size).toInt().coerceIn(0, 99)
+            Log.i(TAG, "Resume for $packageName starts from $onDisk bytes ($progress%) on disk")
             downloadDao.updateProgress(packageName, progress, 0, 0)
         }
         downloadDao.updateStatus(packageName, DownloadStatus.QUEUED)

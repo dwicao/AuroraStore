@@ -147,6 +147,7 @@ fun AppDetailsScreen(
     val installError by viewModel.installError.collectAsStateWithLifecycle()
     val suggestionsBundle by viewModel.suggestionsBundle.collectAsStateWithLifecycle()
     val canDownload by viewModel.canDownload.collectAsStateWithLifecycle()
+    val isDownloadPaused by viewModel.isDownloadPaused.collectAsStateWithLifecycle()
     val testingProgramUpdating by viewModel.testingProgramUpdating.collectAsStateWithLifecycle()
     val testingProgramSubscribed by
         viewModel.testingProgramSubscribed.collectAsStateWithLifecycle()
@@ -224,6 +225,9 @@ fun AppDetailsScreen(
                     },
                     onFavorite = { viewModel.toggleFavourite(loadedApp) },
                     onCancelDownload = { viewModel.cancelDownload(loadedApp) },
+                    onPauseDownload = { viewModel.pauseDownload(loadedApp) },
+                    onResumeDownload = { viewModel.resumeDownload(loadedApp) },
+                    isDownloadPaused = isDownloadPaused,
                     onUninstall = { AppInstaller.uninstall(context, packageName) },
                     onOpen = {
                         try {
@@ -343,6 +347,9 @@ private fun ScreenContentApp(
     onDownloadWith: (requestedApp: App, accountId: String) -> Unit = { _, _ -> },
     onFavorite: () -> Unit = {},
     onCancelDownload: () -> Unit = {},
+    onPauseDownload: () -> Unit = {},
+    onResumeDownload: () -> Unit = {},
+    isDownloadPaused: Boolean = false,
     onUninstall: () -> Unit = {},
     onOpen: () -> Unit = {},
     onTestingSubscriptionChange: (subscribe: Boolean) -> Unit = {},
@@ -612,12 +619,21 @@ private fun ScreenContentApp(
                 is AppState.Queued,
                 is AppState.Purchasing,
                 is AppState.Downloading -> {
-                    Actions(
-                        primaryActionDisplayName = stringResource(R.string.action_open),
-                        secondaryActionDisplayName = stringResource(R.string.action_cancel),
-                        isPrimaryActionEnabled = false,
-                        onSecondaryAction = onCancelDownload
-                    )
+                    if (isDownloadPaused) {
+                        Actions(
+                            primaryActionDisplayName = stringResource(R.string.action_resume),
+                            secondaryActionDisplayName = stringResource(R.string.action_cancel),
+                            onPrimaryAction = onResumeDownload,
+                            onSecondaryAction = onCancelDownload
+                        )
+                    } else {
+                        Actions(
+                            primaryActionDisplayName = stringResource(R.string.action_pause),
+                            secondaryActionDisplayName = stringResource(R.string.action_cancel),
+                            onPrimaryAction = onPauseDownload,
+                            onSecondaryAction = onCancelDownload
+                        )
+                    }
                 }
 
                 is AppState.Verifying,
