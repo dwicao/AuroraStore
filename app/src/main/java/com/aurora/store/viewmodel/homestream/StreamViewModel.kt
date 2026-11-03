@@ -17,6 +17,8 @@ import com.aurora.gplayapi.model.StreamCluster
 import com.aurora.gplayapi.web.WebPlayClient
 import com.aurora.store.HomeStash
 import com.aurora.store.data.model.ViewState
+import com.aurora.store.data.play.PlayErrors
+import com.aurora.store.data.play.PlayGateway
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +34,8 @@ import kotlinx.coroutines.sync.withLock
  */
 @HiltViewModel
 class StreamViewModel @Inject constructor(
-    private val webPlayClient: WebPlayClient
+    private val webPlayClient: WebPlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     val liveData: MutableLiveData<ViewState> = MutableLiveData()
@@ -49,23 +52,23 @@ class StreamViewModel @Inject constructor(
 
     fun observe(category: ContentType) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                stashMutex.withLock {
-                    val bundle = targetBundle(category)
+            stashMutex.withLock {
+                val bundle = targetBundle(category)
 
-                    // Post existing data if any clusters exist
-                    if (bundle.hasClusters()) {
-                        liveData.postValue(ViewState.Success(stash.toMap()))
-                    }
+                // Post existing data if any clusters exist
+                if (bundle.hasClusters()) {
+                    liveData.postValue(ViewState.Success(stash.toMap()))
+                }
 
-                    if (!bundle.hasClusters() || bundle.hasNext()) {
-                        // Fetch new stream bundle
-                        val newBundle = if (bundle.hasClusters()) {
+                if (!bundle.hasClusters() || bundle.hasNext()) {
+                    // Fetch new stream bundle
+                    playGateway.call("home-stream") {
+                        if (bundle.hasClusters()) {
                             webPlayClient.streams.next(bundle.next!!)
                         } else {
                             webPlayClient.streams.categoryStream(category)
                         }
-
+                    }.onSuccess { newBundle ->
                         val mergedBundle = bundle.copy(
                             clusters = bundle.clusters + newBundle.clusters,
                             next = newBundle.next
@@ -74,36 +77,41 @@ class StreamViewModel @Inject constructor(
 
                         // Post updated to UI
                         liveData.postValue(ViewState.Success(stash.toMap()))
-                    } else {
-                        Log.i(TAG, "End of Bundle")
+                    }.onFailure {
+                        // Auth failures already redirect to Splash via the gateway.
+                        if (!PlayErrors.isAuthFailure(it)) {
+                            liveData.postValue(ViewState.Error(it.message))
+                        }
                     }
+                } else {
+                    Log.i(TAG, "End of Bundle")
                 }
-            } catch (e: Exception) {
-                liveData.postValue(ViewState.Error(e.message))
             }
         }
     }
 
     fun observeCluster(category: ContentType, streamCluster: StreamCluster) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                if (streamCluster.hasNext()) {
-                    val newCluster = webPlayClient.streams.next(streamCluster.next!!)
-
+            if (streamCluster.hasNext()) {
+                playGateway.call("home-stream-next") {
+                    webPlayClient.streams.next(streamCluster.next!!)
+                }.onSuccess { newCluster ->
                     stashMutex.withLock {
                         updateCluster(category, streamCluster.id, newCluster)
                     }
 
                     liveData.postValue(ViewState.Success(stash.toMap()))
-                } else {
-                    stashMutex.withLock {
-                        postClusterEnd(category, streamCluster.id)
+                }.onFailure {
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        liveData.postValue(ViewState.Error(it.message))
                     }
-
-                    liveData.postValue(ViewState.Success(stash.toMap()))
                 }
-            } catch (e: Exception) {
-                liveData.postValue(ViewState.Error(e.message))
+            } else {
+                stashMutex.withLock {
+                    postClusterEnd(category, streamCluster.id)
+                }
+
+                liveData.postValue(ViewState.Success(stash.toMap()))
             }
         }
     }

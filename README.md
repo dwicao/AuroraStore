@@ -41,6 +41,52 @@ Aurora Store works exactly like a door or a browser, allowing you to log in to y
   - Review Add/Update
 - Token dispenser server is not super reliable, downtimes are expected.  
 
+## Fork differences (vs upstream AuroraOSS)
+
+This fork ships a few changes on top of upstream, mostly around reliability.
+Upstream behavior is unchanged everywhere else.
+
+- **Splash/auth hardening.** Session validation and re-mint are bounded by
+  timeouts and cancellable, the splash screen gains a watchdog with an explicit
+  Retry button, and offline startup shows "No network" instead of spinning
+  forever. This fixes the "stuck loading after not opening the app for a while"
+  case (expired session + slow/dead network with no way to recover).
+- **Shizuku as the default installer.** On every app start Aurora checks whether
+  the Shizuku permission is held and installs via Shizuku when it is. On a fresh
+  install it shows the Shizuku grant popup once (only when onboarding is done and
+  the installer is still the Session default); denying it disables further
+  auto-prompts, and picking Shizuku manually from the Installer screen always
+  works. After a clear-data the onboarding default is Shizuku too when the
+  permission is already held, so no re-configuration is needed.
+- **Play API boundary (`PlayGateway`).** All Play API calls go through a single
+  choke point mapping failures onto a small `PlayError` taxonomy, emitting
+  session-expired redirects uniformly and counting unexpected failures so an
+  upstream Google change shows up in logcat before it fully breaks. Background
+  workers (auth refresh, update check, per-account sessions) and the Accounts
+  screen operations are time-bounded the same way.
+- **Dispenser health tracking.** Anonymous logins pick the healthiest dispenser
+  (recent failures are skipped with exponential backoff) instead of pure random,
+  the Dispenser screen shows per-URL backoff status, and a missing dispenser
+  configuration points at Settings instead of a generic internal error.
+- **Startup account reconciliation.** On cold start the Room account DB (source
+  of truth) is reconciled against the legacy SharedPreferences mirror, and the
+  stale sibling token is cleared on login — fixing drift from backup restores or
+  crashes mid-write.
+- **Download hardening.** Range-rejected (416) partials restart from zero once
+  instead of looping, transient 5xx responses are retried with backoff, and the
+  Exodus Privacy integration retries transient failures instead of failing
+  silently on the first attempt.
+- **CI.** `.github/workflows/release.yml` builds a signed release APK and
+  attaches it to the GitHub Release on `v*` tags;
+  `.github/workflows/nightly-health.yml` runs daily dispenser/Play probes, a
+  gplayapi freshness check, and the JVM unit tests as an early warning for
+  upstream breakage.
+
+Releases from this fork are signed with a different key than upstream:
+
+- SHA1: `E0:B5:7C:53:D3:4F:F1:1E:E6:00:06:13:55:C7:B3:33:C6:6A:BD:37`
+- SHA256: `44:9E:09:99:C0:AF:C2:A3:1F:BF:9D:CA:95:A0:80:07:CD:A3:84:B5:15:54:9F:66:BE:6B:CF:85:21:7F:75:3F`
+
 ## AI Usage
 
 Aurora Store is developed with the help of AI tooling. Here is what that means.

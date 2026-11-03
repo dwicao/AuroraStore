@@ -21,6 +21,8 @@ import com.aurora.store.util.Preferences
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.io.IOException
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 
 /**
  * Worker to refresh [AuthenticatedSession] in background
@@ -52,10 +54,13 @@ open class AuthWorker @AssistedInject constructor(
             return Result.success()
         }
 
-        // Generate and validate new auth
+        // Generate and validate new auth. Bounded: the mint below fans out to
+        // AccountManager and Play-network calls, and a hung one must fail this run
+        // instead of wedging the worker until WorkManager kills it.
         try {
-            val accountType = AccountProvider.getAccountType(context)
-            val authData = when (accountType) {
+            withTimeout(AUTH_REFRESH_TIMEOUT_MS) {
+                val accountType = AccountProvider.getAccountType(context)
+                val authData = when (accountType) {
                 AccountType.GOOGLE -> {
                     val email = AccountProvider.getLoginEmail(context)
                     val tokenPair = AccountProvider.getLoginToken(context)
@@ -100,12 +105,26 @@ open class AuthWorker @AssistedInject constructor(
                 ),
                 makeDefault = true
             )
+            }
             Log.i(TAG, "Refreshed AuthData successfully")
             return Result.success()
+        } catch (exception: TimeoutCancellationException) {
+            Log.w(TAG, "Auth refresh timed out, will retry on the next run", exception)
+            return Result.failure()
         } catch (exception: Exception) {
             Log.e(TAG, "Failed to refresh authData!", exception)
             return Result.failure()
         }
+    }
+
+    companion object {
+        /**
+         * Upper bound for a background session re-mint (AccountManager token + Play
+         * authenticate + persist). The foreground path uses 35s/120s; the worker gets
+         * more room since it must not burn WorkManager retries on a slow network, but
+         * it must never hang until the system kills it either.
+         */
+        private const val AUTH_REFRESH_TIMEOUT_MS = 90_000L
     }
 
     private fun verifyAndSaveAuth(

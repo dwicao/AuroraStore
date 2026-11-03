@@ -16,7 +16,6 @@ import com.aurora.extensions.TAG
 import com.aurora.extensions.requiresGMS
 import com.aurora.extensions.toast
 import com.aurora.gplayapi.PlayClient
-import com.aurora.gplayapi.PlayException
 import com.aurora.gplayapi.api.TopChartType
 import com.aurora.gplayapi.model.App
 import com.aurora.gplayapi.model.Category
@@ -32,7 +31,6 @@ import com.aurora.store.AuroraApp
 import com.aurora.store.R
 import com.aurora.store.data.AccountRepository
 import com.aurora.store.data.ExodusRepository
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.event.InstallerEvent
 import com.aurora.store.data.helper.DownloadHelper
 import com.aurora.store.data.model.AppState
@@ -41,6 +39,7 @@ import com.aurora.store.data.model.PlexusReport
 import com.aurora.store.data.model.Report
 import com.aurora.store.data.model.Scores
 import com.aurora.store.data.model.StorageRequirement
+import com.aurora.store.data.play.PlayErrors
 import com.aurora.store.data.play.PlayGateway
 import com.aurora.store.data.providers.AuthProvider
 import com.aurora.store.data.room.download.Download
@@ -233,11 +232,13 @@ class AppDetailsViewModel @Inject constructor(
 
     fun fetchAppDetails(packageName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                _testingProgramSubscribed.value = null
-                _app.value = playClient.apps.details(packageName).copy(
+            _testingProgramSubscribed.value = null
+            playGateway.call("app-details", expiredPackage = packageName) {
+                playClient.apps.details(packageName).copy(
                     isInstalled = PackageUtil.isInstalled(context, packageName)
                 )
+            }.onSuccess {
+                _app.value = it
                 val existingDownload = downloadHelper.getDownload(packageName)
 
                 // A COMPLETED record for an app that is no longer installed means the app was
@@ -254,16 +255,14 @@ class AppDetailsViewModel @Inject constructor(
                     _state.value =
                         existingDownload?.let { stateFromDownload(it) } ?: defaultAppState
                 }
-            } catch (exception: PlayException.Unauthorized) {
-                // The saved Play token has been rejected mid-session. Hand off to
-                // Splash to re-validate and rebuild auth, and ask it to bring the
-                // user back to this app's details once auth is good again.
-                Log.w(TAG, "App details fetch returned ${exception.code}, redirecting to Splash")
-                AuroraApp.events.send(AuthEvent.SessionExpired(packageName))
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to fetch app details", exception)
-                _app.value = null
-                _state.value = AppState.Error(exception.message)
+            }.onFailure {
+                // Auth rejections already hand off to Splash (scoped to this package so
+                // the user is brought back here) via the gateway.
+                if (!PlayErrors.isAuthFailure(it)) {
+                    Log.e(TAG, "Failed to fetch app details", it)
+                    _app.value = null
+                    _state.value = AppState.Error(it.message)
+                }
             }
         }.invokeOnCompletion { throwable ->
             // Only proceed if there was no error while fetching the app details
@@ -287,10 +286,9 @@ class AppDetailsViewModel @Inject constructor(
     suspend fun topChartCluster(chart: TopChart, title: String): StreamCluster? {
         val type = TopChartType.entries.firstOrNull { it.value == chart.chartId } ?: return null
         return withContext(Dispatchers.IO) {
-            runCatching { webPlayClient.charts.cluster(chart.category, type) }
-                .onFailure { Log.e(TAG, "Failed to fetch top chart", it) }
-                .getOrNull()
-                ?.takeIf { it.apps.isNotEmpty() }
+            playGateway.callOrNull("top-chart-cluster") {
+                webPlayClient.charts.cluster(chart.category, type)
+            }?.takeIf { it.apps.isNotEmpty() }
                 ?.copy(title = title)
         }
     }
@@ -300,7 +298,9 @@ class AppDetailsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _categoryIconUrl.value = ContentType.entries.firstNotNullOfOrNull { type ->
                 val categories = categoryCache.getOrPut(type) {
-                    runCatching { playClient.categories.all(type) }.getOrDefault(emptyList())
+                    playGateway.callOrDefault("category-icon", emptyList()) {
+                        playClient.categories.all(type)
+                    }
                 }
                 categories.firstOrNull { it.browseUrl == browseUrl }?.imageUrl
             }
@@ -310,11 +310,13 @@ class AppDetailsViewModel @Inject constructor(
     fun updateTestingProgramStatus(packageName: String, subscribe: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             _testingProgramUpdating.value = true
-            val enrolled = try {
+            val enrolled = playGateway.call("testing-program") {
                 val status = playClient.apps.testingProgram(packageName, subscribe)
                 if (subscribe) status.subscribed else !status.unsubscribed
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to update testing program status", exception)
+            }.getOrElse {
+                if (!PlayErrors.isAuthFailure(it)) {
+                    Log.e(TAG, "Failed to update testing program status", it)
+                }
                 !subscribe
             }
             _testingProgramSubscribed.value = enrolled
@@ -342,9 +344,10 @@ class AppDetailsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val email = accountEmail
             if (email.isBlank()) return@launch
-            try {
-                val isTesting = app.testingProgram?.isSubscribed ?: false
-                val apiReview = playClient.reviews.userReview(app.packageName, isTesting)
+            val isTesting = app.testingProgram?.isSubscribed ?: false
+            playGateway.call("user-review") {
+                playClient.reviews.userReview(app.packageName, isTesting)
+            }.onSuccess { apiReview ->
                 if (apiReview != null) {
                     reviewDao.upsert(
                         LocalReview.fromReview(apiReview, app.packageName, email, synced = true)
@@ -355,8 +358,10 @@ class AppDetailsViewModel @Inject constructor(
                         reviewDao.delete(app.packageName, email)
                     }
                 }
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to fetch user review", exception)
+            }.onFailure {
+                if (!PlayErrors.isAuthFailure(it)) {
+                    Log.e(TAG, "Failed to fetch user review", it)
+                }
             }
         }
     }
@@ -364,16 +369,17 @@ class AppDetailsViewModel @Inject constructor(
     fun postAppReview(packageName: String, review: Review, isBeta: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             val email = accountEmail
-            try {
-                // v4's add() throws rather than returning null on a rejected review (unlike v3's
-                // addOrEditReview); the catch below is what used to be the "posted == null" branch.
-                val posted = playClient.reviews.add(
+            // v4's add() throws rather than returning null on a rejected review (unlike v3's
+            // addOrEditReview); the failure branch below is what used to be the "posted == null" branch.
+            playGateway.call("post-review", expiredPackage = packageName) {
+                playClient.reviews.add(
                     packageName,
                     review.title,
                     review.comment,
                     review.rating,
                     isBeta
                 )
+            }.onSuccess { posted ->
                 // Cache as pending (not yet synced): Play accepted it but getUserReview may
                 // not return it until publishing finishes. Marking it synced prematurely would
                 // let the next reconcile mistake the publishing delay for a deletion.
@@ -381,9 +387,12 @@ class AppDetailsViewModel @Inject constructor(
                     LocalReview.fromReview(posted, packageName, email, synced = false)
                 )
                 _reviewPosted.tryEmit(true)
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to post review", exception)
-                _reviewPosted.tryEmit(false)
+            }.onFailure {
+                // Auth rejections already hand off to Splash via the gateway.
+                if (!PlayErrors.isAuthFailure(it)) {
+                    Log.e(TAG, "Failed to post review", it)
+                    _reviewPosted.tryEmit(false)
+                }
             }
         }
     }
@@ -391,14 +400,17 @@ class AppDetailsViewModel @Inject constructor(
     fun deleteAppReview(app: App) {
         viewModelScope.launch(Dispatchers.IO) {
             val email = accountEmail
-            try {
-                val isTesting = app.testingProgram?.isSubscribed ?: false
+            val isTesting = app.testingProgram?.isSubscribed ?: false
+            playGateway.call("delete-review") {
                 playClient.reviews.delete(app.packageName, isTesting)
+            }.onSuccess {
                 // Only drop the local copy once Play has accepted the deletion, so a failed
                 // network call leaves the review visible rather than silently disappearing.
                 if (email.isNotBlank()) reviewDao.delete(app.packageName, email)
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to delete review", exception)
+            }.onFailure {
+                if (!PlayErrors.isAuthFailure(it)) {
+                    Log.e(TAG, "Failed to delete review", it)
+                }
             }
         }
     }
@@ -497,11 +509,8 @@ class AppDetailsViewModel @Inject constructor(
 
     private fun fetchFeaturedReviews(packageName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                _featuredReviews.value = playClient.reviews.summary(packageName).reviews
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to fetch featured app reviews", exception)
-                _featuredReviews.value = emptyList()
+            _featuredReviews.value = playGateway.callOrDefault("featured-reviews", emptyList()) {
+                playClient.reviews.summary(packageName).reviews
             }
         }
     }
@@ -514,11 +523,8 @@ class AppDetailsViewModel @Inject constructor(
 
     private fun fetchDataSafetyReport(packageName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                _dataSafetyReport.value = webPlayClient.dataSafety.fetch(packageName)
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to fetch data safety report", exception)
-                _dataSafetyReport.value = null
+            _dataSafetyReport.value = playGateway.callOrNull("data-safety") {
+                webPlayClient.dataSafety.fetch(packageName)
             }
         }
     }
@@ -533,17 +539,20 @@ class AppDetailsViewModel @Inject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val pageBundle = playClient.apps.detailsStream(streamUrl)
-                val pageClusters = pageBundle.clusters.filter {
-                    it.title.isNotBlank() && it.apps.isNotEmpty()
+            playGateway.call("details-stream") { playClient.apps.detailsStream(streamUrl) }
+                .onSuccess { pageBundle ->
+                    val pageClusters = pageBundle.clusters.filter {
+                        it.title.isNotBlank() && it.apps.isNotEmpty()
+                    }
+                    suggestionsState = pageBundle.copy(clusters = pageClusters)
+                    _suggestionsBundle.value = suggestionsState
                 }
-                suggestionsState = pageBundle.copy(clusters = pageClusters)
-                _suggestionsBundle.value = suggestionsState
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to fetch suggestions stream", exception)
-                _suggestionsBundle.value = StreamBundle.EMPTY
-            }
+                .onFailure {
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        Log.e(TAG, "Failed to fetch suggestions stream", it)
+                        _suggestionsBundle.value = StreamBundle.EMPTY
+                    }
+                }
         }
     }
 
@@ -551,21 +560,24 @@ class AppDetailsViewModel @Inject constructor(
         val cursor = cluster.next ?: return
 
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val nextPage = playClient.streams.next(cursor)
-                val mergedCluster = cluster.copy(
-                    apps = cluster.apps + nextPage.apps,
-                    next = nextPage.next
-                )
-                suggestionsState = suggestionsState.copy(
-                    clusters = suggestionsState.clusters.map {
-                        if (it.id == cluster.id) mergedCluster else it
+            playGateway.call("details-stream-next") { playClient.streams.next(cursor) }
+                .onSuccess { nextPage ->
+                    val mergedCluster = cluster.copy(
+                        apps = cluster.apps + nextPage.apps,
+                        next = nextPage.next
+                    )
+                    suggestionsState = suggestionsState.copy(
+                        clusters = suggestionsState.clusters.map {
+                            if (it.id == cluster.id) mergedCluster else it
+                        }
+                    )
+                    _suggestionsBundle.value = suggestionsState
+                }
+                .onFailure {
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        Log.e(TAG, "Failed to fetch next cluster page", it)
                     }
-                )
-                _suggestionsBundle.value = suggestionsState
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed to fetch next cluster page", exception)
-            }
+                }
         }
     }
 

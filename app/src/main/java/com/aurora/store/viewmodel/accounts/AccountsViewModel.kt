@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
@@ -51,11 +52,26 @@ class AccountsViewModel @Inject constructor(
     private val _refreshResult = MutableSharedFlow<Int>()
     val refreshResult = _refreshResult.asSharedFlow()
 
+    companion object {
+        /**
+         * Upper bound for one interactive account operation (refresh/add/switch). Matches
+         * the microG consent window used on the login path: long enough for the user to
+         * approve a consent screen, short enough that a hung backend can't wedge the
+         * Accounts screen's progress state forever.
+         */
+        private const val ACCOUNT_OP_TIMEOUT_MS = 120_000L
+    }
+
     /** Refreshes the session/token for every account; the default's prefs mirror is re-synced. */
     fun refreshAll(activity: Activity?) {
         viewModelScope.launch(Dispatchers.IO) {
             val all = accountRepository.getAll()
-            val failures = all.count { authProvider.refresh(it.id, activity).isFailure }
+            val failures = all.count {
+                runCatching {
+                    // Bounded per account so one hung backend doesn't wedge the batch.
+                    withTimeout(ACCOUNT_OP_TIMEOUT_MS) { authProvider.refresh(it.id, activity) }
+                }.isFailure
+            }
             authProvider.syncDefaultToPrefs()
             _refreshResult.emit(failures)
         }
@@ -63,7 +79,9 @@ class AccountsViewModel @Inject constructor(
 
     fun setDefault(account: Account) {
         viewModelScope.launch(Dispatchers.IO) {
-            val ok = authProvider.setDefaultAccount(account.id).isSuccess
+            val ok = runCatching {
+                withTimeout(ACCOUNT_OP_TIMEOUT_MS) { authProvider.setDefaultAccount(account.id) }
+            }.isSuccess
             _switched.emit(ok)
         }
     }
@@ -89,13 +107,15 @@ class AccountsViewModel @Inject constructor(
     fun addAnonymousAccount() {
         viewModelScope.launch(Dispatchers.IO) {
             val added = runCatching {
-                val authData = authProvider.buildAnonymousAuthData().getOrThrow()
-                authProvider.persistAccount(
-                    authData = authData,
-                    accountType = AccountType.ANONYMOUS,
-                    authViaMicroG = false,
-                    makeDefault = false
-                )
+                withTimeout(ACCOUNT_OP_TIMEOUT_MS) {
+                    val authData = authProvider.buildAnonymousAuthData().getOrThrow()
+                    authProvider.persistAccount(
+                        authData = authData,
+                        accountType = AccountType.ANONYMOUS,
+                        authViaMicroG = false,
+                        makeDefault = false
+                    )
+                }
             }.isSuccess
             _addResult.emit(added)
         }
@@ -111,16 +131,18 @@ class AccountsViewModel @Inject constructor(
     fun addSystemAccount(email: String, activity: Activity?) {
         viewModelScope.launch(Dispatchers.IO) {
             val added = runCatching {
-                val token = tokenProvider.fetchAuthToken(email = email, activity = activity)
-                val authData = authProvider
-                    .buildGoogleAuthData(email, token, TokenType.AUTH)
-                    .getOrThrow()
-                authProvider.persistAccount(
-                    authData = authData,
-                    accountType = AccountType.GOOGLE,
-                    authViaMicroG = true,
-                    makeDefault = false
-                )
+                withTimeout(ACCOUNT_OP_TIMEOUT_MS) {
+                    val token = tokenProvider.fetchAuthToken(email = email, activity = activity)
+                    val authData = authProvider
+                        .buildGoogleAuthData(email, token, TokenType.AUTH)
+                        .getOrThrow()
+                    authProvider.persistAccount(
+                        authData = authData,
+                        accountType = AccountType.GOOGLE,
+                        authViaMicroG = true,
+                        makeDefault = false
+                    )
+                }
             }.isSuccess
             _addResult.emit(added)
         }

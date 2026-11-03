@@ -11,13 +11,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aurora.extensions.TAG
 import com.aurora.gplayapi.PlayClient
-import com.aurora.gplayapi.PlayException
 import com.aurora.gplayapi.model.DeveloperStream
 import com.aurora.gplayapi.model.StreamBundle
 import com.aurora.gplayapi.model.StreamCluster
-import com.aurora.store.AuroraApp
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.model.ViewState
+import com.aurora.store.data.play.PlayErrors
+import com.aurora.store.data.play.PlayGateway
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +24,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class DevProfileViewModel @Inject constructor(
-    private val playClient: PlayClient
+    private val playClient: PlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     val liveData: MutableLiveData<ViewState> = MutableLiveData()
@@ -34,16 +34,18 @@ class DevProfileViewModel @Inject constructor(
 
     fun getStreamBundle(devId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                devStream = playClient.apps.developerStream(devId)
-                streamBundle = devStream.streamBundle
-                liveData.postValue(ViewState.Success(devStream))
-            } catch (e: PlayException.Unauthorized) {
-                Log.w(TAG, "Developer stream fetch returned ${e.code}, redirecting to Splash")
-                AuroraApp.events.send(AuthEvent.SessionExpired())
-            } catch (e: Exception) {
-                liveData.postValue(ViewState.Error(e.message))
-            }
+            playGateway.call("dev-stream") { playClient.apps.developerStream(devId) }
+                .onSuccess {
+                    devStream = it
+                    streamBundle = it.streamBundle
+                    liveData.postValue(ViewState.Success(devStream))
+                }
+                .onFailure {
+                    // Auth failures already redirect to Splash via the gateway.
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        liveData.postValue(ViewState.Error(it.message))
+                    }
+                }
         }
     }
 
@@ -55,14 +57,17 @@ class DevProfileViewModel @Inject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val newCluster = playClient.streams.next(cursor)
-                updateCluster(cluster, newCluster)
-                devStream = devStream.copy(streamBundle = streamBundle)
-                liveData.postValue(ViewState.Success(devStream))
-            } catch (e: Exception) {
-                liveData.postValue(ViewState.Error(e.message))
-            }
+            playGateway.call("dev-stream-next") { playClient.streams.next(cursor) }
+                .onSuccess {
+                    updateCluster(cluster, it)
+                    devStream = devStream.copy(streamBundle = streamBundle)
+                    liveData.postValue(ViewState.Success(devStream))
+                }
+                .onFailure {
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        liveData.postValue(ViewState.Error(it.message))
+                    }
+                }
         }
     }
 

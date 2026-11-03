@@ -51,6 +51,7 @@ import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -85,6 +86,13 @@ class UpdateWorker @AssistedInject constructor(
 
     companion object {
         private const val NOTIFICATION_ID = 100
+
+        /**
+         * Upper bound for the bulk Play details call in [checkUpdates]. OkHttp already
+         * bounds the socket at 25s; this only guards non-socket hangs so a wedged
+         * check fails the run instead of the worker.
+         */
+        private const val UPDATE_CHECK_TIMEOUT_MS = 60_000L
     }
 
     /**
@@ -147,7 +155,7 @@ class UpdateWorker @AssistedInject constructor(
                 it.packageName
             }
 
-            val allUpdates = checkUpdates()
+            val allUpdates = withTimeout(UPDATE_CHECK_TIMEOUT_MS) { checkUpdates() }
                 .also {
                     updateDao.insertUpdates(it)
                     Preferences.putLong(

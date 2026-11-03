@@ -12,13 +12,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aurora.extensions.TAG
 import com.aurora.gplayapi.PlayClient
-import com.aurora.gplayapi.PlayException
 import com.aurora.gplayapi.model.Category
 import com.aurora.gplayapi.model.ContentType
-import com.aurora.store.AuroraApp
 import com.aurora.store.CategoryStash
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.model.ViewState
+import com.aurora.store.data.play.PlayErrors
+import com.aurora.store.data.play.PlayGateway
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +25,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    private val playClient: PlayClient
+    private val playClient: PlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     private var stash: CategoryStash = mutableMapOf(
@@ -47,16 +47,18 @@ class CategoryViewModel @Inject constructor(
 
             liveData.postValue(ViewState.Loading)
 
-            try {
-                stash[type] = playClient.categories.all(type)
-                liveData.postValue(ViewState.Success(stash))
-            } catch (exception: PlayException.Unauthorized) {
-                Log.w(TAG, "Categories fetch returned ${exception.code}, redirecting to Splash")
-                AuroraApp.events.send(AuthEvent.SessionExpired())
-            } catch (exception: Exception) {
-                Log.e(TAG, "Failed fetching list of categories", exception)
-                liveData.postValue(ViewState.Error(exception.message))
-            }
+            playGateway.call("categories") { playClient.categories.all(type) }
+                .onSuccess {
+                    stash[type] = it
+                    liveData.postValue(ViewState.Success(stash))
+                }
+                .onFailure {
+                    // Auth failures already redirect to Splash via the gateway.
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        Log.e(TAG, "Failed fetching list of categories", it)
+                        liveData.postValue(ViewState.Error(it.message))
+                    }
+                }
         }
     }
 

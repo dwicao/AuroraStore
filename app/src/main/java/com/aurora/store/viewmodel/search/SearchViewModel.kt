@@ -22,9 +22,7 @@ import com.aurora.gplayapi.model.App
 import com.aurora.gplayapi.model.BundleCursor
 import com.aurora.gplayapi.model.StreamBundle
 import com.aurora.gplayapi.web.WebPlayClient
-import com.aurora.store.AuroraApp
 import com.aurora.store.data.PageResult
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.model.SearchFilter
 import com.aurora.store.data.paging.GenericPagingSource.Companion.manualPager
 import com.aurora.store.data.play.PlayGateway
@@ -79,7 +77,10 @@ class SearchViewModel @Inject constructor(
             clusters.flatMap { it.apps }.distinctBy { app -> app.packageName }
 
         manualPager { page ->
-            val items = try {
+            // Routed through the gateway: an auth rejection redirects to Splash like
+            // every other Play call, and any other failure yields an empty page
+            // instead of killing the paging flow (which left search permanently empty).
+            val items = playGateway.callOrDefault("search", emptyList()) {
                 val bundle = when (page) {
                     1 -> webPlayClient.search.results(query)
                     else -> cursor?.let { webPlayClient.search.next(query, it) }
@@ -92,10 +93,6 @@ class SearchViewModel @Inject constructor(
                 } else {
                     apps
                 }
-            } catch (exception: PlayException.Unauthorized) {
-                Log.w(TAG, "Search returned ${exception.code}, redirecting to Splash")
-                AuroraApp.events.send(AuthEvent.SessionExpired())
-                emptyList()
             }
             PageResult(items)
         }.flow.distinctUntilChanged()

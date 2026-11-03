@@ -59,8 +59,7 @@ sealed interface PlayError {
  */
 object PlayErrors {
 
-    fun of(throwable: Throwable): PlayError {
-        // Auth/session semantics dominate: check the whole cause chain for them first,
+    fun of(throwable: Throwable): PlayError {        // Auth/session semantics dominate: check the whole cause chain for them first,
         // since gplayapi tends to wrap the meaningful error.
         var cursor: Throwable? = throwable
         while (cursor != null) {
@@ -93,5 +92,15 @@ object PlayErrors {
         }
 
         return PlayError.Unknown(throwable)
+    }
+
+    /**
+     * True when the failure is the auth family, which [PlayGateway] already routes to
+     * Splash. Callers setting their own error state use this to stay silent on auth
+     * failures instead of flashing an error screen the user is about to leave.
+     */
+    fun isAuthFailure(throwable: Throwable): Boolean = when (of(throwable)) {
+        is PlayError.AuthExpired, is PlayError.NeedsAccount -> true
+        else -> false
     }
 }

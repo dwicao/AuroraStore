@@ -15,6 +15,8 @@ import com.aurora.gplayapi.model.StreamBundle
 import com.aurora.gplayapi.model.StreamCluster
 import com.aurora.gplayapi.web.WebPlayClient
 import com.aurora.store.data.model.ViewState
+import com.aurora.store.data.play.PlayErrors
+import com.aurora.store.data.play.PlayGateway
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -28,7 +30,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel(assistedFactory = CategoryStreamViewModel.Factory::class)
 class CategoryStreamViewModel @AssistedInject constructor(
     @Assisted val browseUrl: String,
-    private val webPlayClient: WebPlayClient
+    private val webPlayClient: WebPlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     @AssistedFactory
@@ -47,34 +50,38 @@ class CategoryStreamViewModel @AssistedInject constructor(
 
     fun fetch() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                if (!streamBundle.hasClusters() || streamBundle.hasNext()) {
-                    val newBundle = if (streamBundle.hasClusters()) {
+            if (!streamBundle.hasClusters() || streamBundle.hasNext()) {
+                playGateway.call("category-stream") {
+                    if (streamBundle.hasClusters()) {
                         webPlayClient.streams.next(streamBundle.next!!)
                     } else {
                         webPlayClient.categories.stream(browseUrl)
                     }
-
+                }.onSuccess { newBundle ->
                     streamBundle = streamBundle.copy(
                         clusters = streamBundle.clusters + newBundle.clusters,
                         next = newBundle.next
                     )
 
                     _viewState.value = ViewState.Success(streamBundle)
-                } else {
-                    Log.i(TAG, "End of Bundle")
+                }.onFailure {
+                    // Auth failures already redirect to Splash via the gateway.
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        _viewState.value = ViewState.Error(it.message)
+                    }
                 }
-            } catch (e: Exception) {
-                _viewState.value = ViewState.Error(e.message)
+            } else {
+                Log.i(TAG, "End of Bundle")
             }
         }
     }
 
     fun fetchNextCluster(streamCluster: StreamCluster) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                if (streamCluster.hasNext()) {
-                    val newCluster = webPlayClient.streams.next(streamCluster.next!!)
+            if (streamCluster.hasNext()) {
+                playGateway.call("category-stream-next") {
+                    webPlayClient.streams.next(streamCluster.next!!)
+                }.onSuccess { newCluster ->
                     val mergedCluster = streamCluster.copy(
                         apps = streamCluster.apps + newCluster.apps,
                         next = newCluster.next
@@ -86,11 +93,13 @@ class CategoryStreamViewModel @AssistedInject constructor(
                         }
                     )
                     _viewState.value = ViewState.Success(streamBundle)
-                } else {
-                    Log.i(TAG, "End of cluster")
+                }.onFailure {
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        Log.e(TAG, "Failed to fetch next cluster", it)
+                    }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to fetch next cluster", e)
+            } else {
+                Log.i(TAG, "End of cluster")
             }
         }
     }

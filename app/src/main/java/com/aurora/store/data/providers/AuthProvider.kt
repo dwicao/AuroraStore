@@ -338,14 +338,20 @@ class AuthProvider @Inject constructor(
      * network and a token mint - so it belongs on a per-download path, never behind
      * `AuthSessionSource.current`.
      *
+     * Both the validation and the refresh are bounded: a hung Play call surfaces as
+     * [TimeoutCancellationException] (retryable in [DownloadWorker]) rather than wedging
+     * the worker until the system kills it.
+     *
      * @throws IllegalStateException when the account cannot produce a usable session
      */
     suspend fun sessionFor(accountId: String): AuthenticatedSession {
         val stored = getAuthData(accountId)
             ?.takeIf { matchesActiveSpoof(it.device, it.locale) }
-        if (stored != null && sessionFactory.validate(stored)) return stored
+        if (stored != null && withTimeout(VALIDATE_TIMEOUT_MS) { sessionFactory.validate(stored) }) {
+            return stored
+        }
 
-        return refresh(accountId).getOrElse { error ->
+        return withTimeout(SESSION_TIMEOUT_MS) { refresh(accountId) }.getOrElse { error ->
             throw IllegalStateException(
                 "Could not refresh session for account $accountId; re-authentication required",
                 error
@@ -581,5 +587,11 @@ class AuthProvider @Inject constructor(
     companion object {
         const val SESSION_REJECTION_WINDOW_MS = 60_000L
         private const val VALIDATE_TIMEOUT_MS = 25_000L
+
+        /**
+         * Upper bound for a full per-account session refresh (token mint + Play
+         * authenticate + persist) on download paths.
+         */
+        private const val SESSION_TIMEOUT_MS = 60_000L
     }
 }

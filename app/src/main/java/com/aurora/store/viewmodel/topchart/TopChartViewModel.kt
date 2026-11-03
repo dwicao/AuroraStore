@@ -14,6 +14,8 @@ import com.aurora.gplayapi.model.StreamCluster
 import com.aurora.gplayapi.web.WebPlayClient
 import com.aurora.store.TopChartStash
 import com.aurora.store.data.model.ViewState
+import com.aurora.store.data.play.PlayErrors
+import com.aurora.store.data.play.PlayGateway
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +33,8 @@ import kotlinx.coroutines.launch
  */
 @HiltViewModel
 class TopChartViewModel @Inject constructor(
-    private val webPlayClient: WebPlayClient
+    private val webPlayClient: WebPlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     private var stash: TopChartStash = mutableMapOf()
@@ -48,13 +51,17 @@ class TopChartViewModel @Inject constructor(
 
             _state.value = ViewState.Loading
 
-            try {
-                val cluster = webPlayClient.charts.cluster(type.value, chart)
-                stash.getOrPut(type) { mutableMapOf() }[chart] = cluster
-                _state.value = ViewState.Success(targetCluster(type, chart))
-            } catch (e: Exception) {
-                _state.value = ViewState.Error(e.message)
-            }
+            playGateway.call("top-chart") { webPlayClient.charts.cluster(type.value, chart) }
+                .onSuccess {
+                    stash.getOrPut(type) { mutableMapOf() }[chart] = it
+                    _state.value = ViewState.Success(targetCluster(type, chart))
+                }
+                .onFailure {
+                    // Auth failures already redirect to Splash via the gateway.
+                    if (!PlayErrors.isAuthFailure(it)) {
+                        _state.value = ViewState.Error(it.message)
+                    }
+                }
         }
     }
 

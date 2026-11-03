@@ -75,6 +75,7 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlin.properties.Delegates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
 import okhttp3.Headers.Companion.toHeaders
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -405,6 +406,9 @@ class DownloadWorker @AssistedInject constructor(
 
         // A sick CDN edge (5xx) deserves the same backoff treatment as lost connectivity.
         is TransientServerException -> true
+
+        // A session validation/refresh that hit its timeout is transient by nature.
+        is TimeoutCancellationException -> true
 
         else -> isRetryable(throwable.cause)
     }

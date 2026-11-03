@@ -6,19 +6,15 @@
 
 package com.aurora.store.viewmodel.details
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.aurora.extensions.TAG
 import com.aurora.gplayapi.PlayClient
-import com.aurora.gplayapi.PlayException
 import com.aurora.gplayapi.model.Review
-import com.aurora.store.AuroraApp
 import com.aurora.store.data.PageResult
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.paging.GenericPagingSource.Companion.manualPager
+import com.aurora.store.data.play.PlayGateway
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -32,7 +28,8 @@ import kotlinx.coroutines.flow.onEach
 @HiltViewModel(assistedFactory = ReviewViewModel.Factory::class)
 class ReviewViewModel @AssistedInject constructor(
     @Assisted private val packageName: String,
-    private val playClient: PlayClient
+    private val playClient: PlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     @AssistedFactory
@@ -51,7 +48,10 @@ class ReviewViewModel @AssistedInject constructor(
         var reviewsNextPageUrl: String? = null
 
         manualPager { page ->
-            val items = try {
+            // Routed through the gateway: a rejected session redirects to Splash like
+            // every other Play call, and any other failure yields an empty page instead
+            // of killing the paging flow (which left the list permanently empty).
+            val items = playGateway.callOrDefault("reviews", emptyList(), packageName) {
                 when (page) {
                     1 -> playClient.reviews.reviews(packageName, filter).also {
                         reviewsNextPageUrl = it.nextPageUrl
@@ -67,10 +67,6 @@ class ReviewViewModel @AssistedInject constructor(
                         }
                     }
                 }
-            } catch (exception: PlayException.Unauthorized) {
-                Log.w(TAG, "Reviews fetch returned ${exception.code}, redirecting to Splash")
-                AuroraApp.events.send(AuthEvent.SessionExpired(packageName))
-                emptyList()
             }
             PageResult(items)
         }.flow.distinctUntilChanged()

@@ -21,6 +21,8 @@ import com.aurora.store.data.event.InstallerEvent
 import com.aurora.store.data.helper.DownloadHelper
 import com.aurora.store.data.model.StorageRequirement
 import com.aurora.store.data.paging.GenericPagingSource.Companion.pager
+import com.aurora.store.data.play.PlayErrors
+import com.aurora.store.data.play.PlayGateway
 import com.aurora.store.data.room.favourite.Favourite
 import com.aurora.store.data.room.favourite.FavouriteDao
 import com.aurora.store.data.room.favourite.ImportExport
@@ -53,6 +55,7 @@ class FavouriteViewModel @Inject constructor(
     private val favouriteDao: FavouriteDao,
     private val json: Json,
     private val playClient: PlayClient,
+    private val playGateway: PlayGateway,
     private val downloadHelper: DownloadHelper,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
@@ -150,8 +153,26 @@ class FavouriteViewModel @Inject constructor(
             _isEnqueuing.value = true
             try {
                 val packageNames = favouriteDao.favourites().first().map { it.packageName }
-                val canDownload = playClient.supports(Capability.DOWNLOAD)
-                val installable = playClient.apps.details(packageNames).filter { app ->
+                val supportsResult =
+                    playGateway.call("fav-supports") { playClient.supports(Capability.DOWNLOAD) }
+                val detailsResult = playGateway.call("fav-details") {
+                    playClient.apps.details(packageNames)
+                }
+                // Either call failing aborts the batch. Auth failures already redirect
+                // to Splash via the gateway, so only non-auth failures emit -1 here.
+                val failure = listOf(supportsResult, detailsResult)
+                    .mapNotNull { it.exceptionOrNull() }
+                    .firstOrNull()
+                if (failure != null) {
+                    if (!PlayErrors.isAuthFailure(failure)) {
+                        Log.e(TAG, "Failed to enqueue favourites for install", failure)
+                        _enqueueResult.emit(-1)
+                    }
+                    return@launch
+                }
+
+                val canDownload = supportsResult.getOrThrow()
+                val installable = detailsResult.getOrThrow().filter { app ->
                     val needsInstall = !PackageUtil.isInstalled(context, app.packageName) ||
                         PackageUtil.isUpdatable(context, app.packageName, app.versionCode)
                     val acquirable = app.isFree || canDownload

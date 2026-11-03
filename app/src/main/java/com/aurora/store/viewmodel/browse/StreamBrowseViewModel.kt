@@ -6,21 +6,17 @@
 
 package com.aurora.store.viewmodel.browse
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.aurora.extensions.TAG
-import com.aurora.gplayapi.PlayException
 import com.aurora.gplayapi.model.App
 import com.aurora.gplayapi.model.ClusterCursor
 import com.aurora.gplayapi.model.StreamCluster
 import com.aurora.gplayapi.web.WebPlayClient
-import com.aurora.store.AuroraApp
 import com.aurora.store.data.PageResult
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.paging.GenericPagingSource.Companion.manualPager
+import com.aurora.store.data.play.PlayGateway
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -45,7 +41,8 @@ import kotlinx.coroutines.flow.onEach
 @HiltViewModel(assistedFactory = StreamBrowseViewModel.Factory::class)
 class StreamBrowseViewModel @AssistedInject constructor(
     @Assisted private val streamCluster: StreamCluster,
-    private val webPlayClient: WebPlayClient
+    private val webPlayClient: WebPlayClient,
+    private val playGateway: PlayGateway
 ) : ViewModel() {
 
     @AssistedFactory
@@ -64,7 +61,9 @@ class StreamBrowseViewModel @AssistedInject constructor(
         var cursor: ClusterCursor? = streamCluster.next
 
         manualPager { page ->
-            val items = try {
+            // Routed through the gateway: an auth rejection redirects to Splash, and
+            // any other failure yields an empty page instead of killing the flow.
+            val items = playGateway.callOrDefault("stream-browse", emptyList()) {
                 when (page) {
                     1 -> streamCluster.apps
 
@@ -79,10 +78,6 @@ class StreamBrowseViewModel @AssistedInject constructor(
                         }
                     }
                 }
-            } catch (exception: PlayException.Unauthorized) {
-                Log.w(TAG, "Stream returned ${exception.code}, redirecting to Splash")
-                AuroraApp.events.send(AuthEvent.SessionExpired())
-                emptyList()
             }
             PageResult(items)
         }.flow.distinctUntilChanged()
