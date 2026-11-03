@@ -1,12 +1,12 @@
 {
   "version_name": "4.8.4",
-  "version_code": "77",
-  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.12/app-vanilla-release.apk",
+  "version_code": "78",
+  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.13/app-vanilla-release.apk",
   "icon_url": "",
   "sha1": "",
-  "sha256": "1f84b6f52986b9705582fedd4bc6d1fb5a1c83f26e1bd7edf5fbb5d1b2fe1f22",
-  "changelog": "Changelog : v4.8.12 (fork)\n • Stuck download queue watchdog\n • Spoof hardening (no more poisoned native read / corrupt spoof crashes)\n • Auth prefs encrypted with Android Keystore key\n • Self-update feed points at this fork's releases",
-  "size": "10145683",
+  "sha256": "aa3434e0ce7505a3248be139cb2c82024306408124814bbe1e61f60057b809c0",
+  "changelog": "Changelog : v4.8.13 (fork)\n • Privacy report: failure vs no-report states\n • Exodus API key replaceable (bundled key revoked upstream)\n • Fix pause/resume restarting at 0%\n • Pause button on app details",
+  "size": "10146178",
   "last_commit": "",
   "updated_on": "Nov 3, 2026",
   "timestamp": "0"
