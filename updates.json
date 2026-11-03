@@ -1,13 +1,13 @@
 {
-  "version_name": "4.8.15",
-  "version_code": "80",
-  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.15/app-vanilla-release.apk",
+  "version_name": "4.8.16",
+  "version_code": "81",
+  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.16/app-vanilla-release.apk",
   "icon_url": "",
   "sha1": "",
-  "sha256": "12aacf4a9909a4906687d73f626b3ca6c2230b6adc8d465392f19097163ddf72",
-  "changelog": "Changelog : v4.8.15 (fork)\n • Self-update bypasses Play AppDetails (no more dead-end error)\n • Lone deep-link back goes Home instead of closing the app\n • In-app version follows release tags, correct author on self-update",
-  "size": "10146638",
+  "sha256": "e4e4cc73c1abe26c4e7d1a13866dcc39cede8fcfff7e8e42e753c418b647d9df",
+  "changelog": "**Full Changelog**: https://github.com/dwicao/AuroraStore/compare/v4.8.15...v4.8.16",
+  "size": "10146676",
   "last_commit": "",
-  "updated_on": "Nov 3, 2026",
+  "updated_on": "",
   "timestamp": "0"
 }
