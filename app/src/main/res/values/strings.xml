@@ -176,11 +176,9 @@
     <string name="download_force_clear_all">"Force clear all"</string>
     <string name="download_metadata">"Getting metadata"</string>
     <string name="download_none">"No downloads"</string>
-    <string name="download_pause_all">"Pause all"</string>
     <string name="download_paused">"Paused • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g>"</string>
     <string name="download_progress">"Downloading • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g> • <xliff:g id="speed">%3$s</xliff:g>"</string>
     <string name="download_queued">"Queued"</string>
-    <string name="download_resume_all">"Resume all"</string>
     <string name="download_speed_estimating">"Estimating"</string>
     <string name="exodus_no_tracker">"Contains no known trackers"</string>
     <string name="exodus_tracker_desc">This version of the app may still contain more trackers not present yet in the Exodus Privacy\'s database.</string>
