@@ -1,12 +1,12 @@
 {
   "version_name": "4.8.4",
-  "version_code": "78",
-  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.13/app-vanilla-release.apk",
+  "version_code": "79",
+  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.14/app-vanilla-release.apk",
   "icon_url": "",
   "sha1": "",
-  "sha256": "aa3434e0ce7505a3248be139cb2c82024306408124814bbe1e61f60057b809c0",
-  "changelog": "Changelog : v4.8.13 (fork)\n • Privacy report: failure vs no-report states\n • Exodus API key replaceable (bundled key revoked upstream)\n • Fix pause/resume restarting at 0%\n • Pause button on app details",
-  "size": "10146178",
+  "sha256": "e863db112599a2f760f735cfbca784e9de2a0c8690545234283dffbad39b49e8",
+  "changelog": "Changelog : v4.8.14 (fork)\n • Offline on-device tracker scanning (no API token needed)\n • Honest privacy states: failure vs no-report vs loading\n • Replaceable Exodus API key (env/gradle prop/secret)",
+  "size": "10146642",
   "last_commit": "",
   "updated_on": "Nov 3, 2026",
   "timestamp": "0"

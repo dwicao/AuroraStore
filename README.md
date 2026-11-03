@@ -75,6 +75,15 @@ and security. Upstream behavior is unchanged everywhere else.
   configuration points at Settings instead of a generic internal error.
   Dispenser URLs must be HTTPS at every layer (dialog, ViewModel
   normalization, network call) so tokens are never minted over cleartext.
+- **Offline tracker reports.** The bundled Exodus API token was revoked upstream,
+  so per-app privacy reports always failed. The app now distinguishes failure
+  from "no report for this app", and — as long as an APK of that exact version
+  is downloaded or installed — scans its DEX class tables on-device against the
+  public (token-free) tracker definitions. No network, no account, nothing
+  identifying leaves the phone; the result is marked "Scanned on this device".
+  A personal API token can still be injected (Gradle property `exodusApiKey`,
+  `EXODUS_API_KEY` env var, or the release workflow's secret) to restore
+  server-side reports.
 - **Auth material isolated from backups.** Sign-in state, account type, e-mail,
   AAS/AUTH tokens, the saved session and the microG flag live in a dedicated
   `auth_prefs.xml`, excluded from cloud and device-transfer backups in both
