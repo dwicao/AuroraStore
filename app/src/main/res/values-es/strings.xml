@@ -79,11 +79,6 @@
     <string name="installer_service_unavailable">Instala los servicios de Aurora 1.0.9 o superior, o cambia el instalador.</string>
     <string name="installer_service_available">Los servicios de Aurora están disponibles y listos para ser instalados.</string>
     <string name="installer_root_unavailable">Sin acceso root. Concede el acceso o cambia el instalador.</string>
-    <string name="exodus_view_report">Ver informe</string>
-    <string name="exodus_substring">rastreador(es) conocido(s) encontrado(s) en</string>
-    <string name="exodus_progress">Comprobando los rastreadores…</string>
-    <string name="exodus_powered">Desarrollado por Exodus Privacy</string>
-    <string name="exodus_no_tracker">No contiene ningún rastreador conocido</string>
     <string name="download_speed_estimating">Estimando</string>
     <string name="download_resume_all">Reanudar todas</string>
     <string name="download_queued">En espera</string>
@@ -109,7 +104,6 @@
     <string name="filter_review_all">Todas</string>
     <string name="filter_review_critical">Críticas</string>
     <string name="details_ratings">Valoraciones y reseñas</string>
-    <string name="details_privacy">Privacidad</string>
     <string name="details_permission">Permiso</string>
     <string name="details_paid">De pago</string>
     <string name="details_no_updates">No hay actualizaciones disponibles</string>
@@ -270,7 +264,6 @@
     <string name="login_rate_limited">Límite de solicitudes alcanzado</string>
     <string name="server_unreachable">Servidor no accesible</string>
     <string name="title_search_suggestion">Sugerencia de búsqueda</string>
-    <string name="failed_to_fetch_report">No se ha podido obtener el informe de privacidad</string>
     <string name="access_denied_using_vpn">¡Acceso denegado! ¿Estás usando una VPN o Tor\?</string>
     <string name="failed_generating_session">Fallo al generar la sesión, código de error: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="app_language">Idioma de la aplicación</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">No actualizar automáticamente las aplicaciones</string>
     <string name="pref_updates_auto_desc">Configurar el comportamiento de las actualizaciones automáticas</string>
     <string name="pref_updates_auto_install">Comprobar e instalar actualizaciones disponibles automáticamente</string>
-    <string name="action_request_analysis">Solicitar un nuevo análisis</string>
     <string name="failed_apk_export">Error al exportar los APKs</string>
     <string name="download_clear_finished">Limpiar lo finalizado</string>
     <string name="pref_updates_incompatible">Mostrar actualizaciones que podrían fallar</string>
@@ -443,7 +435,6 @@
     <string name="details_data_safety_collect_none">El desarrollador afirma que esta aplicación no recopila datos de los usuarios.</string>
     <string name="details_data_safety_shared">Datos que esta aplicación podría compartir</string>
     <string name="details_data_safety_share_none">El desarrollador afirma que esta aplicación no comparte los datos de los usuarios con otras empresas u organizaciones.</string>
-    <string name="exodus_tracker_desc">Es posible que esta versión de la aplicación aún contenga más rastreadores que aún no figuran en la base de datos de Exodus Privacy.</string>
     <string name="no_description">No hay descripción disponible</string>
     <string name="details_more_info">Más información</string>
     <string name="details_more_target_api">Objetivos</string>
@@ -453,7 +444,6 @@
     <string name="action_filter_no_ads">Sin publicidad</string>
     <string name="action_filter_no_gms">Sin play services</string>
     <string name="permissions_requested"><xliff:g id="number_of_permissions">%1$d</xliff:g> permisos</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> rastreador(es) conocidos encontrados en <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="manual_download_version_error">El código de versión solo puede contener números</string>
     <string name="preparing_to_install">Preparando para instalar</string>
     <string name="installer_microg_misconfigured">MicroG no ha podido instalar la aplicación, seguramente debido a una configuración incorrecta.</string>
@@ -614,17 +604,6 @@
     </plurals>
     <string name="account_exists">Cuenta ya añadida</string>
     <string name="action_update_anyway">Actualizar de todos modos</string>
-    <string name="exodus_report_history">Historial de versiones</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d rastreadores</string>
-    <string name="exodus_latest">Más reciente</string>
-    <string name="pref_updates_warn_trackers">Avisar sobre nuevos rastreadores en las actualizaciones de la aplicación</string>
-    <string name="pref_updates_warn_trackers_desc">Mostrar una advertencia antes de actualizar cuando la nueva versión añada rastreadores que no estaban en la versión instalada</string>
-    <string name="tracker_warning_title">Nuevos rastreadores detectados</string>
-    <string name="tracker_warning_desc">Esta actualización añade rastreadores que no estaban en la versión instalada:</string>
-    <string name="manual_download_lookup">Consultar versiones</string>
-    <string name="manual_download_select_version">Seleccionar una versión</string>
-    <string name="manual_download_no_versions">No se encontraron versiones conocidas</string>
     <string name="manual_download_availability_warning">Algunas versiones pueden no estar disponibles para descargar o ser incompatibles con tu dispositivo.</string>
     <string name="details_more_certificate_hash">Hash del certificado</string>
     <string name="action_free_up_space">Liberar espacio</string>

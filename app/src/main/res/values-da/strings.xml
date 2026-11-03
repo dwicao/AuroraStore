@@ -65,7 +65,6 @@
     <string name="details_beta_delay">Tilmelding kan tage lidt tid. Du kan tjekke status senere.</string>
     <string name="details_beta_description">Du vil se nye funktioner og fejl før offentligheden. Giv din feedback til udviklerne for at hjælpe dem med at forbedre det.</string>
     <string name="details_no_updates">Ingen opdateringer tilgængelige</string>
-    <string name="details_privacy">Privatliv</string>
     <string name="details_permission">Tilladelse</string>
     <string name="details_ratings">Bedømmelser og anmeldelser</string>
     <string name="download_canceled">Afbrudt</string>
@@ -76,8 +75,6 @@
     <string name="details_think_this_app">Hvad synes du om denne app?</string>
     <string name="download_eta_calculating">Beregner</string>
     <string name="download_force_clear_all">Tving rydning af alle</string>
-    <string name="exodus_powered">Drevet af Exodus Privacy</string>
-    <string name="exodus_substring">kendt(e) tracker(e) fundet i</string>
     <string name="filter_review_two">To</string>
     <string name="download_completed">Download fuldført</string>
     <string name="download_failed">Download mislykkedes</string>
@@ -85,10 +82,7 @@
     <string name="download_none">Ingen downloads</string>
     <string name="download_resume_all">Genoptag alle</string>
     <string name="filter_review_positive">Positive</string>
-    <string name="exodus_no_tracker">Indeholder ingen kendte trackere</string>
     <string name="filter_review_critical">Kritiske</string>
-    <string name="exodus_progress">Kontrollerer for trackere…</string>
-    <string name="exodus_view_report">Se rapport</string>
     <string name="filter_review_all">Alle</string>
     <string name="filter_review_five">Fem</string>
     <string name="filter_review_four">Fire</string>
@@ -240,7 +234,6 @@
     <string name="pref_updates_incompatible">Vis opdateringer, der kan fejle</string>
     <string name="session_init">Gør tingene klar…</string>
     <string name="onboarding_permission_notifications">Notifikationer</string>
-    <string name="action_request_analysis">Anmod om ny analyse</string>
     <string name="download_clear_finished">Ryd færdige</string>
     <string name="download_eta_hrs">%1$dt %2$dm %3$ds tilbage</string>
     <string name="download_eta_min">%1$dm %2$ds tilbage</string>
@@ -287,7 +280,6 @@
     <string name="about_aurora_store_title">Om Aurora Store</string>
     <string name="about_aurora_store_subtitle">Lær mere om Aurora Store</string>
     <string name="add_dispenser_error">Ugyldig URL</string>
-    <string name="failed_to_fetch_report">Kunne ikke hente privatlivsrapport</string>
     <string name="pref_updates_check_frequency_desc">Konfigurer tidsinterval for automatiske opdateringer i timer.</string>
     <string name="failed_generating_session">Kunne ikke generere session. Fejlkode: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="app_links_desc">Tillad Aurora Store at åbne understøttede links</string>
@@ -434,8 +426,6 @@
     <string name="details_data_safety_collect_none">Udvikleren siger, at denne app ikke indsamler brugerdata.</string>
     <string name="details_data_safety_shared">Data, som denne app kan dele</string>
     <string name="details_data_safety_share_none">Udvikleren siger, at denne app ikke deler brugerdata med andre virksomheder eller organisationer.</string>
-    <string name="exodus_tracker_desc">Denne version af appen kan stadig indeholde flere trackere, der endnu ikke findes i Exodus Privacys database.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> kendt(e) tracker(e) fundet i <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="account_set_default">Sæt som standard</string>
     <string name="account_default">Standardindstilling</string>
     <string name="account_remove">Slet</string>

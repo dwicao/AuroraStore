@@ -6,6 +6,5 @@ Aurora rakendustepood on ilusa kujundusega mitteametlik ja avatud lähtekoodiga 
 • Ilus kujundus: järgib Material 3 kujunduskeele reegleid
 • Sisselogimiseks kasutatav konto: võid logida sisse nii isikliku kui anonüümse kontoga
 • Seadme ja lokaadi hämamine: geoblokeeringuga rakenduste paigaldamiseks saad muuta nutiseadme ja/või lokaadi seadistusi
-• Exodus Privacy lõiming: rakendustes leiduvad jälitajad on kohe näha
 • Plexuse lõiming: rakenduse ühilduvus kasutamiseks ilma Google Play teenusteta või microG-ta on kohe näha
 • Uuenduste keelamine: vajadusel saad välistada valitud rakenduste uuendamise

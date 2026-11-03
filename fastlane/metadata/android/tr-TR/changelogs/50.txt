@@ -4,6 +4,5 @@
 • Gezinme çekmecesi yalnızca ana ekranda açılabilir
 • Geri eylemi artık belirli ekranlarda uygulamadan düzgün bir şekilde çıkıyor
 • Ayarlar düğmeleri artık koyu temada uygun bir renk tonuna sahip
-• Exodus raporları için araç çubuğunda uygulama adı tekrar görünür oldu
 • Resimlerle ilgili dahili iyileştirmeler
 • Çeviri güncellemeleri

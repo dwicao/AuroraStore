@@ -112,11 +112,6 @@
     <string name="filter_review_five">ਪੰਜ</string>
     <string name="filter_review_critical">ਮਦਦਗਾਰ</string>
     <string name="filter_review_all">ਸਾਰੇ</string>
-    <string name="exodus_view_report">ਵਿਸਥਾਰਿਤ ਰਿਪੋਰਟ ਵੇਖੋ</string>
-    <string name="exodus_substring">ਇਸ ਵਿੱਚ ਗਿਆਤ ਟਰੈਕਰ ਮਿਲੇ ਹਨ</string>
-    <string name="exodus_powered">Exodus Privacy ਵਲੋਂ ਜਾਰੀ</string>
-    <string name="exodus_progress">ਐਪ ਟਰੈਕਰ ਦੀ ਜਾਂਚ ਜਾਰੀ…</string>
-    <string name="exodus_no_tracker">ਕੋਈ ਗਿਆਤ ਟਰੈਕਰ ਸ਼ਾਮਲ ਨਹੀਂ ਹੈ</string>
     <string name="download_speed_estimating">ਅਨੁਮਾਨ ਲਗਾਇਆ ਜਾ ਰਿਹਾ ਹੈ</string>
     <string name="download_resume_all">ਸਾਰੇ ਚਾਲੂ ਕਰੋ</string>
     <string name="download_queued">ਕਤਾਰਬੱਧ</string>
@@ -131,7 +126,6 @@
     <string name="download_cancel_all">ਸਾਰੇ ਰੱਦ ਕਰੋ</string>
     <string name="details_think_this_app">ਤੁਸੀਂ ਇਸ ਐਪ ਬਾਰੇ ਕੀ ਸੋਚਦੇ ਹੋ \?</string>
     <string name="details_ratings">ਰੇਟਿੰਗਸ ਤੇ ਸਮੀਖਿਆਵਾਂ</string>
-    <string name="details_privacy">ਨਿੱਜਤਾ</string>
     <string name="details_permission">ਆਗਿਆਵਾਂ</string>
     <string name="tab_top_paid">ਟੌਪ ਖ੍ਰੀਦੇ ਜਾਣ ਵਾਲੇ</string>
     <string name="details_paid">ਭੁਗਤਾਨ</string>
@@ -266,7 +260,6 @@
     <string name="download_eta_sec">%1$ds ਬਾਕੀ</string>
     <string name="download_paused">ਰੋਕਿਆ • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g></string>
     <string name="title_search_suggestion">ਖੋਜ ਸੁਝਾਅ</string>
-    <string name="failed_to_fetch_report">ਗੋਪਨੀਯਤਾ ਰਿਪੋਰਟ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ</string>
     <string name="login_rate_limited">ਓਹੋ, ਤੁਸੀਂ ਰੇਟ ਸੀਮਤ ਹੋ</string>
     <string name="server_unreachable">ਸਰਵਰ ਪਹੁੰਚਯੋਗ ਨਹੀਂ ਹੈ</string>
     <string name="access_denied_using_vpn">ਪਹੁੰਚ ਅਸਵੀਕਾਰ ਕੀਤੀ ਗਈ ਹੈ! ਕੀ ਤੁਸੀਂ VPN ਜਾਂ Tor ਵਰਤ ਰਹੇ ਹੋ\?</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">ਐਪਾਂ ਨੂੰ ਆਟੋ-ਅੱਪਡੇਟ ਨਾ ਕਰੋ</string>
     <string name="pref_updates_auto_desc">ਆਟੋ-ਅੱਪਡੇਟ ਵਿਵਹਾਰ ਨੂੰ ਕੌਨਫਿਗਰ ਕਰੋ</string>
     <string name="pref_updates_auto_install">ਉਪਲਬਧ ਅੱਪਡੇਟਾਂ ਨੂੰ ਸਵੈਚਲਿਤ ਤੌਰ \'ਤੇ ਚੈੱਕ ਕਰੋ ਅਤੇ ਇੰਸਟਾਲ ਕਰੋ</string>
-    <string name="action_request_analysis">ਨਵੇਂ ਵਿਸ਼ਲੇਸ਼ਣ ਦੀ ਬੇਨਤੀ ਕਰੋ</string>
     <string name="failed_apk_export">APK ਐਕਸਪੋਰਟ ਕਰਨ ਵਿੱਚ ਅਸਫਲ</string>
     <string name="pref_updates_incompatible">ਅਸੰਗਤ ਅੱਪਡੇਟਸ</string>
     <string name="download_clear_finished">ਮੁਕੰਮਲ ਹੋਏ ਸਾਫ਼ ਕਰੋ</string>

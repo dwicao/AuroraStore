@@ -91,11 +91,6 @@
     <string name="filter_review_five">Bost</string>
     <string name="filter_review_critical">Kitrikoa</string>
     <string name="filter_review_all">Guztiak</string>
-    <string name="exodus_view_report">Ikusi txostena</string>
-    <string name="exodus_substring">aztarnari ezagunak aurkitu dira hemen:</string>
-    <string name="exodus_progress">Aztarnariren bila…</string>
-    <string name="exodus_powered">Exodus Privacy-k egindakoa</string>
-    <string name="exodus_no_tracker">Ezagunak ez diren aztarnariak ditu</string>
     <string name="download_speed_estimating">Bailoztatzen</string>
     <string name="download_resume_all">Guztiak jarraitu</string>
     <string name="download_queued">Itxaroten</string>
@@ -110,7 +105,6 @@
     <string name="download_cancel_all">Guztiak bertan behera utzi</string>
     <string name="details_think_this_app">Zer deritzozu aplikazio honi\?</string>
     <string name="details_ratings">Balorazioak eta iritziak</string>
-    <string name="details_privacy">Pribatutasun</string>
     <string name="details_permission">Baimena</string>
     <string name="details_paid">Ordainpekoa</string>
     <string name="details_no_updates">Ez dago eguneratzerik</string>
@@ -308,7 +302,6 @@
     <string name="pref_dispenser_summary">Ikusi eta kudeatu saio-hasiera anonimoetarako token-banatzaileak</string>
     <string name="server_unreachable">Zerbitzaria eskuraezina</string>
     <string name="pref_updates_check_frequency">Eguneratze automatikoen maiztasuna</string>
-    <string name="failed_to_fetch_report">Ezin izan da eskuratu pribatutasun-txostena</string>
     <string name="item_required">Beharrezkoa</string>
     <string name="pref_updates_check_frequency_desc">Zenbatetan egiaztatzen dituen Aurorak aplikazioen eguneraketak.</string>
     <string name="session_installer_subtitle">APK bildu/zatituetarako saioan oinarritutako instalatzailea</string>
@@ -350,7 +343,6 @@
     <string name="pref_updates_incompatible">Erakutsi huts egin dezaketen eguneraketak</string>
     <string name="pref_updates_auto_desc">Konfiguratu eguneratze automatikoen portaera</string>
     <string name="app_links_title">Aplikazioaren estekak</string>
-    <string name="action_request_analysis">Eskatu azterketa berria</string>
     <string name="details_data_safety_subtitle">Garatzaileak deklaratutako datuen pribatutasun eta segurtasun praktikak</string>
     <string name="details_data_safety_title">Datuen segurtasuna</string>
     <string name="toast_permission_installer_required">Lehenik instalatzailearen baimena eman behar duzu</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Garatzaileak dio aplikazio honek ez duela erabiltzaileen daturik biltzen.</string>
     <string name="details_data_safety_shared">Aplikazio honek hurrengo datuak parteka ditzake</string>
     <string name="details_data_safety_share_none">Garatzaileak dio aplikazio honek ez dituela erabiltzaileen datuak beste enpresa edo erakundeekin partekatzen.</string>
-    <string name="exodus_tracker_desc">Aplikazioaren bertsio honek Exodus Privacy-ren datu-basean oraindik ez dauden jarraitzaile gehiago izan ditzake oraindik.</string>
-    <string name="exodus_report_trackers"><xliff:g id="aztarnari_kopurua">%1$d</xliff:g> aztarnari ezagunak hemen aurkituta <xliff:g id="aplikazioaren_bertsioaren_izena">%2$s</xliff:g></string>
     <string name="no_description">Aplikazioaren xehetasunen zatia</string>
     <string name="details_more_info">Informazio gehiago</string>
     <string name="details_more_target_api">Helburuak</string>
@@ -585,20 +575,12 @@
     <string name="details_review_delete_title">Iritzia ezabatu?</string>
     <string name="details_review_delete_message">Zure balorazioa eta iritzia Google Playtik kenduko dira.</string>
     <string name="details_your_review">Zure iritzia</string>
-    <string name="exodus_report_history">Bertsioen historia</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d aztarnari</string>
-    <string name="exodus_latest">Azkena</string>
     <string name="installer_provider">%1$s · Hornitzailea: %2$s</string>
     <string name="confirm_deeplink_title">Berretsi kanpoko estekak</string>
     <string name="confirm_deeplink_summary">Galdetu esteka batetik aplikazio baten fitxa ireki aurretik, iragarkiek Aurora Store zure baimenik gabe ireki ez dezaten.</string>
     <string name="confirm_deeplink_sheet_title">Aurora Storera jarraitu?</string>
     <string name="confirm_deeplink_sheet_message">Kanpoko aplikazio batek Aurora Store ireki nahi du</string>
     <string name="confirm_deeplink_sheet_source">Hemendik irekia: %1$s</string>
-    <string name="pref_updates_warn_trackers">Ohartarazi aplikazioen eguneraketetako aztarnari berriez</string>
-    <string name="pref_updates_warn_trackers_desc">Erakutsi abisu bat eguneratu aurretik, bertsio berriak instalatutako bertsioan ez zeuden aztarnariak gehitzen baditu</string>
-    <string name="tracker_warning_title">Aztarnari berriak hauteman dira</string>
-    <string name="tracker_warning_desc">Eguneraketa honek instalatutako bertsioan ez zeuden aztarnariak gehitzen ditu:</string>
     <string name="insufficient_storage_title">Ez dago leku nahikorik</string>
     <string name="insufficient_storage_desc">%1$s aplikazioak %2$s behar ditu, baina %3$s bakarrik dago erabilgarri.</string>
     <string name="insufficient_storage_hint">Egin %1$s-ko lekua eta saiatu berriz.</string>
@@ -607,9 +589,6 @@
     <string name="install_favourites_warning">Baliteke aplikazio bakoitzerako instalazio-eskaera bat ikustea.</string>
     <string name="pref_ui_dynamic_color">Kolore dinamikoak</string>
     <string name="pref_ui_dynamic_color_desc">Erabili horma-paperaren koloreak. Desaktibatu Auroraren marka-paleta erabiltzeko.</string>
-    <string name="manual_download_lookup">Bilatu bertsioak</string>
-    <string name="manual_download_select_version">Hautatu bertsio bat</string>
-    <string name="manual_download_no_versions">Ez da bertsio ezagunik aurkitu</string>
     <string name="manual_download_availability_warning">Baliteke bertsio batzuk deskargatzeko erabilgarri ez egotea edo zure gailuarekin bateragarriak ez izatea.</string>
     <string name="toast_fav_install_enqueued">%1$d aplikazio instalatzen</string>
     <string name="toast_fav_install_none">Ez dago instalatzeko ezer</string>

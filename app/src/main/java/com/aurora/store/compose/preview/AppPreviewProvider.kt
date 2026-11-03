@@ -35,7 +35,6 @@ class AppPreviewProvider : PreviewParameterProvider<App> {
             • Beautiful design: Built upon latest Material 3 guidelines<br>
             • Account login: You can login with either personal or an anonymous account<br>
             • Device &amp; Locale spoofing: Change your device and/or locale to access geo locked apps<br>
-            • Exodus Privacy integration: Instantly see trackers in app<br>
             • Plexus integration: Instantly see app compatibility without Google Play Services or with microG<br>
             • Updates blacklisting: Ignore updates for specific apps</p>
         """

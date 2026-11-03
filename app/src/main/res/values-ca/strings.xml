@@ -42,9 +42,6 @@
     <string name="details_ratings">Valoració i revisions</string>
     <string name="details_think_this_app">Què en penses d\'aquesta aplicació\?</string>
     <string name="download_canceled">Cancel·lat</string>
-    <string name="exodus_no_tracker">No conté rastrejadors coneguts</string>
-    <string name="exodus_progress">S\'estan comprovant els elements de seguiment…</string>
-    <string name="exodus_substring">element(s) de seguiment trobat(s) a</string>
     <string name="installer_service_unavailable">Instal·la els serveis d\'Aurora 1.0.9 o superior, o canvia l\'instal·lador.</string>
     <string name="installer_service_misconfigured">Configureu els serveis d\'Aurora i concediu abans tots els permisos.</string>
     <string name="filter_review_four">Quatre</string>
@@ -54,8 +51,6 @@
     <string name="filter_review_five">Cinc</string>
     <string name="installer_status_failure">Ha fallat la instal·lació</string>
     <string name="installer_status_failure_blocked">S\'ha bloquejat la instal·lació</string>
-    <string name="exodus_powered">Propulsat per Exodus ·Privacy</string>
-    <string name="exodus_view_report">Veure informe</string>
     <string name="filter_review_three">Tres</string>
     <string name="installer_am_unavailable">Instal·leu App Manager o canvieu l\'instal·lador.</string>
     <string name="installer_service_available">Els serveis d\'Aurora estan disponibles i preparats per instal·lar.</string>
@@ -122,7 +117,6 @@
     <string name="details_no_updates">No hi ha actualitzacions disponibles</string>
     <string name="details_paid">Pagant</string>
     <string name="details_permission">Permissió</string>
-    <string name="details_privacy">Privacitat</string>
     <string name="download_cancel_all">Cancel·lar-ho tot</string>
     <string name="download_completed">Baixada completada</string>
     <string name="download_eta_calculating">Calculant</string>
@@ -244,7 +238,6 @@
     <string name="filter_latest">Últim</string>
     <string name="installer_shizuku_unavailable">Shizuku no està instal·lat o configurat correctament.</string>
     <string name="action_favourite">Preferit</string>
-    <string name="action_request_analysis">Sol·licita una nova anàlisi</string>
     <string name="details_data_safety_title">Seguretat de les dades</string>
     <string name="details_data_safety_subtitle">Privadesa de dades i pràctiques de seguretat declarades pel desenvolupador</string>
     <string name="action_home_screen">Afig a la pantalla d\'inici</string>
@@ -305,7 +298,6 @@
     <string name="pref_updates_auto_install">Comprova i instal·la actualitzacions disponibles automàticament</string>
     <string name="pref_updates_check_frequency">Freqüència d\'actualitzacions automàtiques</string>
     <string name="pref_updates_check_frequency_desc">Amb quina freqüència Aurora comprova si hi ha actualitzacions de l\'aplicació.</string>
-    <string name="failed_to_fetch_report">Error obtenint el resum de privacitat</string>
     <string name="access_denied_using_vpn">Accés denegat! Pot ser estàs fent us d\'una VPN o Tor?</string>
     <string name="bad_request">Error intern! Per favor, torna a intentar-ho en una estona</string>
     <string name="login_rate_limited">La teva velocitat està limitada</string>
@@ -450,8 +442,6 @@
     <string name="details_data_safety_collect_none">El desenvolupador diu que aquesta aplicació no recull dades de l\'usuari.</string>
     <string name="details_data_safety_shared">Dades que aquesta aplicació pot compartir</string>
     <string name="details_data_safety_share_none">El desenvolupador diu que aquesta aplicació no comparteix dades de l\'usuari amb altres companyies ni organitzacions.</string>
-    <string name="exodus_tracker_desc">Aquesta versió de l\'aplicació pot contenir encara més rastrejadors que no surten de moment a la base de dades de privacitat d\'Exodus.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> element(s) de seguiment trobat(s) a <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="installer_microg_misconfigured">L\'instal·lador de microG ha fallat en instal·lar l\'aplicació, segurament a causa d\'una configuració incorrecta.</string>
     <string name="spoof_property"><xliff:g id="manufacturer">%1$s</xliff:g> • API <xliff:g id="api">%2$s</xliff:g></string>
     <string name="notification_updates_available"><xliff:g id="apps_count">%1$d</xliff:g> actualitzacions disponibles</string>
@@ -499,9 +489,6 @@
     <string name="details_review_delete_message">La teva valoració i ressenya seran eliminades de Google Play.</string>
     <string name="details_your_review">La teva ressenya</string>
     <string name="download_failed_storage">No hi ha prou espai d\'emmagatzematge per descarregar aquesta aplicació</string>
-    <string name="exodus_report_history">Historial de versions</string>
-    <string name="exodus_history_subtitle">%1$s · %2$d seguidors</string>
-    <string name="exodus_latest">Ultims</string>
     <string name="installer_fallback_session">L\'instal·lador seleccionat no està disponible, utilitzant l\'instal·lador per defecte.</string>
     <string name="title_security">Seguretat</string>
     <string name="app_lock_title">Aplicació bloquejada</string>
@@ -519,8 +506,6 @@
     <string name="notification_channel_alerts">Errors i alertes</string>
     <string name="notification_group_activity">Descàrregues i actualitzacions</string>
     <string name="notification_group_alerts">Alertes</string>
-    <string name="pref_updates_warn_trackers">Advertir sobre nous rastrejadors en les actualitzacions de l\'aplicació</string>
-    <string name="pref_updates_warn_trackers_desc">Mostra un avís abans d\'actualitzar quan la nova versió afegeixi rastrejadors que no hi havia a la versió instal·lada</string>
     <string name="pref_self_update">Actualització automàtica</string>
     <string name="pref_self_update_desc">Oferiu noves construccions de la botiga Aurora a la pestanya Actualitzacions.</string>
     <string name="pref_source_filters_title">Filtra aplicacions d\'altres fonts</string>
@@ -533,8 +518,6 @@
     <string name="source_filters_add">Afegeix instal·lador</string>
     <string name="source_filters_add_dialog_hint">Introdueix el nom del paquet</string>
     <string name="source_filters_remove">Elimina instal·lador</string>
-    <string name="tracker_warning_title">S\'han detectat nous rastrejadors</string>
-    <string name="tracker_warning_desc">Aquesta actualització afegeix rastrejadors que no hi eren a la versió instal·lada:</string>
     <string name="title_install_favourites">Instal·lar favorits?</string>
     <string name="install_favourites_summary">Això descarregarà i instal·larà %1$d aplicacions.</string>
     <string name="install_favourites_warning">Pots veure un prompt d\'instal·lació separat per a cada aplicació.</string>
@@ -571,9 +554,6 @@
     <string name="pref_ui_dynamic_color">Colors dinàmics</string>
     <string name="pref_ui_dynamic_color_desc">Utilitza els colors del teu fons d\'escriptori. Apaga la paleta de marca d\'Aurora.</string>
     <string name="microg_removed_auth_warning">microG ja no està instal·lat. Torna a executar la configuració perquè tot funcioni correctament.</string>
-    <string name="manual_download_lookup">Consulta les versions</string>
-    <string name="manual_download_select_version">Selecciona una versió</string>
-    <string name="manual_download_no_versions">No s\'han trobat versions conegudes</string>
     <string name="manual_download_availability_warning">Algunes versions poden no estar disponibles per descarregar o ser incompatibles amb el vostre dispositiu.</string>
     <string name="toast_fav_install_enqueued">Instal·lant %1$d aplicacions</string>
     <string name="toast_fav_install_none">Res per a instal·lar</string>
@@ -621,5 +601,4 @@
     <string name="installed_filter_all">Tot</string>
     <string name="installed_updated_at">Actualitzat <xliff:g id="when">%1$s</xliff:g></string>
     <string name="action_check">Comprova</string>
-    <string name="exodus_history_version">%1$s%2$s</string>
 </resources>

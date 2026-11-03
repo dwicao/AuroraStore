@@ -65,7 +65,6 @@
     <string name="action_pending">Ow Gortos</string>
     <string name="action_post">Postya</string>
     <string name="action_remove_all">Remova oll</string>
-    <string name="action_request_analysis">Peji dielvennans nowydh</string>
     <string name="action_restart">Dastalleth</string>
     <string name="action_resume">Daskemeres</string>
     <string name="action_search">Hwilas</string>
@@ -111,7 +110,6 @@
     <string name="details_data_safety_share_none">An awtour leverel an app ma na kevrenna data usyer gans kompanis po kowethyansow aral.</string>
     <string name="details_data_safety_title">Sawder data</string>
     <string name="details_data_safety_subtitle">Privetter data ha praktisyow sawder disklerys gans an awtour</string>
-    <string name="details_privacy">Privetter</string>
     <string name="details_ratings">Talvosow ha breusyansow</string>
     <string name="details_ratings_title_hint">Titel breusyans</string>
     <string name="details_think_this_app">Pyth tybi ty a-dro an app ma?</string>
@@ -131,11 +129,6 @@
     <string name="download_queued">Lostys</string>
     <string name="download_resume_all">Daskemeres oll</string>
     <string name="download_speed_estimating">Ow Dysmygriva</string>
-    <string name="exodus_no_tracker">Kontaynya aspioryon aswonys vyth</string>
-    <string name="exodus_tracker_desc">An versyon ma a\'n app kontaynya martesen moy aspioryon na y\'n sel dherivasow Exodus Privacy.</string>
-    <string name="exodus_progress">Ow checkya rag aspioryon…</string>
-    <string name="exodus_substring">aspioryon aswonys kavosys yn</string>
-    <string name="exodus_view_report">Gweles derivas</string>
     <string name="filter_review_all">Oll</string>
     <string name="filter_latest">Diwettha</string>
     <string name="filter_review_critical">Troboyntyel</string>

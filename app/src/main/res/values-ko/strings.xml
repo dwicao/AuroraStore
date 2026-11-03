@@ -94,7 +94,6 @@
     <string name="details_no_updates">사용할 수 있는 업데이트 없음</string>
     <string name="details_paid">유료</string>
     <string name="details_permission">권한</string>
-    <string name="details_privacy">개인정보 보호</string>
     <string name="details_ratings">평가 및 리뷰</string>
     <string name="details_think_this_app">이 앱에 대해 어떻게 생각하세요\?</string>
     <string name="download_cancel_all">모두 취소</string>
@@ -109,15 +108,10 @@
     <string name="download_queued">대기 중</string>
     <string name="download_resume_all">모두 재개</string>
     <string name="download_speed_estimating">예상 중</string>
-    <string name="exodus_no_tracker">알려진 트래커 없음</string>
-    <string name="exodus_progress">트래커 확인 중…</string>
     <string name="filter_review_positive">긍정적</string>
     <string name="filter_review_two">2점</string>
-    <string name="exodus_view_report">보고서 보기</string>
     <string name="filter_review_all">모두</string>
-    <string name="exodus_powered">Exodus Privacy에서 제공</string>
     <string name="filter_review_four">4점</string>
-    <string name="exodus_substring">알려진 트래커 발견</string>
     <string name="filter_review_critical">부정적</string>
     <string name="filter_review_five">5점</string>
     <string name="filter_review_one">1점</string>
@@ -205,7 +199,6 @@
     <string name="title_apps">앱</string>
     <string name="title_app_settings">앱 설정</string>
     <string name="purchase_failed">다운로드 실패됨</string>
-    <string name="action_request_analysis">새 분석 요청</string>
     <string name="action_home_screen">홈 화면에 추가</string>
     <string name="download_clear_finished">완료한 항목 지우기</string>
     <string name="purchase_invalid">구매하지 않은 앱</string>
@@ -245,7 +238,6 @@
     <string name="failed_apk_export">APK 내보내기 실패</string>
     <string name="access_denied_using_vpn">접근 거부됨! VPN 또는 Tor를 사용하고 있습니까?</string>
     <string name="notification_updates_available_desc_2"><xliff:g id="app_one_name">%1$s</xliff:g> 와 <xliff:g id="app_two_name">%2$s</xliff:g></string>
-    <string name="failed_to_fetch_report">개인정보 보호 보고서를 가져오지 못함</string>
     <string name="bad_request">내부 오류! 잠시 후 다시 시도하십시오</string>
     <string name="tab_top_grossing">최고 매출</string>
     <string name="app_links_title">앱 링크</string>
@@ -401,8 +393,6 @@
     <string name="details_data_safety_collect_none">개발자에 따르면 이 앱은 사용자 데이터를 수집하지 않습니다.</string>
     <string name="details_data_safety_shared">이 앱이 공유할 수 있는 데이터</string>
     <string name="details_data_safety_share_none">개발자에 따르면 이 앱은 사용자 데이터를 외부 업체나 단체에 공유하지 않습니다.</string>
-    <string name="exodus_tracker_desc">이 버전의 앱에는 아직 Exodus Privacy 데이터베이스에 등록되지 않은 추가 트래커가 포함되어 있을 수 있습니다.</string>
-    <string name="exodus_report_trackers"><xliff:g id="app_version_name">%2$s</xliff:g>에서 트래커 <xliff:g id="number_of_trackers">%1$d</xliff:g>개 확인됨</string>
     <string name="installer_microg_misconfigured">설정 오류로 인해 MicroG 인스톨러가 앱 설치에 실패한 것으로 보입니다.</string>
     <string name="pref_install_mode_microg">MicroG 설치 프로그램</string>
     <string name="no_apps_available">사용 가능한 앱 없음</string>
@@ -604,17 +594,6 @@
     <string name="action_buy">구매 %1$s</string>
     <string name="account_exists">계정 이미 추가됨</string>
     <string name="action_update_anyway">그래도 업데이트</string>
-    <string name="exodus_report_history">버전 내역</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • 추적기 %2$d개</string>
-    <string name="exodus_latest">최신</string>
-    <string name="pref_updates_warn_trackers">앱 업데이트 시 새 추적기 경고</string>
-    <string name="pref_updates_warn_trackers_desc">설치한 버전에서는 없었던 추적기가 신규 버전에서 추가되었으면 업데이트하기 전에 경고 표시</string>
-    <string name="tracker_warning_title">새 추적기 감지됨</string>
-    <string name="tracker_warning_desc">이번 업데이트로 기존에 설치한 버전에서는 없었던 추적기가 추가됩니다:</string>
-    <string name="manual_download_lookup">버전 찾기</string>
-    <string name="manual_download_select_version">버전 선택</string>
-    <string name="manual_download_no_versions">버전을 찾을 수 없음</string>
     <string name="manual_download_availability_warning">일부 버전은 다운로드할 수 없거나 기기와 호환되지 않을 수 있습니다.</string>
     <string name="details_more_certificate_hash">인증서 해시</string>
     <string name="action_free_up_space">공간 확보</string>

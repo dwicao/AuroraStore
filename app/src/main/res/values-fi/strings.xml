@@ -40,7 +40,6 @@
     <string name="download_resume_all">Jatka kaikki</string>
     <string name="download_queued">Jonossa</string>
     <string name="filter_review_all">Kaikki</string>
-    <string name="exodus_view_report">Näytä raportti</string>
     <string name="filter_review_two">Kaksi</string>
     <string name="filter_review_three">Kolme</string>
     <string name="filter_review_positive">Positiivinen</string>
@@ -90,10 +89,6 @@
     <string name="toast_permission_granted">Lupa myönnetty</string>
     <string name="toast_manual_unavailable">Pyytämäsi versiokoodi ei ole saatavilla.</string>
     <string name="filter_review_critical">Kriittinen</string>
-    <string name="exodus_substring">tunnettu(a) seurantasovellus(ta) löydetty versiossa</string>
-    <string name="exodus_progress">Tarkistetaan seurantasovelluksia…</string>
-    <string name="exodus_powered">Voimanlähteenä Exodus Privacy</string>
-    <string name="exodus_no_tracker">Ei sisällä tunnettuja seurantasovelluksia</string>
     <string name="download_speed_estimating">Arviointi</string>
     <string name="download_pause_all">Tauota kaikki</string>
     <string name="download_force_clear_all">Pakota tyhjentämään kaikki</string>
@@ -103,7 +98,6 @@
     <string name="download_cancel_all">Peruuta kaikki</string>
     <string name="details_think_this_app">Mitä ajattelet tästä sovelluksesta\?</string>
     <string name="details_ratings">Luokitukset ja arvostelut</string>
-    <string name="details_privacy">Yksityisyys</string>
     <string name="details_permission">Käyttöoikeus</string>
     <string name="details_paid">Osta</string>
     <string name="details_no_updates">Päivityksiä ei ole saatavana</string>
@@ -265,7 +259,6 @@
     <string name="notification_updates_available"><xliff:g id="apps_count">%1$d</xliff:g> päivitystä saatavilla</string>
     <string name="notification_updates_available_desc_3"><xliff:g id="app_one_name">%1$s</xliff:g>, <xliff:g id="app_two_name">%2$s</xliff:g> ja <xliff:g id="app_three_name">%3$s</xliff:g></string>
     <string name="installer_shizuku_unavailable">Shizuku ei ole asennettu tai asetettu oikein.</string>
-    <string name="failed_to_fetch_report">Yksityisyysraportin hakeminen epäonnistui</string>
     <string name="title_search_suggestion">Hakuehdotus</string>
     <string name="title_search_results">Hakutulokset</string>
     <string name="access_denied_using_vpn">Käyttö estetty! Onko käytössäsi VPN tai Tor\?</string>
@@ -304,7 +297,6 @@
     <string name="status_completed">Valmistettu</string>
     <string name="action_favourite">Suosikkeihin</string>
     <string name="details_no_favourites">Suosikkisovelluksia ei löytynyt</string>
-    <string name="action_request_analysis">Pyydä uutta analyysiä</string>
     <string name="details_data_safety_title">Tietoturvallisuus</string>
     <string name="details_data_safety_subtitle">Kehittäjän ilmoittamat tietosuoja- ja turvallisuuskäytännöt</string>
     <string name="check_updates">Tarkista päivitykset</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Kehittäjän mukaan tämä sovellus ei kerää käyttäjätietoja.</string>
     <string name="details_data_safety_shared">Data, jota tämä sovellus saattaa jakaa</string>
     <string name="details_data_safety_share_none">Kehittäjän mukaan tämä sovellus ei jaa käyttäjätietoja muiden yritysten tai organisaatioden kanssa.</string>
-    <string name="exodus_tracker_desc">Tämä versio sovelluksesta saattaa pitää sisällään seuraimia, joita ei vielä löydy Exodus Privacy:n tietokannasta.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> tunnettu(a) seurain(ta) löydetty kohteesta <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="manual_download_version_error">Versiokoodi voi pitää sisällään vain numeroita</string>
     <string name="details_more_info">Lisätietoja</string>
     <string name="details_more_target_api">Kohteet</string>
@@ -609,17 +599,6 @@
     <string name="action_check">Tarkista</string>
     <string name="account_exists">Käyttäjätili jo lisätty</string>
     <string name="action_update_anyway">Päivitä silti</string>
-    <string name="exodus_report_history">Versio historia</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d seuraimet</string>
-    <string name="exodus_latest">Viimeisin</string>
-    <string name="pref_updates_warn_trackers">Ilmoita uusista seuraimista sovelluspäivityksissä</string>
-    <string name="pref_updates_warn_trackers_desc">Näytä huomautuksen ennen päivitystä, kun uusi versio sisältää seuraimia, joita ei ollut ladatussa versiossa</string>
-    <string name="tracker_warning_title">Havaittu uusia seuraimia</string>
-    <string name="tracker_warning_desc">Tämä päivitys lisää seuraimia, joita ei ollut ladatussa versiossa:</string>
-    <string name="manual_download_lookup">Etsi versioita</string>
-    <string name="manual_download_select_version">Valitse versio</string>
-    <string name="manual_download_no_versions">Ei tunnettuja versioita löydetty</string>
     <string name="manual_download_availability_warning">Jotkut versiot eivät saata olla saatavilla latausta varten tai sopimattomia laitteesi kanssa.</string>
     <string name="details_more_certificate_hash">Varmenteen tarkiste</string>
     <string name="action_free_up_space">Vapauta tilaa</string>

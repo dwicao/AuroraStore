@@ -57,13 +57,9 @@
     <string name="action_filter_gsf_dependent_apps">Dipendente da GSF</string>
     <string name="action_filter_apps_with_ads">App con annunci</string>
     <string name="action_filter_apply">Applica</string>
-    <string name="exodus_progress">Controllo della presenza di tracker…</string>
-    <string name="exodus_powered">Dati forniti da Exodus Privacy</string>
-    <string name="exodus_no_tracker">Non contiene tracker noti</string>
     <string name="download_speed_estimating">Stima in corso</string>
     <string name="download_force_clear_all">Rimuovi tutti</string>
     <string name="details_ratings">Valutazione e recensioni</string>
-    <string name="details_privacy">Privacy</string>
     <string name="details_permission">Autorizzazioni</string>
     <string name="details_paid">A pagamento</string>
     <string name="details_no_updates">Nessun aggiornamento disponibile</string>
@@ -201,8 +197,6 @@
     <string name="filter_review_five">Cinque</string>
     <string name="filter_review_critical">Critiche</string>
     <string name="filter_review_all">Tutte</string>
-    <string name="exodus_view_report">Visualizza rapporto</string>
-    <string name="exodus_substring">tracker noti trovati in</string>
     <string name="toast_purchase_blocked">Gli acquisti di app non sono disponibili sui profili anonimi.</string>
     <string name="insecure_anonymous_apply">Assicurati di effettuare nuovamente l\'accesso e di riavviare l\'app per applicare le modifiche.</string>
     <string name="pref_network_title">Rete</string>
@@ -270,7 +264,6 @@
     <string name="access_denied_using_vpn">Accesso negato! Stai usando VPN o Tor\?</string>
     <string name="login_rate_limited">La tua velocità è stata limitata</string>
     <string name="server_unreachable">Server non raggiungibile</string>
-    <string name="failed_to_fetch_report">Errore nel recupero del rapporto sulla privacy</string>
     <string name="bad_request">Errore interno! Riprova più tardi</string>
     <string name="failed_generating_session">Errore nella generazione della sessione, codice: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="check_connectivity">Controlla la tua connessione ad internet</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">Non aggiornare le app automaticamente</string>
     <string name="pref_updates_auto_desc">Configura il comportamento degli aggiornamenti automatici</string>
     <string name="pref_updates_auto_install">Controlla e installa gli aggiornamenti disponibili automaticamente</string>
-    <string name="action_request_analysis">Richiedi nuova analisi</string>
     <string name="failed_apk_export">Esportazioni degli APK fallita</string>
     <string name="download_clear_finished">Rimuovi completati</string>
     <string name="pref_updates_incompatible">Mostra aggiornamenti che potrebbero fallire</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Lo sviluppatore dice che questa app non raccoglie dati utente.</string>
     <string name="details_data_safety_shared">Dati che questa app può condividere</string>
     <string name="details_data_safety_share_none">Lo sviluppatore afferma che questa app non condivide i dati utente con altre aziende o organizzazioni.</string>
-    <string name="exodus_tracker_desc">Questa versione dell\'app può contenere più tracker non ancora presenti nel database di Exodus Privacy.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> tracker conosciuti in <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="installer_microg_misconfigured">L\'installatore MicroG non è riuscito a installare l\'app, probabilmente a causa di una configurazione errata.</string>
     <string name="pref_install_mode_microg">Installatore MicroG</string>
     <string name="action_skip">Salta</string>
@@ -499,8 +489,6 @@
     <string name="details_review_delete_message">La tua valutazione e recensione saranno rimosse da Google Play.</string>
     <string name="details_your_review">La tua recensione</string>
     <string name="download_failed_storage">Non c\'è abbastanza spazio di archiviazione per scaricare questa app</string>
-    <string name="exodus_report_history">Storico versioni</string>
-    <string name="exodus_latest">Ultima</string>
     <string name="title_security">Sicurezza</string>
     <string name="app_lock_title">Blocco app</string>
     <string name="app_lock_summary">Richiedi l\'autenticazione biometrica o blocco schermo per aprire Aurora Store.</string>
@@ -517,11 +505,6 @@
     <string name="notification_channel_alerts">Errori e avvisi</string>
     <string name="notification_group_activity">Scaricamenti e aggiornamenti</string>
     <string name="notification_group_alerts">Avvisi</string>
-    <string name="pref_updates_warn_trackers">Avvisa sui nuovi tracker negli aggiornamenti delle app</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d tracker</string>
-    <string name="pref_updates_warn_trackers_desc">Mostra un avviso prima di aggiornare quando la nuova versione aggiunge tracker che non c\'era nella versione installata</string>
-    <string name="tracker_warning_title">Nuovi tracker rilevati</string>
-    <string name="tracker_warning_desc">Questo aggiornamento aggiunge tracker che non c\'erano nella versione installata:</string>
     <string name="pref_notification_categories">Categorie</string>
     <string name="pref_notification_disabled">Le notifiche sono disattivate</string>
     <string name="pref_notification_disabled_desc">Tocca per abilitare le notifiche per Aurora Store</string>
@@ -545,9 +528,6 @@
     <string name="pref_ui_dynamic_color">Colori dinamici</string>
     <string name="pref_ui_dynamic_color_desc">Usa i colori dal tuo sfondo. Spegni per usare la palette predefinita di Aurora.</string>
     <string name="microg_removed_auth_warning">microG non è più installato. Esegui di nuovo l\'installazione per mantenere le cose funzionanti senza intoppi.</string>
-    <string name="manual_download_lookup">Cerca versioni</string>
-    <string name="manual_download_select_version">Seleziona una versione</string>
-    <string name="manual_download_no_versions">Nessuna versione conosciuta trovata</string>
     <string name="manual_download_availability_warning">Alcune versioni potrebbero non essere disponibili per il download o incompatibili con il dispositivo.</string>
     <string name="toast_fav_install_enqueued">Installazione di %1$d app</string>
     <string name="toast_fav_install_none">Niente da installare</string>
@@ -587,7 +567,6 @@
     </plurals>
     <string name="pref_notification_categories_desc">Imposta il suono e l\'importanza di ciascun tipo di notifica</string>
     <string name="title_notifications">Notifiche</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
     <string name="pref_source_filters_title">Escludi app da altre fonti</string>
     <string name="action_ignore_version">Ignora la versione <xliff:g id="version_name">%1$s</xliff:g></string>
     <string name="action_check">Controlla</string>

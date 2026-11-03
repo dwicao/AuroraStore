@@ -66,7 +66,6 @@
     <string name="action_pending">ກຳລັງລໍຖ້າ</string>
     <string name="action_post">ໂພສ</string>
     <string name="action_remove_all">ລຶບທັງໝົດ</string>
-    <string name="action_request_analysis">ຮ້ອງຂໍການວິເຄາະໃໝ່</string>
     <string name="action_restart">ເລີ່ມໃໝ່</string>
     <string name="action_resume">ສືບຕໍ່</string>
     <string name="action_search">ຄົ້ນຫາ</string>
@@ -111,7 +110,6 @@
     <string name="details_data_safety_share_none">ຜູ້ພັດທະນາລະບຸວ່າແອັບນີ້ບໍ່ໄດ້ແບ່ງປັນຂໍ້ມູນຜູ້ໃຊ້ກັບບໍລິສັດ ຫຼື ອົງກອນອື່ນ.</string>
     <string name="details_data_safety_title">ຄວາມປອດໄພຂອງຂໍ້ມູນ</string>
     <string name="details_data_safety_subtitle">ແນວທາງການປະຕິບັດດ້ານຄວາມເປັນສ່ວນຕົວ ແລະ ຄວາມປອດໄພຂອງຂໍ້ມູນທີ່ຜູ້ພັດທະນາປະກາດ</string>
-    <string name="details_privacy">ຄວາມເປັນສ່ວນຕົວ</string>
     <string name="details_ratings">ຄະແນນ ແລະ ຄຳວິຈານ</string>
     <string name="details_ratings_title_hint">ຫົວຂໍ້ການວິຈານ</string>
     <string name="details_think_this_app">ທ່ານຄິດແນວໃດກ່ຽວກັບແອັບນີ້?</string>
@@ -133,13 +131,6 @@
     <string name="download_queued">ຢູ່ໃນຄິວ</string>
     <string name="download_resume_all">ສືບຕໍ່ທັງໝົດ</string>
     <string name="download_speed_estimating">ກຳລັງປະເມີນ</string>
-    <string name="exodus_no_tracker">ບໍ່ພົບຕົວຕິດຕາມທີ່ຮູ້ຈັກ</string>
-    <string name="exodus_tracker_desc">ແອັບເວີຊັນນີ້ອາດຍັງມີຕົວຕິດຕາມອື່ນໆ ທີ່ຍັງບໍ່ທັນມີຢູ່ໃນຖານຂໍ້ມູນຂອງ Exodus Privacy.</string>
-    <string name="exodus_powered">ສະໜັບສະໜູນໂດຍ Exodus Privacy</string>
-    <string name="exodus_progress">ກຳລັງກວດສອບຕົວຕິດຕາມ…</string>
-    <string name="exodus_substring">ພົບຕົວຕິດຕາມທີ່ຮູ້ຈັກໃນ</string>
-    <string name="exodus_report_trackers">ພົບ <xliff:g id="number_of_trackers">%1$d</xliff:g> ຕົວຕິດຕາມທີ່ຮູ້ຈັກໃນ <xliff:g id="app_version_name">%2$s</xliff:g></string>
-    <string name="exodus_view_report">ເບິ່ງລາຍງານ</string>
     <string name="filter_review_all">ທັງໝົດ</string>
     <string name="filter_latest">ຫຼ້າສຸດ</string>
     <string name="filter_review_critical">ດ້ານລົບ</string>
@@ -304,7 +295,6 @@
     <string name="pref_updates_auto_install">ກວດສອບ ແລະ ຕິດຕັ້ງອັບເດດໃຫ້ອັດຕະໂນມັດ</string>
     <string name="pref_updates_check_frequency">ຄວາມຖີ່ໃນການກວດສອບອັບເດດ</string>
     <string name="pref_updates_check_frequency_desc">ຕັ້ງຄ່າຊ່ວງເວລາໃນການກວດສອບອັບເດດ.</string>
-    <string name="failed_to_fetch_report">ດຶງຂໍ້ມູນລາຍງານຄວາມເປັນສ່ວນຕົວບໍ່ສຳເລັດ</string>
     <string name="access_denied_using_vpn">ການເຂົ້າເຖິງຖືກປະຕິເສດ! ທ່ານກຳລັງໃຊ້ VPN ຫຼື Tor ຢູ່ຫຼືບໍ່?</string>
     <string name="bad_request">ເກີດຂໍ້ຜິດພາດພາຍໃນ! ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ</string>
     <string name="login_rate_limited">ທ່ານຖືກຈຳກັດອັດຕາການເຂົ້າເຖິງ</string>
@@ -499,10 +489,6 @@
     <string name="details_review_delete_message">ຄະແນນ ແລະ ການຣີວິວຂອງທ່ານຈະຖືກລຶບອອກຈາກ Google Play.</string>
     <string name="details_your_review">ການຣີວິວຂອງທ່ານ</string>
     <string name="download_failed_storage">ພື້ນທີ່ຈັດເກັບຂໍ້ມູນບໍ່ພຽງພໍເພື່ອດາວໂຫຼດແອັບນີ້</string>
-    <string name="exodus_report_history">ປະຫວັດເວີຊັນ</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • ຕົວຕິດຕາມ %2$d ຕົວ</string>
-    <string name="exodus_latest">ຫຼ້າສຸດ</string>
     <string name="installer_fallback_session">ຕົວຕິດຕັ້ງທີ່ເລືອກບໍ່ພ້ອມໃຊ້ງານ, ກຳລັງໃຊ້ຕົວຕິດຕັ້ງເລີ່ມຕົ້ນແທນ.</string>
     <string name="title_security">ຄວາມປອດໄພ</string>
     <string name="app_lock_title">ລັອກແອັບ</string>
@@ -520,8 +506,6 @@
     <string name="notification_channel_alerts">ຂໍ້ຜິດພາດ ແລະ ການແຈ້ງເຕືອນ</string>
     <string name="notification_group_activity">ການດາວໂຫຼດ ແລະ ການອັບເດດ</string>
     <string name="notification_group_alerts">ການແຈ້ງເຕືອນ</string>
-    <string name="pref_updates_warn_trackers">ເຕືອນກ່ຽວກັບຕົວຕິດຕາມໃໝ່ໃນການອັບເດດແອັບ</string>
-    <string name="pref_updates_warn_trackers_desc">ສະແດງຄຳເຕືອນກ່ອນການອັບເດດ ເມື່ອເວີຊັນໃໝ່ມີການເພີ່ມຕົວຕິດຕາມທີ່ບໍ່ມີໃນເວີຊັນທີ່ຕິດຕັ້ງແລ້ວ</string>
     <string name="pref_self_update">ອັບເດດຕົວເອງ</string>
     <string name="pref_self_update_desc">ສະເໜີເວີຊັນໃໝ່ຂອງ Aurora Store ໃນແຖບ \"ການອັບເດດ\".</string>
     <string name="pref_source_filters_title">ກັ່ນຕອງແອັບຈາກແຫຼ່ງອື່ນ</string>
@@ -534,8 +518,6 @@
     <string name="source_filters_add">ເພີ່ມຕົວຕິດຕັ້ງ</string>
     <string name="source_filters_add_dialog_hint">ປ້ອນຊື່ແພັກເກດ</string>
     <string name="source_filters_remove">ລຶບຕົວຕິດຕັ້ງອອກ</string>
-    <string name="tracker_warning_title">ກວດພົບຕົວຕິດຕາມໃໝ່</string>
-    <string name="tracker_warning_desc">ການອັບເດດນີ້ໄດ້ເພີ່ມຕົວຕິດຕາມທີ່ບໍ່ມີໃນເວີຊັນທີ່ຕິດຕັ້ງແລ້ວ:</string>
     <string name="title_install_favourites">ຕິດຕັ້ງແອັບທີ່ມັກບໍ?</string>
     <string name="install_favourites_summary">ນີ້ຈະດາວໂຫຼດ ແລະ ຕິດຕັ້ງແອັບ %1$d ແອັບ.</string>
     <string name="install_favourites_warning">ທ່ານອາດຈະເຫັນໜ້າຕ່າງຢືນຢັນການຕິດຕັ້ງແຍກກັນສຳລັບແຕ່ລະແອັບ.</string>
@@ -572,9 +554,6 @@
     <string name="pref_ui_dynamic_color">ສີແບບໄດນາມິກ</string>
     <string name="pref_ui_dynamic_color_desc">ໃຊ້ສີຈາກພາບພື້ນຫຼັງຂອງທ່ານ. ປິດເພື່ອໃຊ້ໂທນສີຂອງ Aurora.</string>
     <string name="microg_removed_auth_warning">microG ບໍ່ໄດ້ຕິດຕັ້ງອີກຕໍ່ໄປ. ກະລຸນາຕັ້ງຄ່າໃໝ່ອີກຄັ້ງເພື່ອໃຫ້ການເຮັດວຽກເປັນໄປຢ່າງລຽບງ່າຍ.</string>
-    <string name="manual_download_lookup">ຄົ້ນຫາເວີຊັນ</string>
-    <string name="manual_download_select_version">ເລືອກເວີຊັນ</string>
-    <string name="manual_download_no_versions">ບໍ່ພົບເວີຊັນທີ່ຮູ້ຈັກ</string>
     <string name="manual_download_availability_warning">ບາງເວີຊັນອາດຈະບໍ່ພ້ອມໃຫ້ດາວໂຫຼດ ຫຼື ບໍ່ເຂົ້າກັນກັບອຸປະກອນຂອງທ່ານ.</string>
     <string name="toast_fav_install_enqueued">ກຳລັງຕິດຕັ້ງ %1$d ແອັບ</string>
     <string name="toast_fav_install_none">ບໍ່ມີຫຍັງໃຫ້ຕິດຕັ້ງ</string>

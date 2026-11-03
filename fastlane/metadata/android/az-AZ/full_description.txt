@@ -6,6 +6,5 @@ Xüsusiyyətlər:
 • Gözəl dizayn: Ən son Material 3 qaydalarına əsasən qurulmuşdur
 • Hesab girişi: Şəxsi və ya gizli hesabla daxil ola bilərsiniz
 • Cihaz və Yerli Saxtakarlıq: Ərazi kilidli tətbiqlərə daxil olmaq üçün cihazınızı və/yaxud yerinizi dəyişdirin
-• Exodus Məxfilik inteqrasiyası: Tətbiqdə izləyiciləri dərhal görün
 • Plexus inteqrasiyası: Google Play Xidmətləri olmadan və ya microG ilə tətbiq uyğunluğunu dərhal görün
 • Yeniləmələrin qara siyahıya alınması: Müəyyən tətbiqlər üçün yeniləmələri görməzdən gəlin

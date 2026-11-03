@@ -106,11 +106,6 @@
     <string name="filter_review_five">Pět</string>
     <string name="filter_review_critical">Kritické</string>
     <string name="filter_review_all">Vše</string>
-    <string name="exodus_view_report">Zobrazit hlášení</string>
-    <string name="exodus_substring">známých sledovacích prvků nalezeno ve verzi</string>
-    <string name="exodus_no_tracker">Neobsahuje žádné známé sledovací prvky</string>
-    <string name="exodus_progress">Kontroluji sledovací prvky…</string>
-    <string name="exodus_powered">Využívá službu Exodus Privacy</string>
     <string name="download_speed_estimating">Odhaduji</string>
     <string name="download_resume_all">Pokračovat vše</string>
     <string name="download_queued">Ve frontě</string>
@@ -125,7 +120,6 @@
     <string name="download_cancel_all">Zrušit vše</string>
     <string name="details_think_this_app">Co si myslíte o této aplikaci\?</string>
     <string name="details_ratings">Hodnocení a recenze</string>
-    <string name="details_privacy">Soukromí</string>
     <string name="details_permission">Oprávnění</string>
     <string name="details_paid">Placené</string>
     <string name="details_no_updates">Nejsou k dispozici žádné aktualizace</string>
@@ -271,7 +265,6 @@
     <string name="failed_generating_session">Nepodařilo se vygenerovat relaci, kód chyby: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="access_denied_using_vpn">Přístup zamítnut! Používáte VPN nebo Tor\?</string>
     <string name="server_unreachable">Server je nedostupný</string>
-    <string name="failed_to_fetch_report">Nepodařilo se načíst hlášení o soukromí</string>
     <string name="bad_request">Interní chyba! Zkuste to prosím znovu za chvíli</string>
     <string name="check_connectivity">Zkontrolujte připojení k internetu</string>
     <string name="app_language">Jazyk aplikace</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">Neaktualizovat automaticky aplikace</string>
     <string name="pref_updates_auto_desc">Nastavit chování automatických aktualizací</string>
     <string name="pref_updates_auto_install">Kontrolovat a automaticky instalovat dostupné aktualizace</string>
-    <string name="action_request_analysis">Požádat o novou analýzu</string>
     <string name="failed_apk_export">Nepodařilo se exportovat soubory APK</string>
     <string name="download_clear_finished">Vymazat dokončené</string>
     <string name="pref_updates_incompatible">Zobrazit aktualizace, které se nemusí povést</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Vývojář uvedl, že tato aplikace neshromažďuje údaje o uživatelích.</string>
     <string name="details_data_safety_shared">Data, která může tato aplikace sdílet</string>
     <string name="details_data_safety_share_none">Vývojář uvedl, že tato aplikace nesdílí údaje o uživatelích s jinými společnostmi nebo organizacemi.</string>
-    <string name="exodus_tracker_desc">Tato verze aplikace může obsahovat více sledovacích prvků, které se zatím nenachází v databázi služby Exodus Privacy.</string>
-    <string name="exodus_report_trackers">Ve verzi <xliff:g id="app_version_name">%2$s</xliff:g> bylo nalezeno <xliff:g id="number_of_trackers">%1$d</xliff:g> známých sledovacích prvků</string>
     <string name="no_description">Není dostupný žádný popis</string>
     <string name="details_more_info">Další informace</string>
     <string name="details_more_target_api">Cíle</string>
@@ -619,17 +609,6 @@
     </plurals>
     <string name="account_exists">Účet již byl přidán</string>
     <string name="action_update_anyway">Přesto aktualizovat</string>
-    <string name="exodus_report_history">Historie verzí</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d sledovacích prvků</string>
-    <string name="exodus_latest">Nejnovější</string>
-    <string name="pref_updates_warn_trackers">Varovat o nových sledovacích prvcích při aktualizacích aplikací</string>
-    <string name="pref_updates_warn_trackers_desc">Zobrazit varování před aktualizací na novou verzi, pokud daná verze přidává sledovací prvky, které se nenacházejí v nainstalované verzi</string>
-    <string name="tracker_warning_title">Zjištěny nové sledovací prvky</string>
-    <string name="tracker_warning_desc">Tato aktualizace přidává sledovací prvky, které se nenacházejí v nainstalované verzi:</string>
-    <string name="manual_download_lookup">Najít verze</string>
-    <string name="manual_download_select_version">Vybrat verzi</string>
-    <string name="manual_download_no_versions">Nenalezeny žádné známé verze</string>
     <string name="manual_download_availability_warning">Některé verze nemusejí být dostupné ke stažení nebo mohou být nekompatibilní s vaším zařízením.</string>
     <string name="details_more_certificate_hash">Hash certifikátu</string>
     <string name="action_free_up_space">Uvolněte místo</string>

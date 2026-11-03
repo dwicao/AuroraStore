@@ -38,7 +38,6 @@ fun AppUpdateItem(
     modifier: Modifier = Modifier,
     update: Update,
     download: Download? = null,
-    isChecking: Boolean = false,
     onClick: () -> Unit = {},
     onUpdate: () -> Unit = {},
     onCancel: () -> Unit = {},
@@ -47,9 +46,8 @@ fun AppUpdateItem(
     onUnignore: (() -> Unit)? = null
 ) {
     // Only the INSTALLING status shows as "Installing"; a downloaded-but-not-installed
-    // (COMPLETED) app falls back to the "Update" action. isChecking is the pre-download
-    // tracker check, shown with the same indeterminate progress + Cancel as an active download.
-    val inProgress = isChecking ||
+    // (COMPLETED) app falls back to the "Update" action.
+    val inProgress =
         (download != null && !download.isFinished && !download.isAwaitingInstall)
     val paused = download?.status == DownloadStatus.PAUSED
     val installing = download?.status == DownloadStatus.INSTALLING

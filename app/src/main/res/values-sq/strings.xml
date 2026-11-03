@@ -95,7 +95,6 @@
     <string name="details_no_updates">S’ka përditësime gati</string>
     <string name="details_paid">Me pagesë</string>
     <string name="details_permission">Leje</string>
-    <string name="details_privacy">Privatësi</string>
     <string name="details_ratings">Vlerësim dhe shqyrtime</string>
     <string name="details_think_this_app">Si ju duket ky aplikacion\?</string>
     <string name="download_cancel_all">Anuloji krejt</string>
@@ -110,11 +109,6 @@
     <string name="download_queued">Në Radhë</string>
     <string name="download_resume_all">Vazhdoi krejt</string>
     <string name="download_speed_estimating">Afërsisht</string>
-    <string name="exodus_no_tracker">S’përmban gjurmues të ditur</string>
-    <string name="exodus_powered">Bazuar në Exodus Privacy</string>
-    <string name="exodus_progress">Po kontrollohet për gjurmues…</string>
-    <string name="exodus_substring">gjurmues() të ditur të gjetur në</string>
-    <string name="exodus_view_report">Shiheni raportimin</string>
     <string name="filter_review_all">Krejt</string>
     <string name="filter_review_critical">Kritike</string>
     <string name="filter_review_five">Pesë</string>
@@ -228,7 +222,6 @@
     <string name="pref_install_mode_am">Instalues AM</string>
     <string name="installer_am_unavailable">Instaloni Përgjegjës Aplikacionesh, ose ndryshoni instaluesin.</string>
     <string name="app_links_desc">Lejojeni Shitoren Aurora të hapë lidhjet që mbulohen</string>
-    <string name="failed_to_fetch_report">S’u arrit të sillet raport privatësie</string>
     <string name="download_progress">Po shkarkohet • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g> • <xliff:g id="speed">%3$s</xliff:g></string>
     <string name="onboarding_permission_notifications">Njoftime</string>
     <string name="pref_vending_version_device">Parazgjedhje (nga formësim pajisjeje)</string>
@@ -280,7 +273,6 @@
     <string name="server_unreachable">Shërbyes i pakapshëm</string>
     <string name="check_connectivity">Kontrolloni lidhjen në rrjet</string>
     <string name="app_language">Gjuhë aplikacioni</string>
-    <string name="action_request_analysis">Kërkoni analizë të re</string>
     <string name="download_paused">Ndalur • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g></string>
     <string name="installer_shizuku_unavailable">Shizuku s’është instaluar, ose s’është ujdisur si duhet.</string>
     <string name="action_home_screen">Shtoje te skena e kreut</string>
@@ -431,8 +423,6 @@
     <string name="details_data_safety_collect_none">Zhvilluesi thotë se ky aplikacion s’grumbullon të dhëna përdoruesi.</string>
     <string name="details_data_safety_shared">Të dhëna që ky aplikacion mund t’u japë të tjerëve</string>
     <string name="details_data_safety_share_none">Zhvilluesi thotë se ky aplikacion s’jep të dhëna përdoruesi për shoqëri dhe ente të tjerë.</string>
-    <string name="exodus_tracker_desc">Ky version i aplikacioni mund të përmbajë ende gjurmues të tjerë jo të pranishëm në bazën e të dhënave të Exodus Privacy-së.</string>
-    <string name="exodus_report_trackers">Te <xliff:g id="app_version_name">%2$s</xliff:g> u gjet(ën) <xliff:g id="number_of_trackers">%1$d</xliff:g> gjurmues i(të) njohur</string>
     <string name="installer_microg_misconfigured">Instaluesi MicroG s’arriti të instalojë aplikacionin, me gjasa për shkak formësimi të gabuar.</string>
     <string name="pref_install_mode_microg">Instalues MicroG</string>
     <string name="action_skip">Anashkaloje</string>
@@ -609,17 +599,6 @@
     <string name="remove_dispenser_summary">Dëshironi ta hiqni shpërndarësin \"<xliff:g id="url">%1$s</xliff:g>\"?</string>
     <string name="account_exists">Llogaria është shtuar tashmë</string>
     <string name="action_update_anyway">Përditësoje sido qoftë</string>
-    <string name="exodus_report_history">Historik versionesh</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d gjurmues</string>
-    <string name="exodus_latest">Më i fundit</string>
-    <string name="pref_updates_warn_trackers">Paralajmëro për gjurmues të rinj në përditësimet e aplikacioneve</string>
-    <string name="pref_updates_warn_trackers_desc">Shfaq një paralajmërim para përditësimit kur versioni i ri shton gjurmues që nuk ishin në versionin e instaluar</string>
-    <string name="tracker_warning_title">U zbuluan gjurmues të rinj</string>
-    <string name="tracker_warning_desc">Ky përditësim shton gjurmues që nuk ishin në versionin e instaluar:</string>
-    <string name="manual_download_lookup">Kërko versionet</string>
-    <string name="manual_download_select_version">Zgjidh një version</string>
-    <string name="manual_download_no_versions">Nuk u gjet asnjë version i njohur</string>
     <string name="manual_download_availability_warning">Disa versione mund të jenë të padisponueshme për shkarkim ose të papajtueshme me pajisjen tënde.</string>
     <string name="details_more_certificate_hash">Hash-i i certifikatës</string>
 </resources>

@@ -124,7 +124,6 @@
     <string name="tab_trending">יישומים טרנדיים</string>
     <string name="about_bhim_summary">תרומה דרך UPI</string>
     <string name="action_disable">השבתה</string>
-    <string name="details_privacy">פרטיות</string>
     <string name="action_share">שיתוף</string>
     <string name="action_update_all">לעדכן הכול</string>
     <string name="details_permission">הרשאה</string>
@@ -138,7 +137,6 @@
     <string name="title_device">מכשיר</string>
     <string name="details_beta_available">להצטרף לתוכנית גרסת הביתא ?</string>
     <string name="details_beta_subscribed">נרשמת לתוכנית הבדיקה של גרסת הביתא</string>
-    <string name="exodus_view_report">הצגת הדו״ח</string>
     <string name="download_metadata">נתוני העל מתקבלים</string>
     <string name="pref_filter_fdroid_summary">אל תבדוק עדכונים עבור יישומים שהותקנו מ-F-Droid</string>
     <string name="onboarding_title_installer">שיטת התקנה</string>
@@ -149,14 +147,12 @@
     <string name="onboarding_permission_esm">מנהל אחסון חיצוני</string>
     <string name="purchase_not_found">היישום לא נמצא</string>
     <string name="installer_status_failure">ההתקנה נכשלה</string>
-    <string name="exodus_substring">עוקבנים ידועים נמצאו</string>
     <string name="download_queued">מחכה בתור</string>
     <string name="pref_install_delete_title">מחיקת קובצי ה־APK לאחר ההתקנה</string>
     <string name="pref_install_mode_services">שירותי Aurora (לא עדכני)</string>
     <string name="pref_network_title">תעבורת רשת</string>
     <string name="title_manual_download">הורדה ידנית</string>
     <string name="purchase_invalid">לא רכשת את היישום</string>
-    <string name="exodus_progress">מתבצעת בדיקת עוקבנים…</string>
     <string name="onboarding_permission_esa">גישה לאחסון חיצוני</string>
     <string name="pref_install_delete_summary">חבילות APK שהורדת יימחקו מיד לאחר ההתקנה</string>
     <string name="title_download_playstore">חנות Play</string>
@@ -169,8 +165,6 @@
     <string name="details_dev_profile">פרופיל המפתח</string>
     <string name="details_gsf_dependent">נדרש GSF</string>
     <string name="download_force_clear_all">לכפות ניקוי של הכול</string>
-    <string name="exodus_no_tracker">לא מכילה עוקבנים ידועים</string>
-    <string name="exodus_powered">מופעל על ידי Exodus Privacy</string>
     <string name="installer_status_failure_conflict">קיימת חבילה מתנגשת</string>
     <string name="installer_status_failure_session">לא היה ניתן ליצור הפעלה</string>
     <string name="pref_filter_fdroid_title">סינון יישומי F-Droid</string>
@@ -259,7 +253,6 @@
     <string name="updates_available">עדכונים נמצאו</string>
     <string name="google_play_store_desc">גוגל פליי, ידוע גם כ-Play Store של גוגל ובתור החנות האידיאלית של אנדרואיד.</string>
     <string name="session_good">וואה! הכל טוב.</string>
-    <string name="failed_to_fetch_report">לא הצליח להשיג דיווח פרטיות</string>
     <string name="action_get_local_apk">שמירת מארז יישום</string>
     <string name="verifying_new_session">מאמת כניסה חדשה</string>
     <string name="toast_import_success">ייבוא תצורת מכשיר בוצעה בהצלחה</string>
@@ -305,7 +298,6 @@
     <string name="onboarding_permission_doze_desc">אפשר לחנות Aurora להוריד ולעדכן יישומים ברקע</string>
     <string name="pref_vending_version_title">גרסת Google Play</string>
     <string name="pref_vending_version_device">ברירת מחדל (מתוך תצורת המכשיר)</string>
-    <string name="action_request_analysis">בקש ניתוח חדש</string>
     <string name="session_login">אנא היכנס לחשבון Google Play שלך</string>
     <string name="session_installer_desc">מומלץ, מובנה ותומך בכל גרסאות האנדרואיד</string>
     <string name="root_installer_desc">דורש הרשאות שורש/משתמש-על, תומך בכל גרסאות האנדרואיד.</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">המפַתח מסר שהוא לא יאסוף את הנתונים שלך ולא ישתמש בהם.</string>
     <string name="details_data_safety_shared">האפליקציה הזאת עשויה לשתף את סוגי הנתונים האלה</string>
     <string name="details_data_safety_share_none">המפַתח הזה מצהיר כי הנתונים שלך לא ישותפו עם חברות וארגונים אחרים.</string>
-    <string name="exodus_tracker_desc">גרסה זו של היישום עשויה להכיל עוד רכיבי מעקב שעדיין לא מתועדים במסד נתוני הפרטיות של Exodus.</string>
-    <string name="exodus_report_trackers">נמצאו <xliff:g id="number_of_trackers">%1$d</xliff:g> רכיבי מעקב מזוהים בתוך <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="action_skip">דילוג</string>
     <string name="force_restart_snack">לפתוח מחדש לצורך החלת השינויים?</string>
     <string name="no_description">אין תיאור זמין</string>
@@ -515,7 +505,5 @@
     <string name="account_exists">החשבון כבר נוסף</string>
     <string name="action_free_up_space">פינוי מקום</string>
     <string name="action_update_anyway">לעדכן בכל זאת</string>
-    <string name="exodus_report_history">היסטוריית גרסאות</string>
-    <string name="exodus_latest">עדכני</string>
     <string name="confirm_deeplink_title">אישור קישורים חיצוניים</string>
 </resources>

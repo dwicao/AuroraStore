@@ -78,7 +78,6 @@ import com.aurora.store.compose.composable.SectionHeader
 import com.aurora.store.compose.composable.ShimmerCarouselSection
 import com.aurora.store.compose.composable.StreamCarousel
 import com.aurora.store.compose.composable.TopAppBar
-import com.aurora.store.compose.composable.TrackerUpdateWarningDialog
 import com.aurora.store.compose.navigation.Destination
 import com.aurora.store.compose.navigation.Screen
 import com.aurora.store.compose.preview.AppPreviewProvider
@@ -92,7 +91,6 @@ import com.aurora.store.compose.ui.details.composable.DataSafety
 import com.aurora.store.compose.ui.details.composable.Details
 import com.aurora.store.compose.ui.details.composable.DeveloperDetails
 import com.aurora.store.compose.ui.details.composable.PlayListing
-import com.aurora.store.compose.ui.details.composable.Privacy
 import com.aurora.store.compose.ui.details.composable.RatingAndReviews
 import com.aurora.store.compose.ui.details.composable.Screenshots
 import com.aurora.store.compose.ui.details.composable.Tags
@@ -106,9 +104,7 @@ import com.aurora.store.compose.ui.sheets.AccountPickerSheet
 import com.aurora.store.compose.ui.sheets.InstallErrorSheet
 import com.aurora.store.data.installer.AppInstaller
 import com.aurora.store.data.model.AppState
-import com.aurora.store.data.model.ExodusTracker
 import com.aurora.store.data.model.PermissionType
-import com.aurora.store.data.model.Report
 import com.aurora.store.data.model.Scores
 import com.aurora.store.data.model.StorageRequirement
 import com.aurora.store.data.providers.PermissionProvider.Companion.isGranted
@@ -118,12 +114,10 @@ import com.aurora.store.util.FlavouredUtil
 import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_UPDATES_WARN_PERMISSIONS
-import com.aurora.store.util.Preferences.PREFERENCE_UPDATES_WARN_TRACKERS
 import com.aurora.store.util.ShortcutManagerUtil
 import com.aurora.store.util.StorageUtil
 import com.aurora.store.viewmodel.details.AppDetailsViewModel
 import com.jakewharton.processphoenix.ProcessPhoenix
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
@@ -140,10 +134,6 @@ fun AppDetailsScreen(
     val featuredReviews by viewModel.featuredReviews.collectAsStateWithLifecycle()
     val userReview by viewModel.userReview.collectAsStateWithLifecycle()
     val favorite by viewModel.favourite.collectAsStateWithLifecycle()
-    val exodusReport by viewModel.exodusReport.collectAsStateWithLifecycle()
-    val exodusFailed by viewModel.exodusFailed.collectAsStateWithLifecycle()
-    val exodusLoaded by viewModel.exodusLoaded.collectAsStateWithLifecycle()
-    val exodusLocal by viewModel.exodusLocal.collectAsStateWithLifecycle()
     val dataSafetyReport by viewModel.dataSafetyReport.collectAsStateWithLifecycle()
     val categoryIconUrl by viewModel.categoryIconUrl.collectAsStateWithLifecycle()
     val plexusScores by viewModel.plexusScores.collectAsStateWithLifecycle()
@@ -216,10 +206,6 @@ fun AppDetailsScreen(
                     plexusScores = plexusScores,
                     dataSafetyReport = dataSafetyReport,
                     categoryIconUrl = categoryIconUrl,
-                    exodusReport = exodusReport,
-                    exodusFailed = exodusFailed,
-                    exodusLoaded = exodusLoaded,
-                    exodusLocal = exodusLocal,
                     onNavigateTo = onNavigateTo,
                     onLoadMoreCluster = { cluster -> viewModel.loadMoreCluster(cluster) },
                     accounts = accounts,
@@ -258,9 +244,6 @@ fun AppDetailsScreen(
                     },
                     onDeleteReview = { viewModel.deleteAppReview(loadedApp) },
                     forceSinglePane = forceSinglePane,
-                    onCheckNewTrackers = { pkg, installedVc ->
-                        viewModel.getNewTrackers(pkg, installedVc)
-                    },
                     onFetchTopChart = viewModel::topChartCluster,
                     onForceRestart = {
                         val intent = Intent(context, ComposeActivity::class.java)
@@ -343,10 +326,6 @@ private fun ScreenContentApp(
     plexusScores: Scores? = null,
     dataSafetyReport: DataSafetyReport? = null,
     categoryIconUrl: String? = null,
-    exodusReport: Report? = null,
-    exodusFailed: Boolean = false,
-    exodusLoaded: Boolean = false,
-    exodusLocal: Boolean = false,
     onNavigateTo: (Destination) -> Unit = {},
     onLoadMoreCluster: (cluster: StreamCluster) -> Unit = {},
     accounts: List<Account> = emptyList(),
@@ -367,11 +346,6 @@ private fun ScreenContentApp(
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
     forceSinglePane: Boolean = false,
     onFetchTopChart: suspend (chart: TopChart, title: String) -> StreamCluster? = { _, _ -> null },
-    onCheckNewTrackers: suspend (
-        packageName: String,
-        installedVersionCode: Long
-    ) -> List<ExodusTracker> =
-        { _, _ -> emptyList() },
     onForceRestart: () -> Unit = {}
 ) {
     val context = LocalContext.current
@@ -416,27 +390,10 @@ private fun ScreenContentApp(
         .scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden
     var showRestartDialog by remember { mutableStateOf(false) }
     var showAccountPicker by remember { mutableStateOf(false) }
-    val warnTrackers = remember {
-        Preferences.getBoolean(context, PREFERENCE_UPDATES_WARN_TRACKERS, false)
-    }
-    var trackerWarning by remember { mutableStateOf<List<ExodusTracker>?>(null) }
     val warnPermissions = remember {
         Preferences.getBoolean(context, PREFERENCE_UPDATES_WARN_PERMISSIONS, false)
     }
     var permissionWarning by remember { mutableStateOf<List<String>?>(null) }
-    var isChecking by remember { mutableStateOf(false) }
-    var checkJob by remember { mutableStateOf<Job?>(null) }
-
-    // Keep the "checking" actions until the app leaves Updatable (i.e. the download it started has
-    // taken over the state), so the button doesn't flash back to "Update" between the two.
-    LaunchedEffect(state) {
-        if (state !is AppState.Updatable) isChecking = false
-    }
-
-    // A blocked download leaves the app Updatable, so the effect above never fires.
-    LaunchedEffect(storageWarning) {
-        if (storageWarning != null) isChecking = false
-    }
 
     if (showRestartDialog) {
         ForceRestartDialog(onConfirm = onForceRestart)
@@ -470,7 +427,6 @@ private fun ScreenContentApp(
                 FlavouredUtil.promptMicroGInstall(context)
 
             if (shouldPromptMicroGInstall && !ignoreMicroG) {
-                isChecking = false
                 showExtraPane(ExtraScreen.MicroG)
             } else {
                 if (accountId != null) {
@@ -481,37 +437,12 @@ private fun ScreenContentApp(
                 onNavigateBack()
             }
         } else {
-            isChecking = false
             val requiredPermissions = setOfNotNull(
                 PermissionType.INSTALL_UNKNOWN_APPS,
                 if (app.fileList.requiresObbDir()) PermissionType.STORAGE_MANAGER else null,
                 if (app.fileList.requiresObbDir()) PermissionType.EXTERNAL_STORAGE else null
             )
             showExtraPane(Screen.PermissionRationale(requiredPermissions = requiredPermissions))
-        }
-    }
-
-    fun onCancelCheck() {
-        checkJob?.cancel()
-        checkJob = null
-        isChecking = false
-    }
-
-    fun checkTrackersThenInstall() {
-        if (!warnTrackers) {
-            onInstall()
-            return
-        }
-        isChecking = true
-        checkJob = coroutineScope.launch {
-            val installedVc =
-                PackageUtil.getInstalledVersionCode(context, app.packageName)
-            val trackers = onCheckNewTrackers(app.packageName, installedVc)
-            if (trackers.isEmpty()) {
-                onInstall()
-            } else {
-                trackerWarning = trackers
-            }
         }
     }
 
@@ -522,7 +453,7 @@ private fun ScreenContentApp(
             emptyList()
         }
         if (newPermissions.isEmpty()) {
-            checkTrackersThenInstall()
+            onInstall()
         } else {
             permissionWarning = newPermissions
         }
@@ -533,23 +464,9 @@ private fun ScreenContentApp(
             permissions = permissions,
             onConfirm = {
                 permissionWarning = null
-                checkTrackersThenInstall()
-            },
-            onDismiss = { permissionWarning = null }
-        )
-    }
-
-    trackerWarning?.let { trackers ->
-        TrackerUpdateWarningDialog(
-            trackers = trackers,
-            onConfirm = {
-                trackerWarning = null
                 onInstall()
             },
-            onDismiss = {
-                trackerWarning = null
-                isChecking = false
-            }
+            onDismiss = { permissionWarning = null }
         )
     }
 
@@ -609,15 +526,6 @@ private fun ScreenContentApp(
 
     @Composable
     fun SetupActions() {
-        if (isChecking) {
-            Actions(
-                primaryActionDisplayName = stringResource(R.string.action_open),
-                secondaryActionDisplayName = stringResource(R.string.action_cancel),
-                isPrimaryActionEnabled = false,
-                onSecondaryAction = ::onCancelCheck
-            )
-            return
-        }
         AnimatedContent(
             targetState = state,
             contentKey = { it::class },
@@ -829,22 +737,6 @@ private fun ScreenContentApp(
                     }
 
                     item {
-                        Privacy(
-                            report = exodusReport,
-                            failed = exodusFailed,
-                            loaded = exodusLoaded,
-                            local = exodusLocal,
-                            onNavigateToDetailsExodus = if (exodusReport != null &&
-                                exodusReport.id != -1
-                            ) {
-                                { showExtraPane(ExtraScreen.Exodus) }
-                            } else {
-                                null
-                            }
-                        )
-                    }
-
-                    item {
                         DeveloperDetails(
                             address = app.developerAddress,
                             website = app.developerWebsite,
@@ -894,10 +786,6 @@ private fun ScreenContentApp(
     @Composable
     fun ExtraPane(screen: NavKey) = when (screen) {
         is ExtraScreen.Review -> ReviewScreen(
-            packageName = app.packageName
-        )
-
-        is ExtraScreen.Exodus -> ExodusScreen(
             packageName = app.packageName
         )
 

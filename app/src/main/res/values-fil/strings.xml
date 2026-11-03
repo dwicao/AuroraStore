@@ -89,7 +89,6 @@
     <string name="action_pending">Pending</string>
     <string name="action_post">I-post</string>
     <string name="action_remove_all">I-remove lahat</string>
-    <string name="action_request_analysis">Mag request ng bagong analysis</string>
     <string name="action_restart">I-restart</string>
     <string name="action_resume">I-resume</string>
     <string name="action_retry">Ulitin</string>
@@ -137,7 +136,6 @@
     <string name="details_data_safety_share_none">Ang developer ay nagsasabi na hindi ito nagbibigay ng user data sa ibang kompanya at organization.</string>
     <string name="details_data_safety_title">Safety ng data</string>
     <string name="details_data_safety_subtitle">Privacy ng data at practices ng security na ni deklara ng developer</string>
-    <string name="details_privacy">Pribasiya</string>
     <string name="details_ratings">Mga rating at reviews</string>
     <string name="details_ratings_title_hint">Title ng review</string>
     <string name="details_review_comment_hint">I-describe ang iyong karanasan (opsyonal)</string>
@@ -166,17 +164,6 @@
     <string name="download_queued">Naka-queue</string>
     <string name="download_resume_all">I-resume lahat</string>
     <string name="download_speed_estimating">Ni-estimate</string>
-    <string name="exodus_no_tracker">Walang kilalang trackers</string>
-    <string name="exodus_tracker_desc">Ang version ng app na ito ay posibleng merong trackers na hindi pa present sa database ng Exodus Privacy.</string>
-    <string name="exodus_powered">Ni-Power ng Exodus Privacy</string>
-    <string name="exodus_progress">Tinitignan kung may trackers…</string>
-    <string name="exodus_substring">Mga kilalang trackers(s) na nahanap sa</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> mga known na tracker na nahanap sa <xliff:g id="app_version_name">%2$s</xliff:g></string>
-    <string name="exodus_view_report">Tignan ang report</string>
-    <string name="exodus_report_history">History ng bersyon</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d trackers</string>
-    <string name="exodus_latest">Pinakabago</string>
     <string name="filter_review_all">Lahat</string>
     <string name="filter_latest">Pinakabago</string>
     <string name="filter_review_critical">Kritikal</string>
@@ -254,8 +241,6 @@
     <string name="pref_ui_similar_apps">Mga magkahawig at kaugnay na apps</string>
     <string name="pref_updates_incompatible">Magpakita ng updates na hindi gagana</string>
     <string name="pref_updates_incompatible_desc">Magpakita ng updates para sa mga hindi compatible o nakapatay na apps na maaring hindi mag-install.</string>
-    <string name="pref_updates_warn_trackers">Mag babala sa mga bagong trackers na mahahanap sa bagong updates</string>
-    <string name="pref_updates_warn_trackers_desc">Maglagay ng babala bago mag-update pag ang bagong bersyon ay naglagay ng bagong trackers na wala sa naka-install na app</string>
     <string name="pref_self_update">Sariling pag-update</string>
     <string name="pref_self_update_desc">Magbigay ng mga bagong builds ng Aurora Store sa Updates tab.</string>
     <string name="pref_aurora_only">Mag filter ng apps na galing sa ibang sources.</string>
@@ -294,8 +279,6 @@
     <string name="tab_top_grossing">May pinakamataas ang kita</string>
     <string name="tab_top_paid">May pinakamataas na may bayad</string>
     <string name="tab_trending">Mga Sikat</string>
-    <string name="tracker_warning_title">Mga bagong trackers ay nahanap</string>
-    <string name="tracker_warning_desc">Ang update ay naglalagay ng bagong trackers na hindi naka-install sa dating bersyon:</string>
     <string name="title_about">Tungkol saan</string>
     <string name="title_account_manager">Mga Account</string>
     <string name="title_apps">Mga App</string>
@@ -403,7 +386,6 @@
     <string name="pref_updates_check_frequency_3d">Kada 3 araw</string>
     <string name="pref_updates_check_frequency_7d">Kada 7 na araw</string>
     <string name="pref_updates_check_frequency_15d">Kada 15 na araw</string>
-    <string name="failed_to_fetch_report">Hindi makuha ang report ng privacy</string>
     <string name="access_denied_using_vpn">Hindi pwede! Ikaw ba ay gumagamit ng VPN o Tor?</string>
     <string name="bad_request">May error sa loob! Ulitin mo ulit pagkatapos makalipas ng sandali</string>
     <string name="login_rate_limited">Ikaw ay limitado sa rate</string>
@@ -472,9 +454,6 @@
     <string name="shizuku_installer_desc">Kailangan ng Shizuku o Sui, kailangan ito i-setup at binibigyan ng pahintulot</string>
     <string name="manual_download_hint">I-enter ang bersyon na code na nais mo i-download</string>
     <string name="manual_download_version_error">Ang bersyon na code ay kumakailangan lang ng digits</string>
-    <string name="manual_download_lookup">Tumingin ng mga bersyon</string>
-    <string name="manual_download_select_version">Sumelekta ng bersyon</string>
-    <string name="manual_download_no_versions">Walang bersyon ang nahanap</string>
     <string name="manual_download_availability_warning">May mga bersyon na maaring hindi pwede ma-download o hindi ito compatible sa iyong device.</string>
     <string name="faqs_subtitle">May mga tanong? Hanapin ang iyong sagot</string>
     <string name="source_code_title">Code ng source</string>

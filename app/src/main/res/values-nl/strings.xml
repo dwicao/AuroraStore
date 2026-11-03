@@ -125,11 +125,6 @@
     <string name="filter_review_five">Vijf</string>
     <string name="filter_review_critical">Kritieke</string>
     <string name="filter_review_all">Alle</string>
-    <string name="exodus_view_report">Bekijk rapport</string>
-    <string name="exodus_substring">bekende tracker(s) gevonden in</string>
-    <string name="exodus_progress">Controleren voor trackers…</string>
-    <string name="exodus_powered">Mogelijk gemaakt door Exodus Privacy</string>
-    <string name="exodus_no_tracker">Bevat geen bekende trackers</string>
     <string name="download_speed_estimating">Geschatte</string>
     <string name="download_resume_all">Alles voortzetten</string>
     <string name="download_queued">In de wachtrij</string>
@@ -144,7 +139,6 @@
     <string name="download_cancel_all">Alles annuleren</string>
     <string name="details_think_this_app">Wat vind je van deze app?</string>
     <string name="details_ratings">Beoordeling en beoordelingen</string>
-    <string name="details_privacy">Privacy</string>
     <string name="details_permission">Toestemming</string>
     <string name="details_paid">Betaald</string>
     <string name="details_no_updates">Geen updates beschikbaar</string>
@@ -270,7 +264,6 @@
     <string name="app_links_desc">Aurora Store toestaan om ondersteunde links te openen</string>
     <string name="title_search_suggestion">Zoeksuggestie</string>
     <string name="title_search_results">Zoekresultaten</string>
-    <string name="failed_to_fetch_report">Mislukt bij het ophalen van privacyrapport</string>
     <string name="server_unreachable">Server onbereikbaar</string>
     <string name="failed_generating_session">Sessie genereren mislukt, foutcode: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="login_rate_limited">Je hebt een limiettarief</string>
@@ -280,7 +273,6 @@
     <string name="verifying_new_session">Nieuwe sessie verifiëren</string>
     <string name="app_links_title">App-koppelingen</string>
     <string name="google_play_store_desc">Google Play, ook bekend als de Google Play Store en voorheen Android Market.</string>
-    <string name="action_request_analysis">Nieuwe analyse aanvragen</string>
     <string name="onboarding_permission_doze">Achtergrondinstallaties</string>
     <string name="onboarding_permission_doze_desc">Sta Aurora Store toe om apps te installeren en te updaten in de achtergrond</string>
     <string name="action_home_screen">Toevoegen aan startpagina</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">De ontwikkelaar zegt dat deze app geen gebruikersgegevens verzamelt.</string>
     <string name="details_data_safety_shared">Gegevens die deze app mogelijk deelt</string>
     <string name="details_data_safety_share_none">De ontwikkelaar zegt dat deze app geen gebruikersgegevens deelt met andere bedrijven of organisaties.</string>
-    <string name="exodus_tracker_desc">Deze versie van de app kan meer trackers bevatten die nog niet in de databank van Exodus Privacy aanwezig zijn.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> bekende tracker(s) gevonden in <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">Geen beschrijving beschikbaar</string>
     <string name="details_more_info">Meer informatie</string>
     <string name="details_more_target_api">Doel-API</string>
@@ -608,18 +598,7 @@
     <string name="toast_fav_install_failed">Ophalen van app-gegevens mislukt</string>
     <string name="account_exists">Account is al toegevoegd</string>
     <string name="action_update_anyway">Toch bijwerken</string>
-    <string name="exodus_report_history">Versiegeschiedenis</string>
-    <string name="exodus_latest">Meest recente</string>
-    <string name="pref_updates_warn_trackers">Waarschuw mij over nieuwe trackers in app-updates</string>
-    <string name="pref_updates_warn_trackers_desc">Toon een waarschuwing als een update nieuwe trackers introduceert die niet aanwezig zijn in de geïnstalleerde versie</string>
-    <string name="tracker_warning_title">Nieuwe trackers gedetecteerd</string>
-    <string name="tracker_warning_desc">Deze update voegt trackers toe die niet aanwezig zijn in de geïnstalleerde versie:</string>
     <string name="install_favourites_summary">Hiermee zullen %1$d apps gedownload en geïnstalleerd worden.</string>
-    <string name="manual_download_lookup">Versies bekijken</string>
-    <string name="manual_download_select_version">Versie selecteren</string>
-    <string name="manual_download_no_versions">Geen bekende versies gevonden</string>
     <string name="manual_download_availability_warning">Sommige versies zijn mogelijk niet beschikbaar om te downloaden of zijn incompatibel met uw apparaat.</string>
     <string name="details_more_certificate_hash">Certificate-hash</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d trackers</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
 </resources>

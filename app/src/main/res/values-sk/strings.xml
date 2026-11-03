@@ -38,7 +38,6 @@
     <string name="download_queued">V poradí</string>
     <string name="download_resume_all">Pokračovať všetko</string>
     <string name="download_speed_estimating">Odhadujem</string>
-    <string name="exodus_no_tracker">Neobsahuje žiadne známe sledovače</string>
     <string name="installer_service_misconfigured">Najprv nastavte služby Aurora a udeľte všetky povolenia.</string>
     <string name="installer_status_failure">Inštalátor zlyhal</string>
     <string name="installer_status_failure_blocked">Inštalácia bola zablokovaná</string>
@@ -72,7 +71,6 @@
     <string name="spoof_property"><xliff:g id="výrobca">%1$s</xliff:g> • API <xliff:g id="api">%2$s</xliff:g></string>
     <string name="notification_channel_updates">Oznámenia o aktualizáciách</string>
     <string name="notification_updates_available_desc_2"><xliff:g id="aplikácia_jedna_názov">%1$s</xliff:g> and <xliff:g id="aplikácia_dva_názov">%2$s</xliff:g></string>
-    <string name="failed_to_fetch_report">Nepodarilo sa načítať správu o ochrane osobných údajov</string>
     <string name="access_denied_using_vpn">Prístup zamietnutý! Používate VPN alebo Tor?</string>
     <string name="bad_request">Vnútorná chyba! Skúste to neskôr</string>
     <string name="app_links_desc">Povoľte Aurore otvárať podporované odkazy</string>
@@ -93,7 +91,6 @@
     <string name="action_open">Otvoriť</string>
     <string name="action_pending">Čakajúce</string>
     <string name="action_post">Vložiť</string>
-    <string name="action_request_analysis">Požiadať o novú analýzu</string>
     <string name="action_restart">Reštart</string>
     <string name="action_search">Hľadať</string>
     <string name="action_share">Zdieľať</string>
@@ -234,7 +231,6 @@
     <string name="details_paid">Platené</string>
     <string name="action_uninstall_success">Úspešne odinštalované</string>
     <string name="details_permission">Oprávnenie</string>
-    <string name="details_privacy">Ochrana osobných údajov</string>
     <string name="details_ratings">Hodnotenie a recenzie</string>
     <string name="details_ratings_title_hint">Názov recenzie</string>
     <string name="details_think_this_app">Čo si myslíte o tejto aplikácii?</string>
@@ -279,9 +275,6 @@
     <string name="action_whitelist">Biela listina</string>
     <string name="details_beta">Beta program</string>
     <string name="details_beta_subscribed">Ste beta testerom</string>
-    <string name="exodus_powered">Využívané službou Exodus Privacy</string>
-    <string name="exodus_progress">Kontrolujem sledovače…</string>
-    <string name="exodus_substring">známe sledovače nájdené v</string>
     <string name="download_eta_min">Zostáva %1$dm %2$ds</string>
     <string name="download_eta_sec">Zostáva %1$ds</string>
     <string name="filter_review_five">Päť</string>
@@ -291,7 +284,6 @@
     <string name="filter_review_three">Tri</string>
     <string name="installer_root_unavailable">Žiadny prístup root. Udeľte ho alebo zmeňte inštalačný program.</string>
     <string name="filter_review_two">Dve</string>
-    <string name="exodus_view_report">Zobraziť správu</string>
     <string name="filter_review_critical">Kritické</string>
     <string name="installer_am_unavailable">Nainštalujte správcu aplikácií alebo zmeňte inštalačný program.</string>
     <string name="onboarding_title_installer">Inštalátor</string>
@@ -435,7 +427,6 @@
     <string name="details_data_safety_collect_none">Vývojár tvrdí, že táto aplikácia nezhromažďuje údaje používateľa.</string>
     <string name="details_data_safety_shared">Údaje, ktoré môže táto aplikácia zdieľať</string>
     <string name="details_data_safety_share_none">Vývojár tvrdí, že táto aplikácia nezdieľa údaje používateľov s inými spoločnosťami alebo organizáciami.</string>
-    <string name="exodus_tracker_desc">Táto verzia aplikácie môže stále obsahovať ďalšie sledovacie zariadenia, ktoré ešte nie sú v databáze Exodus Privacy.</string>
     <string name="microg_license_agreement">Prečítajte si licenciu a zmluvu microG</string>
     <string name="microg_privacy_policy">Prečítajte si zásady ochrany osobných údajov spoločnosti microG</string>
     <string name="microg_website">Navštívte webovú stránku projektu microG</string>
@@ -452,7 +443,6 @@
     <string name="onboarding_title_gsf_desc">Chýbajúce závislosti</string>
     <string name="onboarding_gms_agreement">Prečítal som si a súhlasím s podmienkami používania služby microG a so zásadami ochrany osobných údajov</string>
     <string name="onboarding_gms_missing">Vo vašom zariadení sme nenašli službu Google Play, viaceré populárne aplikácie ju teraz vyžadujú na správne fungovanie!</string>
-    <string name="exodus_report_trackers"><xliff:g id="počet_sledovačov">%1$d</xliff:g> známy/e sledovač/e nájdené v <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="onboarding_gms_microg">microG je bezplatná implementácia s otvoreným zdrojovým kódom, ktorá poskytuje podobné funkcie na spúšťanie aplikácií závislých od služieb Google Play pre zariadenia so systémom Android prostredníctvom reimplementácie.\n\nmicroG umožňuje aplikáciám prístup k týmto rozhraniam API spoločnosti Google, čím zvyšuje kompatibilitu pre používateľov a zároveň ponúka výhody v oblasti ochrany osobných údajov. \n\nmicroG sa automaticky spustí na pozadí pri otvorení aplikácií závislých od mobilných služieb Google.</string>
     <string name="manual_download_version_error">Kód verzie môže obsahovať iba číslice</string>
     <string name="preparing_to_install">Príprava na inštaláciu</string>

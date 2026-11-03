@@ -87,7 +87,6 @@
     <string name="installer_status_failure_session">Nepavyko sukurti seanso</string>
     <string name="details_changelog">Keitinių žurnalas</string>
     <string name="details_permission">Leidimas</string>
-    <string name="details_privacy">Privatumas</string>
     <string name="installer_status_failure_conflict">Yra konfliktuojantis paketas</string>
     <string name="installer_status_failure_incompatible">Nesuderinama programėlė</string>
     <string name="onboarding_title_installer">Diegimo programa</string>
@@ -121,7 +120,6 @@
     <string name="action_filter_rating">Įvertinimai</string>
     <string name="action_whitelist">Baltasis sąrašas</string>
     <string name="details_more_about_app">Išsamiau apie programėlę</string>
-    <string name="exodus_view_report">Rodyti ataskaitą</string>
     <string name="download_eta_calculating">Skaičiuojama</string>
     <string name="pref_filter_fdroid_summary">Nepaisyti F-Droid programėlių Atnaujinimuose ir Įdiegtų programėlių sąraše</string>
     <string name="pref_filter_fdroid_title">Filtruoti F-Droid programėles</string>
@@ -170,9 +168,6 @@
     <string name="download_cancel_all">Atsisakyti visų</string>
     <string name="download_resume_all">Pratęsti visus</string>
     <string name="download_speed_estimating">Apskaičiuojama</string>
-    <string name="exodus_no_tracker">Programėlėje nėra žinomų seklių</string>
-    <string name="exodus_progress">Tikrinama, ar yra seklių…</string>
-    <string name="exodus_substring">žinomi sekliai(-ių) rasti versijoje</string>
     <string name="filter_review_all">Visi</string>
     <string name="filter_review_critical">Neigiami</string>
     <string name="installer_status_failure_blocked">Įdiegimas buvo užblokuotas</string>
@@ -194,7 +189,6 @@
     <string name="details_beta_description">Jūs matysite naujas ypatybes ir klaidas anksčiau nei su jomis susidurs visi kiti. Siųskite plėtotojams savo atsiliepimus, kad jie galėtų tobulinti programėles.</string>
     <string name="download_canceled">Atsisakytas</string>
     <string name="download_completed">Atsiuntimas užbaigtas</string>
-    <string name="exodus_powered">Veikia su „Exodus Privacy“</string>
     <string name="filter_review_four">Keturios</string>
     <string name="filter_review_three">Trys</string>
     <string name="filter_review_one">Viena</string>

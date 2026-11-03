@@ -177,11 +177,6 @@
     <string name="filter_review_five">Pet</string>
     <string name="filter_review_critical">Kritične</string>
     <string name="filter_review_all">Sve</string>
-    <string name="exodus_view_report">Prikaži izvještaj</string>
-    <string name="exodus_substring">poznati programi za praćenje pronađeni u</string>
-    <string name="exodus_progress">Provjeravanje programa za praćenje …</string>
-    <string name="exodus_powered">Pokreće Exodus Privacy</string>
-    <string name="exodus_no_tracker">Ne sadrži poznate programe za praćenje</string>
     <string name="download_speed_estimating">Procjenjivanje</string>
     <string name="download_resume_all">Nastavi sve</string>
     <string name="download_queued">U redu čekanja</string>
@@ -196,7 +191,6 @@
     <string name="download_cancel_all">Prekini sve</string>
     <string name="details_think_this_app">Što misliš o ovoj aplikaciji?</string>
     <string name="details_ratings">Ocjena i recenzije</string>
-    <string name="details_privacy">Privatnost</string>
     <string name="details_permission">Dozvola</string>
     <string name="details_paid">Naplativo</string>
     <string name="details_no_updates">Nema novih verzija</string>
@@ -256,7 +250,6 @@
     <string name="toast_import_success">Konfiguracija uređaja je uvezena</string>
     <string name="action_import">Uvezi</string>
     <string name="toast_import_failed">Nije bilo moguće uvesti konfiguraciju uređaja</string>
-    <string name="action_request_analysis">Zatraži novu analizu</string>
     <string name="action_home_screen">Dodaj na početni zaslon</string>
     <string name="installer_shizuku_unavailable">Shizuku nije instaliran ili postavljen pravilno.</string>
     <string name="about_wiki_title">Wiki</string>
@@ -360,7 +353,6 @@
     <string name="manual_download_hint">Upiši kod verzije koju želiš preuzeti</string>
     <string name="source_code_subtitle">Saznaj što je unutra</string>
     <string name="notification_updates_available_desc_1">Dostupna je nova verzija za <xliff:g id="app_one_name">%1$s</xliff:g></string>
-    <string name="failed_to_fetch_report">Dohvaćanje izvještaja o privatnosti nije uspjelo</string>
     <string name="pref_updates_check_frequency_desc">Konfiguriraj vremenske intervale za automatska aktualiziranja, u satima.</string>
     <string name="shizuku_installer_subtitle">Korištenje API-ja sustava izravno s administratorskim pravima</string>
     <string name="source_code_title">Izvorni kod</string>
@@ -427,7 +419,6 @@
     <string name="details_data_safety_collect_none">Programer tvrdi da ova aplikacija ne prikuplja korisničke podatke.</string>
     <string name="details_data_safety_shared">Podaci koje ova aplikacija može dijeliti</string>
     <string name="details_data_safety_share_none">Programer tvrdi da ova aplikacija ne dijeli korisničke podatke s drugim tvrtkama ili organizacijama.</string>
-    <string name="exodus_tracker_desc">Ova verzija aplikacije može i dalje sadržavati više programa za prećenje koji još nisu prisutni u Exodus Privacy bazi podataka.</string>
     <string name="app_info_downloads">Preuzimanja</string>
     <string name="app_info_updated_on">Zadnje aktualiziranje</string>
     <string name="app_info_min_android">Najmanja Android verzija</string>
@@ -453,7 +444,6 @@
     <string name="action_filter_no_ads">Bez oglasa</string>
     <string name="action_filter_no_gms">Bez usluga reprodukcije</string>
     <string name="action_install_microG">Instaliraj microG paket</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> pronađena programa za praćenje u <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="onboarding_gms_microg">microG je besplatna i otvorenog koda implementacija koja pruža sličnu funkcionalnost za pokretanje aplikacija koje ovise o Google Play uslugama na Android uređajima putem ponovne implementacije.\n\nmicroG omogućuje aplikacijama pristup Google API-jima, poboljšavajući kompatibilnost za korisnike uz dodatne prednosti po pitanju privatnosti.\n\nmicroG će se automatski pokrenuti u pozadini kada otvorite aplikacije koje ovise o Google mobilnim uslugama.</string>
     <string name="preparing_to_install">Priprema za instalaciju</string>
     <string name="permission_required">Potrebna dozvola</string>

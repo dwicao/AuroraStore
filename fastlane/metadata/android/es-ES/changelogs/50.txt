@@ -4,6 +4,5 @@
 • La barra de navegación solo se abre en la pantalla principal
 • Al retroceder ahora sale correctamente de la aplicación
 • Botones de configuración tienen el color correcto en el tema oscuro
-• El nombre de la aplicación vuelve a ser visible en la barra de herramientas de Exodus Reports.
 • Mejoras internas de las imágenes.
 • Actualizaciones de traducción

@@ -56,8 +56,6 @@
     <string name="details_no_ads">Reklam yoxdur</string>
     <string name="download_none">Endirmə yoxdur</string>
     <string name="download_eta_calculating">Hesablanır</string>
-    <string name="exodus_powered">Exodus Privacy Tərəfindən Dəstəklənir</string>
-    <string name="exodus_view_report">Hesabata baxın</string>
     <string name="filter_review_all">Hamısı</string>
     <string name="filter_review_one">Bir</string>
     <string name="installer_service_unavailable">Aurora Xidmətləri 1.0.9 və ya yuxarısını quraşdır və ya quraşdırıcını dəyişdir.</string>
@@ -115,7 +113,6 @@
     <string name="details_no_updates">Yeniləmə yoxdur</string>
     <string name="details_paid">Ödənişli</string>
     <string name="details_permission">İcazə</string>
-    <string name="details_privacy">Məxfilik</string>
     <string name="details_ratings">Reytinq və rəylər</string>
     <string name="details_think_this_app">Bu tətbiq haqqında nə düşünürsünüz\?</string>
     <string name="download_cancel_all">Hamısın ləğv et</string>
@@ -128,9 +125,6 @@
     <string name="download_queued">Növbəyə salındı</string>
     <string name="download_resume_all">Hamısın davam etdir</string>
     <string name="download_speed_estimating">Hesablanır</string>
-    <string name="exodus_no_tracker">Məlum izləyicilər ehtiva etmir</string>
-    <string name="exodus_progress">İzləyicilər yoxlanılır…</string>
-    <string name="exodus_substring">məlum izləyici(lər) tapıldı</string>
     <string name="filter_review_critical">Tənqidi</string>
     <string name="filter_review_five">Beş</string>
     <string name="filter_review_four">Dörd</string>
@@ -248,7 +242,6 @@
     <string name="pref_network_proxy_url">Proksi URL</string>
     <string name="pref_aurora_only">Digər mənbələrdən tətbiqləri filtirdən keçirin.</string>
     <string name="action_favourite">Sevimli</string>
-    <string name="action_request_analysis">Yeni yoxlama tələb et</string>
     <string name="details_ratings_title_hint">Rəy başlığı</string>
     <string name="download_clear_finished">Təmizləndi</string>
     <string name="onboarding_permission_installer_legacy_desc">Naməlum mənbələrdən tətbiqlər quraşdırmağa icazə ver</string>
@@ -288,7 +281,6 @@
     <string name="title_search_suggestion">Axtarış təklifi</string>
     <string name="title_advanced">Qabaqcıl</string>
     <string name="toast_proxy_failed">Proxy qurmaq olmadı</string>
-    <string name="failed_to_fetch_report">Məxfilik hesabatını almaq olmadı</string>
     <string name="server_unreachable">Server əlçatmazdır</string>
     <string name="notification_updates_available_desc_3"><xliff:g id="app_one_name">%1$s</xliff:g>, <xliff:g id="app_two_name">%2$s</xliff:g> and <xliff:g id="app_three_name">%3$s</xliff:g></string>
     <string name="bad_request">Daxili xəta! Xahiş olunur, az sonra təkrar sına</string>
@@ -402,8 +394,6 @@
     <string name="details_data_safety_collect_none">Tərtibatçı deyir ki, bu tətbiq istifadəçi məlumatını toplamır.</string>
     <string name="details_data_safety_shared">Bu tətbiqin paylaşa biləcəyi məlumat</string>
     <string name="details_data_safety_share_none">Tərtibatçı deyir ki, bu tətbiq istifadəçi məlumatını digər şirkətlər və ya təşkilatlarla paylaşmır.</string>
-    <string name="exodus_tracker_desc">Tətbiqin bu versiyasında hələ Exodus Privacy məlumat bazasında olmayan daha çox izləyici ola bilər.</string>
-    <string name="exodus_report_trackers">&lt;xliff:gid=\"app_version_name\"&gt;%2$s&lt;/xliff:g&gt; içində olan &lt;xliff:gid=\"number_of_trackers\"&gt;\n%1$d&lt;/xliff:g&gt; izləyici tapıldı</string>
     <string name="no_apps_available">Əlçatan tətbiq yoxdur</string>
     <string name="app_info_downloads">Yükləmələr</string>
     <string name="app_info_updated_on">Son yenilənmə</string>
@@ -609,17 +599,6 @@
     </plurals>
     <string name="account_exists">Hesab artıq əlavə edilib</string>
     <string name="action_update_anyway">Yenə də yenilə</string>
-    <string name="exodus_report_history">Versiya tarixçəsi</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d izləyici</string>
-    <string name="exodus_latest">Ən son</string>
-    <string name="pref_updates_warn_trackers">Tətbiq yeniləmələrində yeni izləyicilər barədə xəbər ver</string>
-    <string name="pref_updates_warn_trackers_desc">Yeni versiya quraşdırılmış versiyada olmayan izləyiciləri əlavə etdikdə yeniləmədən əvvəl xəbərdarlıq göstər</string>
-    <string name="tracker_warning_title">Yeni izləyicilər aşkarlandı</string>
-    <string name="tracker_warning_desc">Bu yeniləmə quraşdırılmış versiyada olmayan izləyiciləri əlavə edir:</string>
-    <string name="manual_download_lookup">Versiyalara bax</string>
-    <string name="manual_download_select_version">Versiya seç</string>
-    <string name="manual_download_no_versions">Məlum versiya tapılmadı</string>
     <string name="manual_download_availability_warning">Bəzi versiyaların yüklənilməsi əlçatmaz ola bilər və ya cihazınızla uyuşmaz ola bilər.</string>
     <string name="details_more_certificate_hash">Sertifikat hash-i</string>
     <string name="action_free_up_space">Yer boşaltın</string>

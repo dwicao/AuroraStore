@@ -102,8 +102,8 @@ data layer → gplayapi / Room / WorkManager.
   bump `version`, add `MIGRATION_n_n+1` in `MigrationHelper`, register it in
   `RoomModule`, commit the regenerated schema JSON.
 - **Background:** WorkManager with `@HiltWorker`/`@AssistedInject` workers in
-  `data/work/` (auth refresh, downloads, update check, cache, Exodus tracker
-  sync, export). `AuroraApp` implements `Configuration.Provider` with
+  `data/work/` (auth refresh, downloads, update check, cache, export).
+  `AuroraApp` implements `Configuration.Provider` with
   `HiltWorkerFactory`.
 - **Installers:** strategy objects in `data/installer/`
   (`SessionInstaller`, `ShizukuInstaller`, `RootInstaller`, `NativeInstaller`,
@@ -147,8 +147,8 @@ data layer → gplayapi / Room / WorkManager.
 ## Testing
 
 - **JVM unit tests** (`app/src/test/`): JUnit4 + Google Truth; pure-logic
-  seams only (Play error mapping, dispenser health policy, DEX tracker
-  scanner, bsdiff, APK frosting). Run: `./gradlew testVanillaDebugUnitTest`.
+  seams only (Play error mapping, dispenser health policy, bsdiff, APK
+  frosting). Run: `./gradlew testVanillaDebugUnitTest`.
   - `FrostingVerifierTest` needs a real Play APK via
     `-Pfrosted.apk=/path/to/base.apk`; without it those cases are skipped
     (`assumeTrue`), not failed.
@@ -181,9 +181,6 @@ data layer → gplayapi / Room / WorkManager.
   as the first signal, not noise to suppress.
 - Network is **HTTPS-only everywhere** (`usesCleartextTraffic=false`, dispenser
   URLs enforced HTTPS at dialog/VM/network layers). Don't add cleartext paths.
-- The bundled Exodus API token is revoked upstream (degrades tracker reports
-  only); override with `-PexodusApiKey=`, `EXODUS_API_KEY` env, or the CI
-  secret. Per-app reports fall back to on-device DEX scanning.
 - Self-update reads root `updates.json` (GitHub raw), **not** upstream's feed —
   fork APKs can't install over upstream's signature (and vice versa).
 - R8 full mode is explicitly disabled (`gradle.properties`), and

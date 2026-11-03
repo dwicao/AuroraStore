@@ -30,13 +30,11 @@ import com.aurora.gplayapi.web.WebPlayClient
 import com.aurora.store.AuroraApp
 import com.aurora.store.R
 import com.aurora.store.data.AccountRepository
-import com.aurora.store.data.ExodusRepository
 import com.aurora.store.data.event.InstallerEvent
 import com.aurora.store.data.helper.DownloadHelper
 import com.aurora.store.data.model.AppState
 import com.aurora.store.data.model.DownloadStatus
 import com.aurora.store.data.model.PlexusReport
-import com.aurora.store.data.model.Report
 import com.aurora.store.data.model.Scores
 import com.aurora.store.data.model.StorageRequirement
 import com.aurora.store.data.play.PlayErrors
@@ -92,7 +90,6 @@ class AppDetailsViewModel @Inject constructor(
     private val okHttpClient: OkHttpClient,
     private val json: Json,
     private val accountRepository: AccountRepository,
-    private val exodusRepository: ExodusRepository,
     private val playGateway: PlayGateway
 ) : ViewModel() {
 
@@ -132,27 +129,6 @@ class AppDetailsViewModel @Inject constructor(
 
     private val _dataSafetyReport = MutableStateFlow<DataSafetyReport?>(null)
     val dataSafetyReport = _dataSafetyReport.asStateFlow()
-
-    private val _exodusReport = MutableStateFlow<Report?>(Report())
-    val exodusReport = _exodusReport.asStateFlow()
-
-    /** True when the shown report was scanned on-device rather than fetched. */
-    private val _exodusLocal = MutableStateFlow(false)
-    val exodusLocal = _exodusLocal.asStateFlow()
-
-    private val _exodusReports = MutableStateFlow<List<Report>>(emptyList())
-    val exodusReports = _exodusReports.asStateFlow()
-
-    /** True once a reports fetch finished without usable data (network/HTTP/parse). */
-    private val _exodusFailed = MutableStateFlow(false)
-    val exodusFailed = _exodusFailed.asStateFlow()
-
-    /** True once a reports fetch finished, successfully or not. */
-    private val _exodusLoaded = MutableStateFlow(false)
-    val exodusLoaded = _exodusLoaded.asStateFlow()
-
-    private val _versionLookupInProgress = MutableStateFlow(false)
-    val versionLookupInProgress = _versionLookupInProgress.asStateFlow()
 
     private val _plexusScores = MutableStateFlow<Scores?>(Scores())
     val plexusScores = _plexusScores.asStateFlow()
@@ -290,7 +266,6 @@ class AppDetailsViewModel @Inject constructor(
             fetchDataSafetyReport(packageName)
             fetchCategoryIcon(app.value!!.categoryStreamUrl.orEmpty())
             fetchSuggestions()
-            fetchExodusPrivacyReport(packageName)
             if (app.value!!.requiresGMS()) fetchPlexusReport(packageName)
         }
     }
@@ -609,68 +584,6 @@ class AppDetailsViewModel @Inject constructor(
                 }
         }
     }
-
-    private fun fetchExodusPrivacyReport(packageName: String) {
-        viewModelScope.launch {
-            _exodusFailed.value = false
-            _exodusLocal.value = false
-            val remote = exodusRepository.fetchReports(packageName)
-            _exodusLoaded.value = true
-            val sorted = remote.getOrDefault(emptyList())
-                .sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
-            if (sorted.isNotEmpty()) {
-                _exodusReport.value = sorted.firstOrNull()
-                _exodusReports.value = sorted
-                return@launch
-            }
-            // Remote came back empty (or failed outright): fall back to scanning an
-            // on-device APK of this exact version, if one is downloaded or installed.
-            val current = app.value
-            val local = current?.let {
-                exodusRepository.scanLocalReport(it.packageName, it.versionCode, it.versionName)
-            }
-            if (local != null) {
-                _exodusReport.value = local
-                _exodusReports.value = listOf(local)
-                _exodusLocal.value = true
-            } else {
-                _exodusReport.value = null
-                _exodusFailed.value = remote.isFailure
-            }
-        }
-    }
-
-    /**
-     * Loads the list of known versions from Exodus for the version picker on the manual download
-     * screen. Reuses the reports already fetched for the privacy report when available, and only
-     * hits the network when nothing has been loaded yet.
-     */
-    fun lookupVersions() {
-        val packageName = app.value?.packageName ?: return
-        if (_exodusReports.value.isNotEmpty() || _versionLookupInProgress.value) return
-
-        viewModelScope.launch {
-            _versionLookupInProgress.value = true
-            try {
-                exodusRepository.fetchReports(packageName)
-                    .onSuccess { reports ->
-                        val sorted = reports
-                            .sortedByDescending { it.versionCode.toLongOrNull() ?: -1L }
-                        _exodusReports.value = sorted
-                        _exodusReport.value = sorted.firstOrNull()
-                        _exodusFailed.value = false
-                    }
-                    .onFailure { _exodusFailed.value = true }
-            } finally {
-                // Runs on cancellation too, so the progress flag cannot stick.
-                _exodusLoaded.value = true
-                _versionLookupInProgress.value = false
-            }
-        }
-    }
-
-    suspend fun getNewTrackers(packageName: String, installedVersionCode: Long) =
-        exodusRepository.getNewTrackers(packageName, installedVersionCode)
 
     private fun fetchPlexusReport(packageName: String) {
         viewModelScope.launch(Dispatchers.IO) {

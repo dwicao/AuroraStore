@@ -86,11 +86,9 @@
     <string name="action_uninstall">अनइंस्टॉल करें</string>
     <string name="download_cancel_all">सभी रद्द करें</string>
     <string name="download_canceled">रद्द किया गया</string>
-    <string name="details_privacy">गोपनीयता</string>
     <string name="action_open">खोलें</string>
     <string name="app_updater_service_notif_title">पृष्ठभूमि में ऐप डाउनलोड</string>
     <string name="title_blacklist_manager">कालीसूची प्रबंधक</string>
-    <string name="exodus_substring">ज्ञात ट्रैकर्स पाए गए</string>
     <string name="pref_ui_no_for_you">\'आपके लिए\' पृष्ठ</string>
     <string name="pref_ui_similar_apps">समान और संबंधित ऐप्स</string>
     <string name="pref_install_mode_native">मूल इंस्टॉलर (अस्वीकृत)</string>
@@ -117,7 +115,6 @@
     <string name="download_resume_all">सभी पुनः आरंभ करें</string>
     <string name="title_updates">अपडेट</string>
     <string name="details_beta_subscribed">आप बीटा परीक्षक हैं</string>
-    <string name="exodus_powered">Exodus Privacy द्वारा संचालित</string>
     <string name="pref_install_mode_am">AM इंस्टॉलर</string>
     <string name="title_download_manager">डाउनलोड</string>
     <string name="tab_editor_choice">संपादकों की पसंद</string>
@@ -153,7 +150,6 @@
     <string name="tab_top_charts">शीर्ष तालिका</string>
     <string name="toast_manual_available">बधाई हो, अनुरोधित संस्करण कोड उपलब्ध है, अभी डाउनलोड किया जा रहा है।</string>
     <string name="details_changelog_unavailable">बदलावलॉग नहीं दिया गया</string>
-    <string name="exodus_view_report">रिपोर्ट देखें</string>
     <string name="filter_review_two">दो</string>
     <string name="onboarding_permission_esa">बाहरी स्टोरेज एक्सेस</string>
     <string name="toast_permission_granted">अनुमति दी गई</string>
@@ -193,9 +189,7 @@
     <string name="details_more_about_app">ऐप के बारे में और</string>
     <string name="details_no_dependencies">कोई निर्भरता नहीं</string>
     <string name="download_metadata">मेटाडेटा प्राप्त हो रहा है</string>
-    <string name="exodus_no_tracker">इसमें कोई ज्ञात ट्रैकर शामिल नहीं है</string>
     <string name="download_completed">डाउनलोड पूरा हुआ</string>
-    <string name="exodus_progress">ट्रैकर्स की जांच की जा रही है…</string>
     <string name="filter_review_all">सभी</string>
     <string name="filter_review_five">पांच</string>
     <string name="filter_review_positive">सकारात्मक</string>
@@ -269,7 +263,6 @@
     <string name="title_search_suggestion">खोज सुझाव</string>
     <string name="title_search_results">खोज परिणाम</string>
     <string name="access_denied_using_vpn">पहुंच अस्वीकृत! क्या आप VPN या Tor का उपयोग कर रहे हैं?</string>
-    <string name="failed_to_fetch_report">गोपनीयता रिपोर्ट लाने में विफल</string>
     <string name="login_rate_limited">आपकी दर सीमित है</string>
     <string name="server_unreachable">सर्वर पहुंच योग्य नहीं है</string>
     <string name="failed_generating_session">सत्र उत्पन्न करने में विफल, त्रुटि कोड: <xliff:g id="status_code">%1$d</xliff:g></string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">ऐप्स को स्वतः अपडेट न करें</string>
     <string name="pref_updates_auto_desc">स्वतः अद्यतन का व्यवहार विन्यस्त करें</string>
     <string name="pref_updates_auto_install">उपलब्ध अपडेट को स्वचालित रूप से जांचें और इंस्टॉल करें</string>
-    <string name="action_request_analysis">नए विश्लेषण का अनुरोध करें</string>
     <string name="failed_apk_export">APK निर्यात करने में विफल</string>
     <string name="pref_updates_incompatible_desc">असंगत या अक्षम ऐप्स के लिए अपडेट दिखाएं जो इंस्टॉल करने में विफल हो सकते हैं</string>
     <string name="download_clear_finished">समाप्त हुए साफ करें</string>
@@ -429,8 +421,6 @@
     <string name="details_data_safety_collect_none">डेवलपर ने बताया कि यह ऐप कोई प्रयोक्ता-जानकारी एकत्र नहीं करता है।</string>
     <string name="details_data_safety_shared">जो जानकारी यह ऐप साझा कर सकता है</string>
     <string name="details_data_safety_share_none">डेवलपर का कहना है कि यह ऐप उपयोगकर्ता डेटा को अन्य कंपनियों या संगठनों के साथ साझा नहीं करता है।</string>
-    <string name="exodus_tracker_desc">ऐप के इस संस्करण में अभी भी अधिक ट्रैकर्स हो सकते हैं जो अभी तक एक्सोडस प्राइवेसी डेटाबेस में मौजूद नहीं हैं।</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> ज्ञात ट्रैकर <xliff:g id="app_version_name">%2$s</xliff:g> में पाए गए</string>
     <string name="app_info_downloads">डाउनलोड</string>
     <string name="app_info_updated_on">आखरी अपडेट</string>
     <string name="app_info_min_android">न्यूनतम Android वर्जन</string>

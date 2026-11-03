@@ -133,11 +133,6 @@
     <string name="filter_review_five">Beş</string>
     <string name="filter_review_critical">Kritik</string>
     <string name="filter_review_all">Tümü</string>
-    <string name="exodus_view_report">Raporu görüntüle</string>
-    <string name="exodus_substring">bilinen izleyici bulundu</string>
-    <string name="exodus_progress">İzleyiciler denetleniyor…</string>
-    <string name="exodus_powered">Exodus Privacy Tarafından Destekleniyor</string>
-    <string name="exodus_no_tracker">Bilinen izleyici içermiyor</string>
     <string name="download_speed_estimating">Hesaplanıyor</string>
     <string name="download_resume_all">Tümünü sürdür</string>
     <string name="download_queued">Kuyruğa alındı</string>
@@ -152,7 +147,6 @@
     <string name="download_cancel_all">Tümünü iptal et</string>
     <string name="details_think_this_app">Bu uygulamayla ilgili ne düşünüyorsun\?</string>
     <string name="details_ratings">Derecelendirme ve incelemeler</string>
-    <string name="details_privacy">Gizlilik</string>
     <string name="details_permission">İzin</string>
     <string name="details_paid">Ücretli</string>
     <string name="details_no_updates">Güncelleme yok</string>
@@ -270,7 +264,6 @@
     <string name="login_rate_limited">Hız sınırlamanız var</string>
     <string name="server_unreachable">Sunucuya ulaşılamıyor</string>
     <string name="failed_generating_session">Oturum oluşturulamadı, hata kodu: <xliff:g id="status_code">%1$d</xliff:g></string>
-    <string name="failed_to_fetch_report">Gizlilik raporu alınamadı</string>
     <string name="access_denied_using_vpn">Erişim reddedildi! VPN veya Tor kullanıyor musunuz\?</string>
     <string name="bad_request">İç hata! Lütfen bir süre sonra yeniden deneyin</string>
     <string name="app_language">Uygulama dili</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">Uygulamalar kendiliğinden güncellenmesin</string>
     <string name="pref_updates_auto_desc">Kendiliğinden güncelleme davranışını yapılandır</string>
     <string name="pref_updates_auto_install">Kullanılabilir denetlemeleri kendiliğinden denetle ve kur</string>
-    <string name="action_request_analysis">Yeni değerlendirme iste</string>
     <string name="failed_apk_export">APK\'lar dışa aktarılamadı</string>
     <string name="download_clear_finished">Temizlendi</string>
     <string name="pref_updates_incompatible">Başarısız olabilecek güncellemeleri göster</string>
@@ -444,12 +436,10 @@
     <string name="details_data_safety_collect_none">Geliştirici bu uygulamanın kullanıcı verileri toplamadığını söylüyor.</string>
     <string name="details_data_safety_shared">Bu uygulamanın paylaşabileceği veriler</string>
     <string name="details_data_safety_share_none">Geliştirici bu uygulamanın kullanıcı verilerini diğer şirketler ve kurumlarla paylaşmayacağını söylüyor.</string>
-    <string name="exodus_tracker_desc">Uygulamanın bu sürümü henüz Exodus Privacy\'nin veri merkezinde bulunmayan takipçiler bulundurabilir.</string>
     <string name="details_more_info">Daha çok bilgi</string>
     <string name="details_more_target_api">Hedefler</string>
     <string name="details_more_package_name">Paket adı</string>
     <string name="select_app_for_details">Daha çok ayrıntı için uygulama şeçin</string>
-    <string name="exodus_report_trackers"><xliff:g id="app_version_name">%2$s</xliff:g> içinde bilinen <xliff:g id="number_of_trackers">%1$d</xliff:g> izleyici bulundu</string>
     <string name="no_description">Açıklama yok</string>
     <string name="details_more_content_rating">İçerik derecelendirme</string>
     <string name="manual_download_version_error">Sürüm kodu yalnızca rakam içerebilir</string>
@@ -609,17 +599,6 @@
     </plurals>
     <string name="account_exists">Hesap zaten eklendi</string>
     <string name="action_update_anyway">Yine de güncelle</string>
-    <string name="exodus_report_history">Sürüm geçmişi</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d izleyici</string>
-    <string name="exodus_latest">En yeni</string>
-    <string name="pref_updates_warn_trackers">Uygulama güncellemelerinde yeni izleyiciler hakkında uyar</string>
-    <string name="pref_updates_warn_trackers_desc">Yeni sürümde, kurulu sürümde bulunmayan izleyiciler eklendiğinde güncellemeden önce bir uyarı göster</string>
-    <string name="tracker_warning_title">Yeni izleyiciler algılandı</string>
-    <string name="tracker_warning_desc">Bu güncelleme, kurulu sürümde bulunmayan izleyiciler ekliyor:</string>
-    <string name="manual_download_lookup">Sürümleri ara</string>
-    <string name="manual_download_select_version">Sürüm seç</string>
-    <string name="manual_download_no_versions">Bilinen sürüm bulunamadı</string>
     <string name="manual_download_availability_warning">Bazı sürümler indirilebilir olmayabilir veya aygıtınızla uyumsuz olabilir.</string>
     <string name="details_more_certificate_hash">Sertifika sağlama toplamı</string>
     <string name="action_free_up_space">Alan boşalt</string>

@@ -10,11 +10,6 @@
     <string name="filter_review_five">5★</string>
     <string name="filter_review_critical">差评</string>
     <string name="filter_review_all">全部</string>
-    <string name="exodus_view_report">查看报告</string>
-    <string name="exodus_substring">种已知跟踪器，版本</string>
-    <string name="exodus_progress">正在检查跟踪器…</string>
-    <string name="exodus_powered">由 Exodus Privacy 提供支持</string>
-    <string name="exodus_no_tracker">不包含已知的跟踪器</string>
     <string name="download_speed_estimating">估算中</string>
     <string name="download_resume_all">恢复全部</string>
     <string name="download_queued">已加入队列</string>
@@ -29,7 +24,6 @@
     <string name="download_cancel_all">全部取消</string>
     <string name="details_think_this_app">您如何看待此应用？</string>
     <string name="details_ratings">评分和评价</string>
-    <string name="details_privacy">隐私</string>
     <string name="details_permission">权限</string>
     <string name="details_paid">付费</string>
     <string name="details_no_updates">无更新</string>
@@ -267,7 +261,6 @@
     <string name="installer_shizuku_unavailable">未安装或正确设置 Shizuku。</string>
     <string name="title_search_suggestion">搜索建议</string>
     <string name="title_search_results">搜索结果</string>
-    <string name="failed_to_fetch_report">获取隐私报告失败</string>
     <string name="access_denied_using_vpn">访问被拒！你在使用 VPN 或 Tor 吗？</string>
     <string name="bad_request">内部错误！请在将来某个时刻重试</string>
     <string name="login_rate_limited">你被限制速率了</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">不自动更新应用</string>
     <string name="pref_updates_auto_desc">配置自动更新行为</string>
     <string name="pref_updates_auto_install">自动检查并安装可用更新</string>
-    <string name="action_request_analysis">请求新分析</string>
     <string name="failed_apk_export">导出 APK 失败</string>
     <string name="download_clear_finished">清除已完成</string>
     <string name="pref_updates_incompatible">显示可能失败的更新</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">开发者称该应用不收集用户数据。</string>
     <string name="details_data_safety_shared">该应用可能分享的数据</string>
     <string name="details_data_safety_share_none">开发者称该应用不与其他公司或组织分享用户数据。</string>
-    <string name="exodus_tracker_desc">应用的这个版本仍可能包括尚不在 Exodus Privacy 数据库中的更多跟踪器。</string>
-    <string name="exodus_report_trackers">在 <xliff:g id="app_version_name">%2$s</xliff:g> 中找到了 <xliff:g id="number_of_trackers">%1$d 个</xliff:g> 已知的跟踪器</string>
     <string name="no_description">无描述可用</string>
     <string name="details_more_info">更多信息</string>
     <string name="details_more_target_api">目标 API</string>
@@ -604,17 +594,6 @@
     </plurals>
     <string name="account_exists">已添加账户</string>
     <string name="action_update_anyway">仍要更新</string>
-    <string name="exodus_report_history">版本历史</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d 个跟踪器</string>
-    <string name="exodus_latest">最新</string>
-    <string name="pref_updates_warn_trackers">警告应用更新中的新跟踪器</string>
-    <string name="pref_updates_warn_trackers_desc">当新版本添加了已安装版本没有的跟踪器时在更新前显示警告</string>
-    <string name="tracker_warning_title">检测到新跟踪器</string>
-    <string name="tracker_warning_desc">此更新添加了不在已安装版本中的跟踪器：</string>
-    <string name="manual_download_lookup">查找版本</string>
-    <string name="manual_download_select_version">选择版本</string>
-    <string name="manual_download_no_versions">没找到已知版本</string>
     <string name="manual_download_availability_warning">一些版本可能下载不了或者和你的设备不兼容。</string>
     <string name="details_more_certificate_hash">证书哈希</string>
     <string name="action_free_up_space">腾出空间</string>

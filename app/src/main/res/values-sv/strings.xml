@@ -84,11 +84,6 @@
     <string name="filter_review_five">Fem</string>
     <string name="filter_review_critical">Kritiskt</string>
     <string name="filter_review_all">Alla</string>
-    <string name="exodus_view_report">Visa rapport</string>
-    <string name="exodus_substring">kända spårare hittades i</string>
-    <string name="exodus_progress">Söker efter spårare…</string>
-    <string name="exodus_powered">Drivs av Exodus Privacy</string>
-    <string name="exodus_no_tracker">Innehåller inga kända spårare</string>
     <string name="download_speed_estimating">Uppskattar</string>
     <string name="download_resume_all">Återuppta alla</string>
     <string name="download_queued">I kö</string>
@@ -101,7 +96,6 @@
     <string name="download_canceled">Avbröts</string>
     <string name="download_cancel_all">Avbryt alla</string>
     <string name="details_think_this_app">Vad tycker du om den här appen\?</string>
-    <string name="details_privacy">Sekretess</string>
     <string name="details_permission">Behörighet</string>
     <string name="details_no_updates">Inga uppdateringar tillgängliga</string>
     <string name="details_no_dependencies">Inga beroenden</string>
@@ -256,7 +250,6 @@
     <string name="updates_available">uppdateringar tillgängliga</string>
     <string name="google_play_store_desc">Google Play, också känd som Google\'s Play-butik och tidigare Android Market.</string>
     <string name="session_good">Allt bra.</string>
-    <string name="failed_to_fetch_report">Hämtningen av sekretessrapporten misslyckades</string>
     <string name="verifying_new_session">Bekräftar ny session</string>
     <string name="download_eta_hrs">%1$dh %2$dm %3$ds kvar</string>
     <string name="session_init">Gör saker redo…</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_install">Kontrollera &amp; installera tillgängliga uppdateringar automatiskt</string>
     <string name="pref_updates_auto">Automatiska uppdateringar</string>
     <string name="pref_updates_auto_off">Uppdatera inte alla appar automatiskt</string>
-    <string name="action_request_analysis">Begär ny analys</string>
     <string name="failed_apk_export">Misslyckades med att exportera APKs</string>
     <string name="download_clear_finished">Rensning slutförd</string>
     <string name="pref_updates_incompatible">Visa uppdateringar som kan misslyckas</string>
@@ -374,8 +366,6 @@
     <string name="details_data_safety_collect_none">Utvecklarna säger att denna app inte samlar användardata.</string>
     <string name="details_data_safety_shared">Data som denna app kan dela</string>
     <string name="details_data_safety_share_none">Utvecklaren säger att denna app inte delar användardata med andra företag eller organisationer.</string>
-    <string name="exodus_tracker_desc">Den här versionen av appen kan fortfarande innehålla fler trackers som ännu inte finns i Exodus Privacys databas.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> kända trackers funna i <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="installer_microg_misconfigured">MicroG-installationen misslyckades, sannolikt på grund av felkonfiguration.</string>
     <string name="pref_install_mode_microg">MicroG-installerare</string>
     <string name="no_apps_available">Inga appar tillgängliga</string>
@@ -498,10 +488,6 @@
     <string name="details_review_delete_title">Ta bort omdömme?</string>
     <string name="details_your_review">Ditt omdömme</string>
     <string name="download_failed_storage">Inte tillräckligt med lagringsutrymme för att ladda ner den här appen</string>
-    <string name="exodus_report_history">Versionshistorik</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d spårare</string>
-    <string name="exodus_latest">Senaste</string>
     <string name="title_security">Säkerhet</string>
     <string name="app_lock_title">Applås</string>
     <string name="app_lock_locked_message">Autentisering krävs för att komma åt Aurora Store</string>
@@ -514,12 +500,9 @@
     <string name="notification_channel_alerts">Fel &amp; varningar</string>
     <string name="notification_group_activity">Nedladdningar &amp; uppdateringar</string>
     <string name="notification_group_alerts">Varningar</string>
-    <string name="pref_updates_warn_trackers">Varna för nya spårare i appuppdateringar</string>
     <string name="pref_self_update">Självuppdatera</string>
     <string name="pref_source_filters_title">Filtrera appar från andra källor</string>
     <string name="pref_source_filters_desc_all">Skippa varje app inte installerad av Aurora Store</string>
-    <string name="tracker_warning_title">Inga spårare upptäckta</string>
-    <string name="tracker_warning_desc">Den här uppdateringen lägger till spårare som inte fanns i den installerade versionen:</string>
     <string name="title_install_favourites">Installera favoriter?</string>
     <string name="install_favourites_summary">Det har vill ladda ner och installera %1$d appar.</string>
     <string name="title_notifications">Notifieringar</string>
@@ -616,10 +599,6 @@
         <item quantity="one">Kunde inte uppdatera %1$d konto</item>
         <item quantity="other">Kunde inte uppdatera %1$d konton</item>
     </plurals>
-    <string name="pref_updates_warn_trackers_desc">Visa en varning före uppdatering när den nya versionen lägger till spårare som inte fanns i den installerade versionen</string>
-    <string name="manual_download_lookup">Sök efter versioner</string>
-    <string name="manual_download_select_version">Välj en version</string>
-    <string name="manual_download_no_versions">Inga kända versioner hittades</string>
     <string name="manual_download_availability_warning">Vissa versioner kanske inte går att hämta eller är inkompatibla med enheten.</string>
     <string name="details_more_certificate_hash">Certifikathash</string>
     <string name="action_free_up_space">Frigör utrymme</string>

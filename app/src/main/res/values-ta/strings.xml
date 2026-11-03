@@ -73,10 +73,7 @@
     <string name="download_metadata">மேனிலைத்தரவைப் பெறுகிறது</string>
     <string name="installer_root_unavailable">ரூட் அணுகல் இல்லை. அதை வழங்கவும் அல்லது நிறுவியை மாற்றவும்.</string>
     <string name="download_canceled">ரத்து செய்யப்பட்டது</string>
-    <string name="exodus_no_tracker">அறியப்பட்ட டிராக்கர்கள் எதுவும் இல்லை</string>
-    <string name="exodus_powered">யாத்திராகமம் தனியுரிமையால் இயக்கப்படுகிறது</string>
     <string name="filter_review_three">மூன்று</string>
-    <string name="exodus_view_report">அறிக்கையைப் பார்</string>
     <string name="filter_review_two">இரண்டு</string>
     <string name="installer_status_failure_blocked">நிறுவல் தடுக்கப்பட்டது</string>
     <string name="installer_status_failure_invalid">செல்லாத அல்லது சிதைந்த APK</string>
@@ -133,7 +130,6 @@
     <string name="details_no_dependencies">சார்புகளில்லை</string>
     <string name="details_paid">செலுத்தப்பட்டது</string>
     <string name="details_permission">அனுமதி</string>
-    <string name="details_privacy">தனியுரிமை</string>
     <string name="details_ratings">மதிப்பீடு மற்றும் மதிப்புரைகள்</string>
     <string name="details_think_this_app">இந்த பயன்பாட்டைப் பற்றி நீங்கள் என்ன நினைக்கிறீர்கள்\?</string>
     <string name="download_cancel_all">அனைத்தையும் ரத்து செய்</string>
@@ -145,8 +141,6 @@
     <string name="download_queued">வரிசையில் நிற்கிறது</string>
     <string name="download_resume_all">அனைத்தையும் மீண்டும் தொடரவும்</string>
     <string name="download_speed_estimating">மதிப்பிடுகிறது</string>
-    <string name="exodus_progress">டிராக்கர்களை சரிபார்க்கிறது…</string>
-    <string name="exodus_substring">அறியப்பட்ட டிராக்கர்கள் (கள்) காணப்படுகின்றன</string>
     <string name="filter_review_all">எல்லாம்</string>
     <string name="filter_review_critical">இக்கட்டானது</string>
     <string name="filter_review_five">ஐந்து</string>
@@ -259,7 +253,6 @@
     <string name="pref_updates_auto_notify">கிடைக்கக்கூடிய புதுப்பிப்புகளுக்கு சரிபார்த்து அறிவிக்கவும்</string>
     <string name="pref_updates_check_frequency_desc">ஆப்ச் புதுப்பிப்புகளை அரோரா எவ்வளவு அடிக்கடி சரிபார்க்கிறது.</string>
     <string name="pref_updates_auto_desc">தானி புதுப்பிப்புகளின் நடத்தை உள்ளமை</string>
-    <string name="failed_to_fetch_report">தனியுரிமை அறிக்கையைப் பெறுவதில் தோல்வி</string>
     <string name="login_rate_limited">நீங்கள் விகிதம் வரையறுக்கப்பட்டவர்</string>
     <string name="failed_to_generate_session">அமர்வை உருவாக்க முடியவில்லை</string>
     <string name="check_connectivity">இணைய இணைப்பை சரிபார்க்கவும்</string>
@@ -360,7 +353,6 @@
     <string name="native_installer_desc">ஆண்ட்ராய்டு 4.4 க்கு கீழே இயங்கும் சாதனங்களுக்கு மிகவும் பொருத்தமானது</string>
     <string name="shizuku_installer_subtitle">கணினி பநிஇ களை நேரடியாக ADB/ROOT சலுகைகளுடன் பயன்படுத்துதல்</string>
     <string name="pref_clear_device_owner_summary">சாதன உரிமையாளர் பயன்பாடாக அரோரா கடையை நீக்குகிறது</string>
-    <string name="action_request_analysis">புதிய பகுப்பாய்வைக் கோருங்கள்</string>
     <string name="details_data_safety_title">தரவு பாதுகாப்பு</string>
     <string name="toast_permission_installer_required">நீங்கள் முதலில் நிறுவி இசைவு வழங்க வேண்டும்</string>
     <string name="item_required">தேவை</string>
@@ -460,8 +452,6 @@
     <string name="details_review_delete_message">உங்கள் மதிப்பீடு மற்றும் மதிப்பாய்வு Google Play இலிருந்து அகற்றப்படும்.</string>
     <string name="details_your_review">உங்கள் விமர்சனம்</string>
     <string name="download_failed_storage">இந்தப் பயன்பாட்டைப் பதிவிறக்க போதுமான சேமிப்பிடம் இல்லை</string>
-    <string name="exodus_tracker_desc">பயன்பாட்டின் இந்தப் பதிப்பில் எக்சோடச் தனியுரிமையின் தரவுத்தளத்தில் இதுவரை இல்லாத அதிகமான டிராக்கர்கள் இருக்கலாம்.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> அறியப்பட்ட டிராக்கர்கள்(கள்) <xliff:g id="app_version_name">%2$s</xliff:g> இல் காணப்படுகின்றன</string>
     <string name="installer_fallback_session">தேர்ந்தெடுக்கப்பட்ட நிறுவி கிடைக்கவில்லை, அதற்குப் பதிலாக இயல்புநிலை நிறுவியைப் பயன்படுத்தவும்.</string>
     <string name="title_security">பாதுகாப்பு</string>
     <string name="app_lock_title">பயன்பாட்டு பூட்டு</string>

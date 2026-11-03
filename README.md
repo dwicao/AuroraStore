@@ -22,7 +22,6 @@ Aurora Store works exactly like a door or a browser, allowing you to log in to y
 - Beautiful design: Built upon latest Material 3 guidelines
 - Account login: You can login with either personal or an anonymous account
 - Device & Locale spoofing: Change your device and/or locale to access geo locked apps
-- [Exodus Privacy](https://exodus-privacy.eu.org/) integration: Instantly see trackers in app
 - [Plexus](https://plexus.techlore.tech/) integration: Instantly see app compatibility without Google Play Services or with microG
 - Updates blacklisting: Ignore updates for specific apps
 - Download manager
@@ -75,15 +74,6 @@ and security. Upstream behavior is unchanged everywhere else.
   configuration points at Settings instead of a generic internal error.
   Dispenser URLs must be HTTPS at every layer (dialog, ViewModel
   normalization, network call) so tokens are never minted over cleartext.
-- **Offline tracker reports.** The bundled Exodus API token was revoked upstream,
-  so per-app privacy reports always failed. The app now distinguishes failure
-  from "no report for this app", and — as long as an APK of that exact version
-  is downloaded or installed — scans its DEX class tables on-device against the
-  public (token-free) tracker definitions. No network, no account, nothing
-  identifying leaves the phone; the result is marked "Scanned on this device".
-  A personal API token can still be injected (Gradle property `exodusApiKey`,
-  `EXODUS_API_KEY` env var, or the release workflow's secret) to restore
-  server-side reports.
 - **Auth material isolated from backups.** Sign-in state, account type, e-mail,
   AAS/AUTH tokens, the saved session and the microG flag live in a dedicated
   `auth_prefs.xml`, excluded from cloud and device-transfer backups in both
@@ -97,15 +87,7 @@ and security. Upstream behavior is unchanged everywhere else.
   stale sibling token is cleared on login — fixing drift from backup restores or
   crashes mid-write.
 - **Download hardening.** Range-rejected (416) partials restart from zero once
-  instead of looping, transient 5xx responses are retried with backoff, and the
-  Exodus Privacy integration retries transient failures instead of failing
-  silently on the first attempt. Its per-app reports distinguish "couldn't
-  fetch" (HTTP/network/parse failure, with the bundled shared API token
-  currently revoked upstream) from "no report for this app", instead of showing
-  a failure for both. To restore live reports, create a free token at
-  reports.exodus-privacy.eu.org and supply it as the `exodusApiKey` Gradle
-  property, the `EXODUS_API_KEY` environment variable, or the release
-  workflow's `EXODUS_API_KEY` secret — no code changes needed.
+  instead of looping, and transient 5xx responses are retried with backoff.
 - **Pause/resume downloads.** Any active download can be paused per app (row,
   bottom sheet, or app details screen) and resumed later from its partial files;
   "pause all / resume all" exists in the Downloads menu and in each Updates
@@ -141,7 +123,7 @@ and security. Upstream behavior is unchanged everywhere else.
   `gh workflow run bootstrap-verification.yml` (or the equivalent local Gradle
   invocation in that workflow) before pushing.
 - **Manifest hardening.** `usesCleartextTraffic` is explicitly off — every
-  network call the app makes (Play, Exodus, dispensers, self-update feed) is
+  network call the app makes (Play, dispensers, self-update feed) is
   HTTPS-only, complementing the in-code HTTPS enforcement for dispensers.
 
 Per-release flow for the maintainer: bump `versionCode`, tag (`vX.Y.Z` becomes

@@ -111,11 +111,6 @@
     <string name="filter_review_five">Öt</string>
     <string name="filter_review_critical">Kritikus</string>
     <string name="filter_review_all">Összes</string>
-    <string name="exodus_view_report">Jelentés megtekintése</string>
-    <string name="exodus_substring">ismert nyomkövető található a következőben</string>
-    <string name="exodus_progress">Nyomkövetők keresése…</string>
-    <string name="exodus_powered">Exodus Privacy által működtetve</string>
-    <string name="exodus_no_tracker">Nincs ismert nyomkövető</string>
     <string name="download_speed_estimating">Becslés</string>
     <string name="download_resume_all">Összes folytatása</string>
     <string name="download_queued">Várólistán</string>
@@ -130,7 +125,6 @@
     <string name="download_cancel_all">Összes megszakítása</string>
     <string name="details_think_this_app">Mit gondol erről az alkalmazásról?</string>
     <string name="details_ratings">Értékelés és vélemények</string>
-    <string name="details_privacy">Adatvédelem</string>
     <string name="details_permission">Engedély</string>
     <string name="details_paid">Fizetős</string>
     <string name="details_no_updates">Nincs elérhető frissítés</string>
@@ -249,7 +243,6 @@
     <string name="notification_updates_available_1"><xliff:g id="apps_count">%1$d</xliff:g> frissítés érhető el</string>
     <string name="notification_updates_available_desc_2"><xliff:g id="app_one_name">%1$s</xliff:g> és <xliff:g id="app_two_name">%2$s</xliff:g></string>
     <string name="notification_updates_available_desc_4"><xliff:g id="app_one_name">%1$s</xliff:g>, <xliff:g id="app_two_name">%2$s</xliff:g>, <xliff:g id="app_three_name">%3$s</xliff:g> és <xliff:g id="apps_count">%4$d</xliff:g> további</string>
-    <string name="failed_to_fetch_report">Adatvédelmi jelentés lekérése sikertelen</string>
     <string name="access_denied_using_vpn">Hozzáférés megtagadva! VPN-t vagy Tor-t használ?</string>
     <string name="bad_request">Belső hiba! Próbálja újra később</string>
     <string name="login_rate_limited">Kéréskorlát túllépve</string>
@@ -300,7 +293,6 @@
     <string name="onboarding_permission_doze_desc">Engedélyezi az Aurora Store-nak, hogy a háttérben töltse le és frissítse az alkalmazásokat</string>
     <string name="pref_updates_auto_desc">Automatikus frissítések viselkedésének beállítása</string>
     <string name="pref_updates_auto_install">Ellenőrizze, és automatikusan telepítse a rendelkezésre álló frissítéseket</string>
-    <string name="action_request_analysis">Új elemzés kérése</string>
     <string name="failed_apk_export">APK-k exportálása sikertelen</string>
     <string name="download_clear_finished">Törlés befejezve</string>
     <string name="pref_updates_incompatible">Sikertelen frissítések megjelenítése</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">A fejlesztő szerint ez az alkalmazás nem gyűjt felhasználói adatokat.</string>
     <string name="details_data_safety_shared">Alkalmazás által gyűjthető adatok</string>
     <string name="details_data_safety_share_none">A fejlesztő szerint ez az alkalmazás nem oszt meg felhasználói adatokat más cégekkel vagy szervezetekkel.</string>
-    <string name="exodus_tracker_desc">Az alkalmazás ezen verziója még tartalmazhat olyan nyomkövetőket, amelyek egyelőre nem szerepelnek az Exodus Privacy adatbázisában.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> ismert nyomkövető található a(z) <xliff:g id="app_version_name">%2$s</xliff:g> verzióban</string>
     <string name="no_description">Nincs leírás</string>
     <string name="details_more_info">További információk</string>
     <string name="details_more_target_api">Célzott</string>
@@ -609,17 +599,6 @@
     </plurals>
     <string name="account_exists">A fiók már hozzá lett adva</string>
     <string name="action_update_anyway">Frissítés mindenképp</string>
-    <string name="exodus_report_history">Verziótörténet</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d nyomkövető</string>
-    <string name="exodus_latest">Legújabb</string>
-    <string name="pref_updates_warn_trackers">Figyelmeztetés, ha egy alkalmazásfrissítés új nyomkövetőket tartalmaz</string>
-    <string name="pref_updates_warn_trackers_desc">Figyelmeztetés frissítés előtt, ha az új verzió új nyomkövetőket ad hozzá a telepített verzióhoz képest</string>
-    <string name="tracker_warning_title">Új nyomkövetők észlelve</string>
-    <string name="tracker_warning_desc">Ez a frissítés olyan nyomkövetőket ad hozzá, amelyek a telepített verzióban még nem voltak:</string>
-    <string name="manual_download_lookup">Verziók megtekintése</string>
-    <string name="manual_download_select_version">Verzió kiválasztása</string>
-    <string name="manual_download_no_versions">Nem találhatók ismert verziók</string>
     <string name="manual_download_availability_warning">Előfordulhat, hogy egyes verziók nem tölthetők le, vagy nem kompatibilisek az eszközével.</string>
     <string name="details_more_certificate_hash">Tanúsítványkivonat</string>
     <string name="action_free_up_space">Tárhely felszabadítása</string>

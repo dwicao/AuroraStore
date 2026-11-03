@@ -73,11 +73,6 @@
     <string name="filter_review_five">Cinco</string>
     <string name="filter_review_critical">Crítico</string>
     <string name="filter_review_all">Todas</string>
-    <string name="exodus_view_report">Ver relatorio</string>
-    <string name="exodus_substring">rastrexador(es) atopado(s) na versión</string>
-    <string name="exodus_progress">A comprobar os rastrexadores…</string>
-    <string name="exodus_powered">Desenvolvido con Exodus Privacy</string>
-    <string name="exodus_no_tracker">Non contén rastrexadores</string>
     <string name="download_speed_estimating">A estimar</string>
     <string name="download_resume_all">Retomar todas</string>
     <string name="download_queued">En espera</string>
@@ -92,7 +87,6 @@
     <string name="download_cancel_all">Cancelar todas</string>
     <string name="details_think_this_app">Que pensa da aplicación\?</string>
     <string name="details_ratings">Avaliacións e comentarios</string>
-    <string name="details_privacy">Privacidade</string>
     <string name="details_permission">Permisos</string>
     <string name="details_paid">De pago</string>
     <string name="details_no_updates">Sen actualizacións dispoñíbeis</string>
@@ -261,7 +255,6 @@
     <string name="title_search_results">Resultados da busca</string>
     <string name="notification_updates_available_desc_1">Unha nova versión de <xliff:g id="app_one_name">%1$s</xliff:g> está dispoñíbel</string>
     <string name="notification_updates_available_desc_3"><xliff:g id="app_one_name">%1$s</xliff:g>, <xliff:g id="app_two_name">%2$s</xliff:g> e <xliff:g id="app_three_name">%3$s</xliff:g></string>
-    <string name="failed_to_fetch_report">Non foi posíbel obter o informe de privacidade</string>
     <string name="access_denied_using_vpn">Acceso denegado! Está a usar unha VPN ou Tor\?</string>
     <string name="bad_request">Erro interno! Por favor, volva intentalo máis tarde</string>
     <string name="login_rate_limited">Demasiados intentos</string>
@@ -277,7 +270,6 @@
     <string name="about_wiki_summary">Atopar respostas a preguntas frequentes (F.A.Q.), pasos para a solución de problemas e máis</string>
     <string name="action_favourite">Favorito</string>
     <string name="action_remove_all">Eliminar todo</string>
-    <string name="action_request_analysis">Solicitar unha nova análise</string>
     <string name="action_select_all">Seleccionar todo</string>
     <string name="action_uninstall_success">Desinstalado correctamente</string>
     <string name="action_home_screen">Engadir á pantalla de inicio</string>
@@ -478,10 +470,6 @@
     <string name="details_review_delete_message">A túa valoración e a túa recensión eliminaranse de Google Play.</string>
     <string name="details_your_review">A túa recensión</string>
     <string name="download_failed_storage">Non hai espazo de almacenamento suficiente para descargar esta aplicación</string>
-    <string name="exodus_tracker_desc">Esta versión da aplicación pode conter máis rastrexadores que aínda non figuran na base de datos de Exodus Privacy.</string>
-    <string name="exodus_report_history">Historial de versións</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d rastrexadores</string>
-    <string name="exodus_latest">Derradeiro</string>
     <string name="installer_fallback_session">O instalador escollido non está dispoñible; usarase o instalador predeterminado.</string>
     <string name="installer_provider">%1$s · Servido por %2$s</string>
     <string name="title_security">Seguridade</string>
@@ -502,8 +490,6 @@
     <string name="notification_group_activity">Descargas e actualizacións</string>
     <string name="notification_group_alerts">Alertas</string>
     <string name="pref_install_mode_microg">Instalador de MicroG</string>
-    <string name="pref_updates_warn_trackers">Avisar sobre novos rastrexadores nas actualizacións da aplicación</string>
-    <string name="pref_updates_warn_trackers_desc">Amosar un aviso antes de actualizar cando a nova versión engada rastrexadores que non estaban na versión instalada</string>
     <string name="pref_self_update">Autoactualización</string>
     <string name="pref_self_update_desc">Ofrece novas compilacións de Aurora Store na lapela de actualizacións.</string>
     <string name="pref_source_filters_title">Filtrar aplicacións doutras fontes</string>
@@ -516,8 +502,6 @@
     <string name="source_filters_add">Engadir instalador</string>
     <string name="source_filters_add_dialog_hint">Introduce o nome do paquete</string>
     <string name="source_filters_remove">Eliminar instalador</string>
-    <string name="tracker_warning_title">Detectáronse novos rastrexadores</string>
-    <string name="tracker_warning_desc">Esta actualización engade rastrexadores que non estaban na versión instalada:</string>
     <string name="insufficient_storage_title">Non hai espazo suficiente</string>
     <string name="insufficient_storage_desc">%1$s precisa %2$s, pero só %3$s está dispoñible.</string>
     <string name="insufficient_storage_hint">Libera %1$s e téntao de novo.</string>
@@ -561,16 +545,11 @@
     <string name="microg_installer_subtitle">Require a instalación da aplicación complementaria microG</string>
     <string name="microg_installer_desc">Axúdache a omitir a comprobación de integridade da aplicación (só para o instalador)</string>
     <string name="manual_download_version_error">O código de versión só pode conter díxitos</string>
-    <string name="manual_download_lookup">Busca de versións</string>
-    <string name="manual_download_select_version">Escolle unha versión</string>
-    <string name="manual_download_no_versions">Non se atoparon versións coñecidas</string>
     <string name="manual_download_availability_warning">Algunhas versións poden non estar dispoñibles para descargar ou ser incompatibles co teu dispositivo.</string>
     <string name="toast_fav_install_enqueued">Instalando %1$d aplicacións</string>
     <string name="toast_fav_install_none">Non hai nada que instalar</string>
     <string name="toast_fav_install_failed">Non se puideron obter os detalles da aplicación</string>
     <string name="force_restart_snack">Reiniciar para aplicar os cambios?</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> known trackers(s) found in <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="status_installing">Instalando</string>
     <string name="status_installed">Instalado</string>
     <string name="status_awaiting_install">Agardando confirmación</string>

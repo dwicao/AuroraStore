@@ -68,7 +68,6 @@ import com.aurora.store.util.Preferences.PREFERENCE_UPDATES_AUTO
 import com.aurora.store.util.Preferences.PREFERENCE_UPDATES_CHECK_INTERVAL
 import com.aurora.store.util.Preferences.PREFERENCE_UPDATES_EXTENDED
 import com.aurora.store.util.Preferences.PREFERENCE_UPDATES_WARN_PERMISSIONS
-import com.aurora.store.util.Preferences.PREFERENCE_UPDATES_WARN_TRACKERS
 import com.aurora.store.util.save
 import com.aurora.store.viewmodel.all.UpdatesViewModel
 import kotlin.math.abs
@@ -114,9 +113,6 @@ private fun ScreenContent(
     }
     var updatesExtended by remember {
         mutableStateOf(Preferences.getBoolean(context, PREFERENCE_UPDATES_EXTENDED))
-    }
-    var warnTrackers by remember {
-        mutableStateOf(Preferences.getBoolean(context, PREFERENCE_UPDATES_WARN_TRACKERS, false))
     }
     var warnPermissions by remember {
         mutableStateOf(
@@ -348,29 +344,6 @@ private fun ScreenContent(
                                 updatesExtended = checked
                                 context.save(PREFERENCE_UPDATES_EXTENDED, checked)
                                 onCheckUpdatesNow()
-                            }
-                        )
-                    }
-                )
-            }
-            item {
-                ListItem(
-                    modifier = Modifier.clickable {
-                        warnTrackers = !warnTrackers
-                        context.save(PREFERENCE_UPDATES_WARN_TRACKERS, warnTrackers)
-                    },
-                    headlineContent = {
-                        Text(stringResource(R.string.pref_updates_warn_trackers))
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.pref_updates_warn_trackers_desc))
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = warnTrackers,
-                            onCheckedChange = { checked ->
-                                warnTrackers = checked
-                                context.save(PREFERENCE_UPDATES_WARN_TRACKERS, checked)
                             }
                         )
                     }

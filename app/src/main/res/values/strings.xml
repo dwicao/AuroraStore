@@ -100,7 +100,6 @@
     <string name="action_pending">"Pending"</string>
     <string name="action_post">"Post"</string>
     <string name="action_remove_all">"Remove all"</string>
-    <string name="action_request_analysis">Request new analysis</string>
     <string name="action_restart">"Restart"</string>
     <string name="action_resume">"Resume"</string>
     <string name="action_retry">"Retry"</string>
@@ -149,7 +148,6 @@
     <string name="details_data_safety_share_none">The developer says this app doesn\'t share user data with other companies or organizations.</string>
     <string name="details_data_safety_title">Data safety</string>
     <string name="details_data_safety_subtitle">Data privacy and security practices declared by developer</string>
-    <string name="details_privacy">"Privacy"</string>
     <string name="details_ratings">"Rating and reviews"</string>
     <string name="details_ratings_title_hint">"Review title"</string>
     <string name="details_review_comment_hint">"Describe your experience (optional)"</string>
@@ -180,17 +178,6 @@
     <string name="download_progress">"Downloading • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g> • <xliff:g id="speed">%3$s</xliff:g>"</string>
     <string name="download_queued">"Queued"</string>
     <string name="download_speed_estimating">"Estimating"</string>
-    <string name="exodus_no_tracker">"Contains no known trackers"</string>
-    <string name="exodus_tracker_desc">This version of the app may still contain more trackers not present yet in the Exodus Privacy\'s database.</string>
-    <string name="exodus_powered">"Powered by Exodus Privacy"</string>
-    <string name="exodus_progress">"Checking for trackers…"</string>
-    <string name="exodus_substring">known trackers(s) found in</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> known trackers(s) found in <xliff:g id="app_version_name">%2$s</xliff:g></string>
-    <string name="exodus_view_report">"View report"</string>
-    <string name="exodus_report_history">Version history</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d trackers</string>
-    <string name="exodus_latest">Latest</string>
     <string name="filter_review_all">"All"</string>
     <string name="filter_latest">"Latest"</string>
     <string name="filter_review_critical">"Critical"</string>
@@ -275,8 +262,6 @@
     <string name="pref_ui_similar_apps">"Similar and related apps"</string>
     <string name="pref_updates_incompatible">"Show updates that may fail"</string>
     <string name="pref_updates_incompatible_desc">"Display updates for incompatible or disabled apps that may fail to install."</string>
-    <string name="pref_updates_warn_trackers">"Warn about new trackers in app updates"</string>
-    <string name="pref_updates_warn_trackers_desc">"Show a warning before updating when the new version adds trackers that were not in the installed version"</string>
     <string name="pref_updates_warn_permissions">"Warn about new permissions in app updates"</string>
     <string name="pref_updates_warn_permissions_desc">"Show a warning before updating when the new version requests permissions that were not in the installed version"</string>
     <string name="pref_self_update">"Self-update"</string>
@@ -317,8 +302,6 @@
     <string name="tab_top_grossing">"Top grossing"</string>
     <string name="tab_top_paid">"Top paid"</string>
     <string name="tab_trending">"Trending"</string>
-    <string name="tracker_warning_title">New trackers detected</string>
-    <string name="tracker_warning_desc">This update adds trackers that weren\'t in the installed version:</string>
     <string name="permission_warning_title">New permissions requested</string>
     <string name="permission_warning_desc">This update requests permissions the installed version doesn\'t have:</string>
     <plurals name="updates_skipped_new_permissions">
@@ -451,9 +434,6 @@
     <string name="pref_updates_check_frequency_3d">Every 3 days</string>
     <string name="pref_updates_check_frequency_7d">Every 7 days</string>
     <string name="pref_updates_check_frequency_15d">Every 15 days</string>
-    <string name="failed_to_fetch_report">Failed to fetch privacy report</string>
-    <string name="no_privacy_report">No privacy report available for this app yet</string>
-    <string name="exodus_scanned_local">Scanned on this device</string>
     <string name="access_denied_using_vpn">Access denied! Are you using VPN or Tor?</string>
     <string name="bad_request">Internal error! Please retry after sometime</string>
     <string name="login_rate_limited">You are rate limited</string>
@@ -537,9 +517,6 @@
     <!-- ManualDownloadSheet -->
     <string name="manual_download_hint">Enter version code you wish to download</string>
     <string name="manual_download_version_error">Version code can only contain digits</string>
-    <string name="manual_download_lookup">Look up versions</string>
-    <string name="manual_download_select_version">Select a version</string>
-    <string name="manual_download_no_versions">No known versions found</string>
     <string name="manual_download_availability_warning">Some versions may be unavailable to download or incompatible with your device.</string>
 
     <!-- WelcomeFragment -->

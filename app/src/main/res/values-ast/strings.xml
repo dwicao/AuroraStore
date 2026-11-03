@@ -4,7 +4,6 @@
     <string name="details_dev_email">Corréu electrónicu</string>
     <string name="details_dev_address">Señes</string>
     <string name="details_description">Descripción</string>
-    <string name="details_privacy">Privacidá</string>
     <string name="filter_review_five">Cinco estrelles</string>
     <string name="filter_review_four">Cuatro estrelles</string>
     <string name="filter_review_two">Dos estrelles</string>
@@ -90,7 +89,6 @@
     <string name="about_bitcoin_eth">Ethereum</string>
     <string name="action_copy">Copiar</string>
     <string name="download_failed">La descarga falló</string>
-    <string name="exodus_view_report">Ver l\'informe</string>
     <string name="about_paypal_summary">Dona per PayPal</string>
     <string name="about_fdroid">F-Droid</string>
     <string name="details_ratings">Valoración y reseñes</string>
@@ -174,7 +172,6 @@
     <string name="details_dependencies">Dependencies</string>
     <string name="details_dev_profile">Developer profile</string>
     <string name="details_think_this_app">¿Qué pienses d\'esta aplicación\?</string>
-    <string name="exodus_substring">ye\'l númberu de rastrexadores conocíos atopaos</string>
     <string name="filter_review_critical">Reseña crítica</string>
     <string name="pref_install_delete_summary">Los APKs baxaos van desaniciase puramente dempués d\'instalalos</string>
     <string name="pref_install_mode_am">Instalador AM</string>
@@ -187,8 +184,6 @@
     <string name="title_advanced">Opciones avanzaes</string>
     <string name="toast_developer_setting_failed">Activa la configuración pa desendolcadores del preséu p\'abrila.</string>
     <string name="action_cancel">Encaboxar</string>
-    <string name="exodus_powered">Cola teunoloxía d\'Exodus Privacy</string>
-    <string name="exodus_progress">Comprobando los rastrexadores…</string>
     <string name="pref_install_mode_services">Servicios d\'Aurora (obsoletos)</string>
     <string name="pref_install_mode_session">Instalador de la sesión</string>
     <string name="pref_network_title">Rede</string>
@@ -197,7 +192,6 @@
     <string name="download_progress">En descarga • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g> • <xliff:g id="speed">%3$s</xliff:g></string>
     <string name="download_queued">Na cola</string>
     <string name="download_resume_all">Siguir con too</string>
-    <string name="exodus_no_tracker">Nun contién rastrexadores conocíos</string>
     <string name="installer_am_unavailable">Instala App Manager o camuda\'l tipu d\'instaldor.</string>
     <string name="installer_root_unavailable">Nun hai accesu de superusuariu. Concédelu o camuda\'l tipu d\'instalador.</string>
     <string name="installer_service_unavailable">Instala la versión 1.0.9 ó superior de los servicios d\'Aurora o camuda\'l tipu d\'instalador.</string>
@@ -252,7 +246,6 @@
     <string name="downloading_dep">Downloading additional files for <xliff:g id="app">%1$s</xliff:g></string>
     <string name="login_rate_limited">Oops, You are rate limited</string>
     <string name="failed_generating_session">Failed to generate session, error code: <xliff:g id="status_code">%1$d</xliff:g></string>
-    <string name="failed_to_fetch_report">Failed to fetch privacy report</string>
     <string name="app_language">Llingua de l\'aplicación</string>
     <string name="failed_apk_export">Failed to export APKs</string>
     <string name="manual_download_hint">Enter version code you wish to download</string>
@@ -320,7 +313,6 @@
     <string name="verifying_new_session">Verificando la sesión nueva</string>
     <string name="check_connectivity">Check internet connectivity</string>
     <string name="app_links_title">Enllaces d\'aplicaciones</string>
-    <string name="action_request_analysis">Solicitar un análisis nuevu</string>
     <string name="pref_aurora_only">Namás les aplicaciones d\'Aurora Store</string>
     <string name="session_installer_subtitle">Session based installer for bundled/split APKs</string>
     <string name="native_installer_desc">Best suited for devices running below Android 4.4</string>

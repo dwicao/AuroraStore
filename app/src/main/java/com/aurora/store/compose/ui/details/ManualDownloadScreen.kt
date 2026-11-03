@@ -20,10 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -62,9 +60,7 @@ import com.aurora.store.compose.composable.Info
 import com.aurora.store.compose.composable.TopAppBar
 import com.aurora.store.compose.preview.AppPreviewProvider
 import com.aurora.store.compose.preview.ThemePreviewProvider
-import com.aurora.store.compose.ui.sheets.VersionPickerSheet
 import com.aurora.store.data.model.AppState
-import com.aurora.store.data.model.Report
 import com.aurora.store.viewmodel.details.AppDetailsViewModel
 import kotlinx.coroutines.launch
 
@@ -77,8 +73,6 @@ fun ManualDownloadScreen(
 ) {
     val app by viewModel.app.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val reports by viewModel.exodusReports.collectAsStateWithLifecycle()
-    val lookupInProgress by viewModel.versionLookupInProgress.collectAsStateWithLifecycle()
     val topAppBarTitle = when {
         windowAdaptiveInfo.isWindowCompact -> app!!.displayName
         else -> stringResource(R.string.title_manual_download)
@@ -88,9 +82,6 @@ fun ManualDownloadScreen(
         state = state,
         topAppBarTitle = topAppBarTitle,
         currentVersionCode = app!!.versionCode,
-        reports = reports,
-        lookupInProgress = lookupInProgress,
-        onLookup = viewModel::lookupVersions,
         onRequestInstall = { versionCode ->
             val requestedApp = app!!.copy(
                 versionCode = versionCode,
@@ -110,9 +101,6 @@ private fun ScreenContent(
     state: AppState = AppState.Unavailable,
     topAppBarTitle: String? = null,
     currentVersionCode: Long = 0L,
-    reports: List<Report> = emptyList(),
-    lookupInProgress: Boolean = false,
-    onLookup: () -> Unit = {},
     onRequestInstall: (versionCode: Long) -> Unit = {},
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2()
 ) {
@@ -125,21 +113,6 @@ private fun ScreenContent(
     var versionCode by remember {
         val initText = currentVersionCode.toString()
         mutableStateOf(TextFieldValue(text = initText, selection = TextRange(initText.length)))
-    }
-
-    var showVersionPicker by remember { mutableStateOf(false) }
-
-    if (showVersionPicker) {
-        VersionPickerSheet(
-            reports = reports,
-            loading = lookupInProgress,
-            onSelect = { report ->
-                val code = report.versionCode
-                versionCode = TextFieldValue(text = code, selection = TextRange(code.length))
-                showVersionPicker = false
-            },
-            onDismiss = { showVersionPicker = false }
-        )
     }
 
     Scaffold(
@@ -198,28 +171,6 @@ private fun ScreenContent(
                         }
                     }
                 )
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = !state.inProgress(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                    ),
-                    onClick = {
-                        // Dismiss the keyboard so the sheet opens over a settled layout, then
-                        // load versions (a no-op fetch when they are already cached).
-                        focusManager.clearFocus()
-                        showVersionPicker = true
-                        onLookup()
-                    }
-                ) {
-                    Text(
-                        text = stringResource(R.string.manual_download_lookup),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
             }
 
             Row(
@@ -264,11 +215,6 @@ private fun ScreenContent(
 private fun ManualDownloadScreenPreview(@PreviewParameter(AppPreviewProvider::class) app: App) {
     ScreenContent(
         topAppBarTitle = app.displayName,
-        currentVersionCode = app.versionCode,
-        reports = listOf(
-            Report(version = "8.5.1", versionCode = "85100"),
-            Report(version = "8.4.0", versionCode = "84000"),
-            Report(version = "8.3.2", versionCode = "83200")
-        )
+        currentVersionCode = app.versionCode
     )
 }

@@ -66,7 +66,6 @@
     <string name="action_pending">Menunggu</string>
     <string name="action_post">Hantar</string>
     <string name="action_remove_all">Alih keluar semua</string>
-    <string name="action_request_analysis">Mohon analisis baru</string>
     <string name="action_restart">Mula semula</string>
     <string name="action_resume">Sambung</string>
     <string name="action_retry">Cuba semula</string>
@@ -113,7 +112,6 @@
     <string name="details_data_safety_share_none">Pembangun mengatakan apl ini tidak berkongsi data pengguna dengan syarikat atau organisasi lain.</string>
     <string name="details_data_safety_title">Keselamatan data</string>
     <string name="details_data_safety_subtitle">Amalan privasi dan keselamatan data yang diisytiharkan oleh pembangun</string>
-    <string name="details_privacy">Privasi</string>
     <string name="details_ratings">Penilaian dan ulasan</string>
     <string name="details_ratings_title_hint">Tajuk ulasan</string>
     <string name="details_think_this_app">Apakah pendapat anda tentang apl ini?</string>
@@ -136,13 +134,6 @@
     <string name="download_queued">Dalam barisan</string>
     <string name="download_resume_all">Sambung semula semua</string>
     <string name="download_speed_estimating">Mengira</string>
-    <string name="exodus_no_tracker">Tiada penjejak dikesan</string>
-    <string name="exodus_tracker_desc">Versi apl ini mungkin masih mengandungi penjejak yang belum ada dalam pangkalan data Exodus Privacy.</string>
-    <string name="exodus_powered">Dikuasakan oleh Exodus Privacy</string>
-    <string name="exodus_progress">Mengesan penjejak…</string>
-    <string name="exodus_substring">Penjejak yang diketahui ditemui dalam</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> penjejak yang diketahui ditemui dalam <xliff:g id="app_version_name">%2$s</xliff:g></string>
-    <string name="exodus_view_report">Lihat laporan</string>
     <string name="filter_review_all">Semua</string>
     <string name="filter_latest">Terbaru</string>
     <string name="filter_review_critical">Kritikal</string>
@@ -357,7 +348,6 @@
     <string name="pref_updates_check_frequency_3d">Setiap 3 hari</string>
     <string name="pref_updates_check_frequency_7d">Setiap 7 hari</string>
     <string name="pref_updates_check_frequency_15d">Setiap 15 hari</string>
-    <string name="failed_to_fetch_report">Gagal mengambil laporan privasi</string>
     <string name="access_denied_using_vpn">Akses ditolak! Adakah anda menggunakan VPN atau Tor?</string>
     <string name="bad_request">Ralat dalaman! Sila cuba lagi nanti</string>
     <string name="login_rate_limited">Permintaan anda telah dihadkan</string>
@@ -604,17 +594,6 @@
     </plurals>
     <string name="account_exists">Akaun telah ditambah</string>
     <string name="action_update_anyway">Kemas kini juga</string>
-    <string name="exodus_report_history">Sejarah versi</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d alat penjejak</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_latest">Terkini</string>
-    <string name="pref_updates_warn_trackers">Berikan amaran tentang penjejak baharu dalam kemas kini aplikasi</string>
-    <string name="pref_updates_warn_trackers_desc">Paparkan amaran sebelum mengemas kini apabila versi baharu menambah penjejak yang tiada dalam versi yang dipasang</string>
-    <string name="tracker_warning_title">Penjejak baharu dikesan</string>
-    <string name="tracker_warning_desc">Kemas kini ini menambah penjejak yang tiada dalam versi yang dipasang:</string>
-    <string name="manual_download_lookup">Semak versi</string>
-    <string name="manual_download_select_version">Pilih versi</string>
-    <string name="manual_download_no_versions">Tiada versi yang diketahui ditemui</string>
     <string name="manual_download_availability_warning">Sesetengah versi mungkin tidak tersedia untuk dimuat turun atau tidak serasi dengan peranti anda.</string>
     <string name="details_more_certificate_hash">Hash sijil</string>
     <string name="action_free_up_space">Kosongkan ruang</string>

@@ -47,7 +47,6 @@
     <string name="action_open">Адкрыць</string>
     <string name="action_pending">У чаканні</string>
     <string name="action_post">Апублікаваць</string>
-    <string name="action_request_analysis">Запытаць новы аналіз</string>
     <string name="action_restart">Перазапусціць</string>
     <string name="action_resume">Працягнуць</string>
     <string name="action_search">Шукаць</string>
@@ -60,7 +59,6 @@
     <string name="details_no_permission">Адсутнічаюць дазволы</string>
     <string name="details_permission">Дазволы</string>
     <string name="details_data_safety_title">Бяспека даных</string>
-    <string name="details_privacy">Прыватнасць</string>
     <string name="details_ratings_title_hint">Загаловак водгуку</string>
     <string name="details_think_this_app">Як вам гэта праграма?</string>
     <string name="download_canceled">Скасавана</string>
@@ -73,10 +71,6 @@
     <string name="download_queued">У чарзе</string>
     <string name="download_resume_all">Працягнуць усе</string>
     <string name="download_speed_estimating">Ацэнка</string>
-    <string name="exodus_no_tracker">Не ўтрымлівае вядомых праграм сачэння</string>
-    <string name="exodus_powered">На платформе Exodus Privacy</string>
-    <string name="exodus_progress">Праверка на наяўнасць праграм сачэння…</string>
-    <string name="exodus_substring">знойдзены вядомыя праграмы сачэння</string>
     <string name="filter_review_critical">Крытычны</string>
     <string name="filter_review_five">Пяць</string>
     <string name="filter_review_four">Чатыры</string>
@@ -151,7 +145,6 @@
     <string name="notification_channel_updates">Апавяшчэнні аб абнаўленні</string>
     <string name="notification_updates_available_desc_4"><xliff:g id="app_one_name">%1$s</xliff:g>, <xliff:g id="app_two_name">%2$s</xliff:g>, <xliff:g id="app_three_name">%3$s</xliff:g> і яшчэ <xliff:g id="apps_count">%4$d</xliff:g></string>
     <string name="pref_updates_auto_install">Правяраць і ўсталёўваць даступныя абнаўленні аўтаматычна</string>
-    <string name="failed_to_fetch_report">Не ўдалося атрымаць справаздачу аб прыватнасці</string>
     <string name="failed_generating_session">Не ўдалося згенерыраваць сеанс, код памылкі: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="check_connectivity">Праверце падключэнне да інтэрнэту</string>
     <string name="pref_ui_layout">Макет</string>
@@ -228,7 +221,6 @@
     <string name="details_gsf_dependent">Патрабуецца GSF</string>
     <string name="details_more_about_app">Больш аб гэтай праграме</string>
     <string name="details_no_ads">Без рэкламы</string>
-    <string name="exodus_view_report">Паглядзець справаздачу</string>
     <string name="details_data_safety_subtitle">Заяўленыя распрацоўшчыкам практыкі бяспекі і прыватнасць даных</string>
     <string name="download_cancel_all">Скасаваць усе</string>
     <string name="download_clear_finished">Ачысціць завершаныя</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Распрацоўшчык сцвярджае, што праграма не збірае даныя карыстальнікаў.</string>
     <string name="details_data_safety_shared">Даныя, якія можа абагульваць гэта праграма</string>
     <string name="details_data_safety_share_none">Распрацоўшчык сцвярджае, што праграма не абагульвае даныя карыстальнікаў з іншымі кампаніямі або арганізацыямі.</string>
-    <string name="exodus_tracker_desc">Гэта версія праграмы ўсё яшчэ можа змяшчаць больш праграм сачэння, якія адсутнічаюць у базе даных Exodus Privacy.</string>
-    <string name="exodus_report_trackers">Знойдзена вядомых праграм сачэння: <xliff:g id="number_of_trackers">%1$d</xliff:g>. У <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="installer_microg_misconfigured">Усталёўшчык MicroG не змог усталяваць праграму. Хутчэй за ўсё гэта адбылося з прычыны няправільнай канфігурацыі.</string>
     <string name="pref_install_mode_microg">Усталёўшчык MicroG</string>
     <string name="microg_installer_subtitle">Патрабуецца ўсталяванне спадарожнай праграмы microG</string>

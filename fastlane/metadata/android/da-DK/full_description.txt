@@ -7,5 +7,4 @@ opdatere og søge efter apps som i Play Butik. Den virker helt fint med eller ud
 • Smukt design: Bygget på de seneste Material 3-retningslinjer
 • Konto log-in: Du kan enten logge ind med en personlig eller anonym konto
 • Enheds- og lokalitetsforfalskning: Skift din enhed og/eller lokalitet for at få adgang til geo-låste apps
-• Integration af Exodus Privacy: Se straks sporingselementer i appen
 • Sortliste for opdateringer: Ignorér opdateringer til bestemte apps

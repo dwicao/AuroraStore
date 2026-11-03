@@ -142,11 +142,6 @@
     <string name="filter_review_five">Lima</string>
     <string name="filter_review_critical">Sangat penting</string>
     <string name="filter_review_all">Semua</string>
-    <string name="exodus_view_report">Lihat laporan</string>
-    <string name="exodus_substring">pelacak yang diketahui ditemukan di</string>
-    <string name="exodus_progress">Memeriksa pelacak…</string>
-    <string name="exodus_powered">Didukung oleh Exodus Privacy</string>
-    <string name="exodus_no_tracker">Tidak mengandung pelacak yang diketahui</string>
     <string name="download_speed_estimating">Memperkirakan</string>
     <string name="download_resume_all">Lanjutkan semua</string>
     <string name="download_queued">Antrean</string>
@@ -161,7 +156,6 @@
     <string name="download_cancel_all">Batalkan semua</string>
     <string name="details_think_this_app">Apa pendapat Anda tentang aplikasi ini\?</string>
     <string name="details_ratings">Peringkat dan ulasan</string>
-    <string name="details_privacy">Privasi</string>
     <string name="details_permission">Perizinan</string>
     <string name="details_paid">Berbayar</string>
     <string name="details_no_updates">Tidak ada pembaruan yang tersedia</string>
@@ -270,7 +264,6 @@
     <string name="access_denied_using_vpn">Akses ditolak! Apakah Anda menggunakan VPN atau Tor\?</string>
     <string name="bad_request">Kesalahan internal! Silakan coba lagi setelah beberapa saat</string>
     <string name="login_rate_limited">Kuota Anda dibatasi</string>
-    <string name="failed_to_fetch_report">Gagal mengambil laporan privasi</string>
     <string name="server_unreachable">Server tidak dapat dijangkau</string>
     <string name="failed_generating_session">Gagal membuat sesi, kode kesalahan: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="pref_vending_version_device">Bawaan (dari konfigurasi perangkat)</string>
@@ -331,7 +324,6 @@
     <string name="session_installer_subtitle">Pemasang berbasis sesi untuk APK dipaketkan/terpisah</string>
     <string name="session_installer_desc">Direkomendasikan, sudah terpasang dan mendukung semua versi Android</string>
     <string name="root_installer_subtitle">Pemasang berbasis shell menggunakan izin root</string>
-    <string name="action_request_analysis">Minta analisis baru</string>
     <string name="action_home_screen">Tambahkan ke layar beranda</string>
     <string name="remove_dispenser_summary">Apakah Anda ingin menghapus dispenser \"<xliff:g id="url">%1$s</xliff:g>\"?</string>
     <string name="remove">Hapus</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Pengembang menyatakan bahwa aplikasi ini tidak mengumpulkan data pengguna.</string>
     <string name="details_data_safety_shared">Data yang mungkin dibagikan oleh aplikasi ini</string>
     <string name="details_data_safety_share_none">Pengembang menyatakan bahwa aplikasi ini tidak membagikan data pengguna dengan perusahaan atau organisasi lain.</string>
-    <string name="exodus_tracker_desc">Versi aplikasi ini mungkin masih mengandung pelacak yang belum terdaftar dalam basis data Exodus Privacy.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> pelacak yang diketahui ditemukan di <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">Tidak ada deskripsi yang tersedia</string>
     <string name="details_more_info">Informasi lebih lanjut</string>
     <string name="details_more_target_api">Sasaran</string>
@@ -604,17 +594,6 @@
     </plurals>
     <string name="account_exists">Akun sudah ditambahkan</string>
     <string name="action_update_anyway">Tetap perbarui</string>
-    <string name="exodus_report_history">Riwayat versi</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">"%1$s -  %2$d pelacak"</string>
-    <string name="exodus_latest">Terbaru</string>
-    <string name="pref_updates_warn_trackers">Peringatkan tentang pelacak baru dalam pembaruan aplikasi</string>
-    <string name="pref_updates_warn_trackers_desc">Tampilkan peringatan sebelum memperbarui ketika versi baru menambahkan pelacak yang tidak ada pada versi yang terpasang</string>
-    <string name="tracker_warning_title">Pelacak baru terdeteksi</string>
-    <string name="tracker_warning_desc">Pembaruan ini menambahkan pelacak yang tidak ada pada versi yang terpasang:</string>
-    <string name="manual_download_lookup">Cari versi</string>
-    <string name="manual_download_select_version">Pilih versi</string>
-    <string name="manual_download_no_versions">Tidak ada versi yang diketahui ditemukan</string>
     <string name="manual_download_availability_warning">Beberapa versi mungkin tidak tersedia untuk diunduh atau tidak kompatibel dengan perangkat Anda.</string>
     <string name="details_more_certificate_hash">Hash sertifikat</string>
     <string name="action_free_up_space">Kosongkan ruang</string>

@@ -59,11 +59,6 @@
     <string name="filter_review_five">5つ星</string>
     <string name="filter_review_critical">低評価</string>
     <string name="filter_review_all">すべて</string>
-    <string name="exodus_view_report">レポートを見る</string>
-    <string name="exodus_substring">個の既知のトラッカーが見つかりました:</string>
-    <string name="exodus_progress">トラッカーを確認中…</string>
-    <string name="exodus_powered">Exodus Privacy により提供</string>
-    <string name="exodus_no_tracker">既知のトラッカーを含んでいません</string>
     <string name="download_speed_estimating">計算中</string>
     <string name="download_resume_all">すべて再開</string>
     <string name="download_queued">待機中</string>
@@ -78,7 +73,6 @@
     <string name="download_cancel_all">すべてキャンセル</string>
     <string name="details_think_this_app">アプリについてどう思いますか？</string>
     <string name="details_ratings">評価とレビュー</string>
-    <string name="details_privacy">プライバシー</string>
     <string name="details_permission">権限</string>
     <string name="details_paid">有料</string>
     <string name="details_no_updates">更新はありません</string>
@@ -270,7 +264,6 @@
     <string name="bad_request">内部エラーが発生しました。しばらくしてからもう一度お試しください</string>
     <string name="server_unreachable">サーバーに接続できませんでした</string>
     <string name="login_rate_limited">ログイン試行の回数が上限を超えました</string>
-    <string name="failed_to_fetch_report">プライバシーレポートの取得に失敗しました</string>
     <string name="access_denied_using_vpn">アクセスが拒否されました。VPN または Tor を使用していませんか？</string>
     <string name="failed_generating_session">セッションの生成に失敗しました。エラーコード : <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="check_connectivity">インターネット接続を確認してください</string>
@@ -294,7 +287,6 @@
     <string name="pref_updates_auto">自動更新</string>
     <string name="onboarding_permission_doze">バックグラウンドダウンロード</string>
     <string name="pref_updates_auto_desc">自動更新の動作を設定する</string>
-    <string name="action_request_analysis">分析を要求</string>
     <string name="pref_vending_version_title">Google Playのバージョン</string>
     <string name="pref_vending_version_device">デフォルト (端末設定による)</string>
     <string name="pref_updates_auto_install">更新を確認して自動でインストールする</string>
@@ -388,7 +380,6 @@
     <string name="details_data_safety_collect_none">開発者は、このアプリがユーザーデータを収集しないと表明しています。</string>
     <string name="details_data_safety_shared">このアプリが共有する可能性のあるデータ</string>
     <string name="details_data_safety_share_none">デベロッパーによると、このアプリはユーザーデータを他の企業や組織と共有しません。</string>
-    <string name="exodus_tracker_desc">このバージョンのアプリには、Exodus Privacyのデータベースにまだ存在しないトラッカーがまだ含まれている可能性があります。</string>
     <string name="pref_common_advanced">もっと</string>
     <string name="onboarding_title_gsf">アプリ互換性</string>
     <string name="pref_updates_app_source">アプリソース</string>
@@ -406,7 +397,6 @@
     <string name="app_info_min_android">最低限Androidバージョン</string>
     <string name="onboarding_title_gsf_desc">依存関係が不足しています</string>
     <string name="details_more_info">もっとみる</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> 個のトラッカーが <xliff:g id="app_version_name">%2$s</xliff:g> で見つかりました</string>
     <string name="filter_latest">最新</string>
     <string name="installer_microg_misconfigured">MicroG installer は誤った構成が原因でアプリのインストールに失敗しました。</string>
     <string name="no_apps_available">利用可能なアプリはありません</string>
@@ -495,9 +485,6 @@
     <string name="action_update_anyway">とにかく更新する</string>
     <string name="action_free_up_space">空き容量を増してください</string>
     <string name="download_failed_storage">アプリをダウンロードするには、十分な空き容量がありません</string>
-    <string name="exodus_report_history">バージョン履歴</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_latest">最新</string>
     <string name="insufficient_storage_title">空き容量が足りていません</string>
     <string name="pref_updates_check_frequency_3h">3時間毎</string>
     <string name="pref_updates_check_frequency_6h">6時間毎</string>
@@ -511,7 +498,6 @@
     <string name="pref_theme_style_system">システムに合わせる</string>
     <string name="pref_ui_theme">テーマ</string>
     <string name="pref_ui_dynamic_color">ダイナミックカラー</string>
-    <string name="manual_download_select_version">バージョンを選択してください</string>
     <string name="toast_fav_install_enqueued">%1$dつのアプリをインストールしています</string>
     <string name="status_installing">インストール中</string>
     <string name="status_installed">インストール済</string>
@@ -538,6 +524,4 @@
     <string name="pref_notification_progress_desc">アプリをダウンロードしたりアップデートしたりしている間、詳細な進捗状況を表示します。オフの場合、目立たない通知によってバックグラウンドでダウンロードを続行します。</string>
     <string name="pref_notification_disabled">通知はオフになっています</string>
     <string name="pref_notification_disabled_desc">タップしてAurora Storeからの通知を許可</string>
-    <string name="pref_updates_warn_trackers">アップデートの際に新しいトラッカーについて警告する</string>
-    <string name="pref_updates_warn_trackers_desc">インストールされたバージョンのアプリになかったトラッカーが新しいバージョンで追加された場合、アップデートの前に警告する</string>
 </resources>

@@ -170,11 +170,6 @@
     <string name="filter_review_five">5 ★</string>
     <string name="filter_review_critical">負面</string>
     <string name="filter_review_all">全部</string>
-    <string name="exodus_view_report">查看報告</string>
-    <string name="exodus_substring">個已知的追蹤器被發現於</string>
-    <string name="exodus_progress">正在檢查追蹤器…</string>
-    <string name="exodus_powered">由 Exodus Privacy 提供</string>
-    <string name="exodus_no_tracker">不包含任何已知的追蹤器</string>
     <string name="download_speed_estimating">估算中</string>
     <string name="download_resume_all">恢復全部</string>
     <string name="download_queued">已加入佇列</string>
@@ -189,7 +184,6 @@
     <string name="download_cancel_all">取消全部</string>
     <string name="details_think_this_app">您覺得這個應用程式如何？</string>
     <string name="details_ratings">評分及評論</string>
-    <string name="details_privacy">隱私</string>
     <string name="details_permission">權限</string>
     <string name="details_paid">付費</string>
     <string name="details_no_updates">暫無更新可用</string>
@@ -289,7 +283,6 @@
     <string name="access_denied_using_vpn">存取被拒！你是否正開著 VPN 或者 Tor？</string>
     <string name="pref_updates_auto">自動更新</string>
     <string name="pref_updates_auto_install">檢查並自動安裝可用的更新</string>
-    <string name="failed_to_fetch_report">取得隱私報告失敗</string>
     <string name="pref_updates_check_frequency">自動更新頻率</string>
     <string name="pref_updates_check_frequency_desc">Aurora 多久檢查一次應用程式更新。</string>
     <string name="app_links_title">應用程式連結</string>
@@ -298,7 +291,6 @@
     <string name="failed_generating_session">產生工作階段失敗，錯誤代碼： <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="google_play_store_desc">Google Play 或 Google Play Store 原本被稱為 Android Market。</string>
     <string name="android_market_desc">Android Market 原本是一個線上商店，提供為 Android 裝置設計的應用程式，但在 2017 年退役了。</string>
-    <string name="action_request_analysis">要求重新分析</string>
     <string name="onboarding_permission_doze">在背景中下載</string>
     <string name="toast_proxy_failed">設定代理失敗</string>
     <string name="pref_updates_auto_notify">檢查並通知可用的更新</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">開發者表示此應用程式不會收集使用者資料。</string>
     <string name="details_data_safety_shared">此應用程式可能分享的資料</string>
     <string name="details_data_safety_share_none">開發者表示此應用程式不會與其他公司或組織分享使用者資料。</string>
-    <string name="exodus_tracker_desc">此版本的應用程式可能仍包含 Exodus Privacy 資料庫中尚未收錄的更多追蹤器。</string>
-    <string name="exodus_report_trackers">在 <xliff:g id="app_version_name">%2$s</xliff:g> 中發現 <xliff:g id="number_of_trackers">%1$d</xliff:g> 個已知追蹤器</string>
     <string name="manual_download_version_error">版本代碼只能包含數字</string>
     <string name="no_description">沒有可用的描述</string>
     <string name="details_more_info">更多資訊</string>
@@ -604,17 +594,6 @@
     <string name="action_check">檢查</string>
     <string name="account_exists">帳戶已存在</string>
     <string name="action_update_anyway">仍要更新</string>
-    <string name="exodus_report_history">版本紀錄</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d 個追蹤器</string>
-    <string name="exodus_latest">最新</string>
-    <string name="pref_updates_warn_trackers">應用程式更新包含新增追蹤器時警告</string>
-    <string name="pref_updates_warn_trackers_desc">當新版本包含已安裝版本中沒有的追蹤器時，在更新前顯示警告</string>
-    <string name="tracker_warning_title">偵測到新增追蹤器</string>
-    <string name="tracker_warning_desc">本次更新新增了已安裝版本中沒有的追蹤器：</string>
-    <string name="manual_download_lookup">查询版本</string>
-    <string name="manual_download_select_version">選擇版本</string>
-    <string name="manual_download_no_versions">未找到已知版本</string>
     <string name="manual_download_availability_warning">部分版本可能無法下載，或與您的裝置不相容。</string>
     <string name="details_more_certificate_hash">憑証雜湊值</string>
     <string name="action_free_up_space">釋放空間</string>

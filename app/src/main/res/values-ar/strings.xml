@@ -11,7 +11,6 @@
     <string name="filter_review_five">خمس</string>
     <string name="download_speed_estimating">يتم التقدير</string>
     <string name="account_google">حساب Google</string>
-    <string name="exodus_substring">برمجيات التتبع المعروفة الموجودة في</string>
     <string name="title_spoof_manager">مدير المحاكاة الوهمية</string>
     <string name="toast_permission_granted">الإذن الممنوح</string>
     <string name="toast_developer_setting_failed">شغِّل إعدادات المطور من إعدادات الجهاز لفتحها.</string>
@@ -73,10 +72,6 @@
     <string name="filter_review_positive">إيجابية</string>
     <string name="filter_review_critical">الحرجه</string>
     <string name="filter_review_all">الكل</string>
-    <string name="exodus_view_report">اعرض التقرير</string>
-    <string name="exodus_progress">التحقق من وجود برمجيات تتبع…</string>
-    <string name="exodus_powered">بدعم من Exodus Privacy</string>
-    <string name="exodus_no_tracker">لا يحتوي على برمجيات تتبع معروفة</string>
     <string name="download_resume_all">استكمل الكل</string>
     <string name="download_queued">في قائمة الإنتظار</string>
     <string name="download_pause_all">ألبِث</string>
@@ -89,7 +84,6 @@
     <string name="download_canceled">أُلغِيَ</string>
     <string name="download_cancel_all">ألغِ الكل</string>
     <string name="details_ratings">التقييمات والمراجعات</string>
-    <string name="details_privacy">الخصوصية</string>
     <string name="details_permission">الأذونات</string>
     <string name="details_paid">مدفوع</string>
     <string name="details_no_permission">لا توجد أذونات</string>
@@ -269,7 +263,6 @@
     <string name="bad_request">خطأ داخلي! من فضلك أعد المحاولة بعد فترة</string>
     <string name="login_rate_limited">الحساب محدود</string>
     <string name="title_search_results">نتائج البحث</string>
-    <string name="failed_to_fetch_report">فشل في الحصول على تقرير الخصوصية</string>
     <string name="access_denied_using_vpn">رُفض الوصول! هل تستخدم VPN أو تور؟</string>
     <string name="server_unreachable">لا يمكن الوصول إلى الخادم</string>
     <string name="failed_generating_session">فشل توليد جلسة عمل، رمز الخطأ: <xliff:g id="status_code">%1$d</xliff:g></string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">لا تحدِّث التطبيقات تلقائيًا</string>
     <string name="pref_updates_auto_desc">اضبط سلوك التحديثات التلقائية</string>
     <string name="pref_updates_auto_install">التحقق من التحديثات المتوفرة وتثبيتها تلقائيًا</string>
-    <string name="action_request_analysis">طلب تحليل جديد</string>
     <string name="failed_apk_export">فشل تصدير ملفات APK</string>
     <string name="download_clear_finished">مسح المكتملة</string>
     <string name="pref_updates_incompatible">أظهِر التحديثات التي قد تفشل</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">يقول المطوِّر إن هذا التطبيق لا يجمع بيانات المستخدم.</string>
     <string name="details_data_safety_shared">البيانات التي قد يشاركها هذا التطبيق</string>
     <string name="details_data_safety_share_none">يقول المطوِّر إن هذا التطبيق لا يشارك بيانات المستخدم مع شركات أو منظمات أخرى.</string>
-    <string name="exodus_tracker_desc">قد لا يزال هذا الإصدار من التطبيق يحتوي على المزيد من أدوات التتبع غير الموجودة بعد في قاعدة بيانات Exodus Privacy.</string>
-    <string name="exodus_report_trackers">عُثر على متتبعات معروفة عددها <xliff:g id="number_of_trackers">%1$d</xliff:g> في <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">لا يوجد وصف متاح</string>
     <string name="details_more_info">مزيد من المعلومات</string>
     <string name="details_more_target_api">يستهدف</string>
@@ -629,17 +619,6 @@
     </plurals>
     <string name="account_exists">أُضيف الحساب بالفعل</string>
     <string name="action_update_anyway">حدِّث على أي حال</string>
-    <string name="exodus_report_history">سجلّ الإصدار</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d متعقب</string>
-    <string name="exodus_latest">الأحدث</string>
-    <string name="pref_updates_warn_trackers">حذّر من المتعقبات الجديدة في تحديثات التطبيقات</string>
-    <string name="pref_updates_warn_trackers_desc">اعرض تحذير قبل التحديث عندما تضيف النُسخة الجديدة متعقبات لم تكن موجودة في النُسخة المثبتة</string>
-    <string name="tracker_warning_title">اكتُشف متعقبات جديدة</string>
-    <string name="tracker_warning_desc">يضيف هذا التحديث متعقبات لم تكن موجودة في الإصدار المثبت:</string>
-    <string name="manual_download_lookup">ابحث عن الإصدارات</string>
-    <string name="manual_download_select_version">حدّد إصدار</string>
-    <string name="manual_download_no_versions">لم يُعثر على أي إصدارات معروفة</string>
     <string name="manual_download_availability_warning">قد تكون بعض الإصدارات غير متاحة للتنزيل أو غير متوافقة مع جهازك.</string>
     <string name="details_more_certificate_hash">تجزئة الشهادة</string>
     <string name="action_free_up_space">فرغ بعض المساحة</string>

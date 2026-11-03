@@ -32,14 +32,11 @@
     <string name="filter_review_four">හතර</string>
     <string name="filter_review_five">පහ</string>
     <string name="filter_review_all">සියල්ල</string>
-    <string name="exodus_progress">ලුහුබැඳීම් ගැන පරීක්ෂා වෙමින්…</string>
-    <string name="exodus_powered">එක්සෝඩස් මගින් බලගන්වා ඇත</string>
     <string name="download_failed">බාගතවීම අසාර්ථකයි</string>
     <string name="download_eta_calculating">ගණනය වෙමින්</string>
     <string name="download_completed">බාගැනීම සම්පූර්ණයි</string>
     <string name="download_cancel_all">සියල්ල අවලංගු කරන්න</string>
     <string name="details_think_this_app">මෙම යෙදුම ගැන ඔබ සිතන්නේ කුමක්ද\?</string>
-    <string name="details_privacy">පෞද්ගලිකත්වය</string>
     <string name="details_permission">අවසරය</string>
     <string name="details_no_permission">අවසර නැත</string>
     <string name="details_no_ads">දැන්වීම් නැත</string>
@@ -68,7 +65,6 @@
     <string name="action_disable">අබල කරන්න</string>
     <string name="action_clear">හිස් කරන්න</string>
     <string name="details_no_updates">යාවත්කාල නැත</string>
-    <string name="exodus_no_tracker">දන්නා ලුහුබැඳීම් අන්තර්ගත නොවේ</string>
     <string name="download_speed_estimating">තක්සේරු වෙමින්</string>
     <string name="download_none">බාගැනීම් නැත</string>
     <string name="details_more_about_app">යෙදුම ගැන තවත්</string>
@@ -149,7 +145,6 @@
     <string name="download_force_clear_all">බලෙන් සියල්ල හිස් කරන්න</string>
     <string name="download_pause_all">සියල්ලට විරාමයක්</string>
     <string name="download_resume_all">සියල්ල නැවතත්</string>
-    <string name="exodus_view_report">වාර්තාව දකින්න</string>
     <string name="installer_am_unavailable">යෙදුම් කළමණාකරු ස්ථාපනය හෝ ස්ථාපකය වෙනස් කරන්න.</string>
     <string name="filter_review_critical">තීරණාත්මක</string>
     <string name="installer_status_failure_storage">මතකයේ ඉඩ ප්‍රමාණවත් නැත</string>
@@ -220,7 +215,6 @@
     <string name="dialog_desc_native_split">නිසග ස්ථාපකය හරහා පොදි(පංගු) යෙදුම් ස්ථාපනය කිරීමට නොහැකිය. ස්ථාපකය මූල, සේවා හෝ වාරය ට වෙනස් කරන්න.</string>
     <string name="device_miui_extra">වෛකල්පිතව, ඔබට නිසග ස්ථාපකය තේරීමට හැකිය නමුත් ඊළඟට ඔබට පොදි(පංගු) APKs ස්ථානය කිරීමට නොහැකිය, තීරණය ඔබ සතුය.</string>
     <string name="toast_page_unavailable">පිරික්සන ලද පිටුව නොතිබේ</string>
-    <string name="exodus_substring">ක් ලුහුබැඳීම් මෙහි හමුවිය</string>
     <string name="pref_install_delete_summary">පෙරනිමි ලෙස APKs මකා දැමෙයි</string>
     <string name="details_beta_description">පොදු ජනතාව දැකීමට පෙර ඔබ නව විශේෂාංග හා දෝෂ දකිනු ඇත. වැඩිදියුණු කිරීමට ඔබගේ ප්‍රතිපෝෂණ සපයන්න.</string>
     <string name="pref_install_delete_title">පසු-ස්ථාපන APK මකන්න</string>
@@ -269,7 +263,6 @@
     <string name="failed_generating_session">වාරය උත්පාදනයට අසමත් විය, දෝෂයේ කේතය: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="title_search_results">සෙවුම් ප්‍රතිඵල</string>
     <string name="title_search_suggestion">සෙවුම් යෝජනා</string>
-    <string name="failed_to_fetch_report">පෞද්. වාර්තාව ගැනීමට නොහැකි විය</string>
     <string name="bad_request">අභ්‍යන්තර දෝෂයකි! ටික වේලාවකින් බලන්න</string>
     <string name="login_rate_limited">ඔබව අනුපාතනය වී ඇත</string>
     <string name="server_unreachable">සේවාදායකයට ළඟා වීමට නොහැකිය</string>

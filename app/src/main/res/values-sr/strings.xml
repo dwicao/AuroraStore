@@ -93,11 +93,6 @@
     <string name="filter_review_five">Пет</string>
     <string name="filter_review_critical">Критично</string>
     <string name="filter_review_all">Све</string>
-    <string name="exodus_view_report">Погледај извештај</string>
-    <string name="exodus_substring">познати(x) програм(а) за праћење пронађено је у</string>
-    <string name="exodus_progress">Проверавање програма за праћење…</string>
-    <string name="exodus_powered">Покреће га Exodus Privacy</string>
-    <string name="exodus_no_tracker">Не садржи познате програме за праћење</string>
     <string name="download_speed_estimating">Процењивање</string>
     <string name="download_resume_all">Настави све</string>
     <string name="download_queued">У редоследу</string>
@@ -112,7 +107,6 @@
     <string name="download_cancel_all">Откажи све</string>
     <string name="details_think_this_app">Шта мислите о овој апликацији\?</string>
     <string name="details_ratings">Оцене и рецензије</string>
-    <string name="details_privacy">Приватност</string>
     <string name="details_permission">Дозвола</string>
     <string name="details_paid">Плаћено</string>
     <string name="details_no_updates">Нема доступних ажурирања</string>
@@ -295,7 +289,6 @@
     <string name="session_good">Вау! Све је у реду.</string>
     <string name="toast_import_failed">Није могуће увести конфигурацију уређаја</string>
     <string name="search_hint">Претражите апликације и игре</string>
-    <string name="failed_to_fetch_report">Прикупљање извештаја о приватности није успело</string>
     <string name="installer_shizuku_unavailable">„Shizuku“ није правилно инсталиран или подешен.</string>
     <string name="pref_install_mode_am">Програм за инсталацију „AM”</string>
     <string name="pref_install_mode_shizuku">Програм за инсталацију „Shizuku”</string>
@@ -324,7 +317,6 @@
     <string name="pref_updates_auto_off">Без аутоматског ажурирања апликација</string>
     <string name="pref_updates_auto_desc">Конфигуришите понашање аутоматских ажурирања</string>
     <string name="pref_updates_auto_install">Провера и аутоматска инсталација доступних ажурирања</string>
-    <string name="action_request_analysis">Затражи нову анализу</string>
     <string name="failed_apk_export">Извоз APK-ова није успео</string>
     <string name="download_clear_finished">Очисти завршено</string>
     <string name="pref_updates_incompatible">Прикажи ажурирања која можда неће успети</string>
@@ -468,8 +460,6 @@
     <string name="details_data_safety_collect_none">Програмер каже да ова апликација не прикупља корисничке податке.</string>
     <string name="details_data_safety_shared">Подаци које ова апликација може да дели</string>
     <string name="details_data_safety_share_none">Програмер каже да ова апликација не дели корисничке податке са другим компанијама или организацијама.</string>
-    <string name="exodus_tracker_desc">Ова верзија апликације може и даље да садржи више пратилаца који још нису присутни у бази података Exodus Privacy-а.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> познатих пратилаца пронађено у <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="manual_download_version_error">Код верзије може да садржи само цифре</string>
     <string name="no_description">Нема доступног описа</string>
     <string name="details_more_info">Више информација</string>

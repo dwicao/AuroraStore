@@ -6,6 +6,5 @@ Ciri-ciri:
 • Reka bentuk yang cantik: Dibina berdasarkan garis panduan Material 3 terkini
 • Log masuk akaun: Anda boleh log masuk menggunakan akaun peribadi atau akaun tanpa nama
 • Penyamaran Peranti & Lokasi Setempat: Tukar peranti dan/atau lokasi setempat anda untuk mengakses aplikasi yang disekat mengikut kawasan
-• Penyepaduan Exodus Privacy: Serta-merta melihat penjejak dalam aplikasi
 •Penyepaduan Plexus: Serta-merta melihat keserasian aplikasi tanpa Perkhidmatan Google Play atau dengan microG
 • Senarai hitam kemas kini: Abaikan kemas kini untuk aplikasi tertentu

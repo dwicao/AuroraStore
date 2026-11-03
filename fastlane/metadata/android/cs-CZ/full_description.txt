@@ -6,6 +6,5 @@ Obchod Aurora je neoficiální, svobodný a otevřený klient pro Google Play s 
 • Nádherný design: postaveno podle nejnovějších pravidel Material 3
 • Přihlášení k účtu: můžete se přihlásit buď s osobním, nebo s anonymním účtem
 • Spoofing zařízení a umístění: změňte své zařízení a/nebo umístění pro přístup k geograficky uzamčeným aplikacím
-• Integrace Exodus Privacy: okamžité zobrazení sledovacích prvků v aplikaci
 • Integrace Plexus: okamžité zobrazení kompatibility aplikací bez Služeb Google Play nebo s microG
 • Zakázání aktualizací: ignorování aktualizací pro určité aplikace

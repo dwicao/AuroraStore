@@ -42,7 +42,6 @@
     <string name="about_bhim_summary">Mit UPI spenden</string>
     <string name="about_bhim">BHIM – UPI</string>
     <string name="details_think_this_app">Was hältst du von dieser App\?</string>
-    <string name="details_privacy">Datenschutz</string>
     <string name="details_permission">Berechtigung</string>
     <string name="details_no_updates">Keine Updates verfügbar</string>
     <string name="details_no_permission">Keine Berechtigungen</string>
@@ -136,11 +135,6 @@
     <string name="filter_review_five">Fünf</string>
     <string name="filter_review_critical">Kritisch</string>
     <string name="filter_review_all">Alle</string>
-    <string name="exodus_view_report">Bericht ansehen</string>
-    <string name="exodus_substring">bekannte(r) Tracker gefunden in</string>
-    <string name="exodus_progress">Es wird auf Tracker geprüft …</string>
-    <string name="exodus_powered">Bereitgestellt von Exodus Privacy</string>
-    <string name="exodus_no_tracker">Enthält keine bekannten Tracker</string>
     <string name="download_speed_estimating">Geschwindigkeit wird ermittelt …</string>
     <string name="download_resume_all">Alle fortsetzen</string>
     <string name="download_queued">In der Warteschlange</string>
@@ -267,7 +261,6 @@
     <string name="notification_updates_available_desc_2"><xliff:g id="app_one_name">%1$s</xliff:g> und <xliff:g id="app_two_name">%2$s</xliff:g></string>
     <string name="access_denied_using_vpn">Zugriff verweigert! Verwendest du ein VPN oder Tor\?</string>
     <string name="login_rate_limited">Deine Anfragehäufigkeit ist begrenzt</string>
-    <string name="failed_to_fetch_report">Datenschutzbericht konnte nicht abgerufen werden</string>
     <string name="title_search_suggestion">Suchvorschlag</string>
     <string name="title_search_results">Suchergebnisse</string>
     <string name="bad_request">Interner Fehler! Bitte versuche es nach einiger Zeit erneut</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">Apps nicht automatisch aktualisieren</string>
     <string name="pref_updates_auto_install">Verfügbare Updates automatisch installieren</string>
     <string name="pref_updates_auto_desc">Verhalten von automatischen Updates konfigurieren</string>
-    <string name="action_request_analysis">Neue Analyse anfordern</string>
     <string name="failed_apk_export">Exportieren der APKs fehlgeschlagen</string>
     <string name="download_clear_finished">Fertige löschen</string>
     <string name="pref_updates_incompatible">Updates anzeigen, die fehlschlagen könnten</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect">Daten, die diese App erfassen darf</string>
     <string name="details_data_safety_collect_none">Der Entwickler gibt an, dass diese App keine Nutzerdaten erfasst.</string>
     <string name="details_data_safety_share_none">Der Entwickler gibt an, dass diese App keine Nutzerdaten an andere Unternehmen oder Organisationen weitergibt.</string>
-    <string name="exodus_tracker_desc">Diese Version der App kann noch weitere Tracker enthalten, die noch nicht in der Datenbank von Exodus Privacy vorhanden sind.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> bekannte Tracker in <xliff:g id="app_version_name">%2$s</xliff:g> gefunden</string>
     <string name="no_description">Keine Beschreibung verfügbar</string>
     <string name="details_more_info">Weitere Infos</string>
     <string name="details_more_target_api">Ziel-API</string>
@@ -609,17 +599,6 @@
     </plurals>
     <string name="account_exists">Konto wurde bereits hinzugefügt</string>
     <string name="action_update_anyway">Trotzdem aktualisieren</string>
-    <string name="exodus_report_history">Versionsverlauf</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d Tracker</string>
-    <string name="exodus_latest">Neueste</string>
-    <string name="pref_updates_warn_trackers">Bei App-Updates vor neuen Trackern warnen</string>
-    <string name="pref_updates_warn_trackers_desc">Vor dem Update eine Warnung anzeigen, wenn die neue Version Tracker enthält, die in der installierten Version nicht vorhanden waren</string>
-    <string name="tracker_warning_title">Neue Tracker erkannt</string>
-    <string name="tracker_warning_desc">Dieses Update fügt Tracker hinzu, die in der installierten Version noch nicht enthalten waren:</string>
-    <string name="manual_download_lookup">Versionen ansehen</string>
-    <string name="manual_download_select_version">Eine Version auswählen</string>
-    <string name="manual_download_no_versions">Keine bekannten Versionen gefunden</string>
     <string name="manual_download_availability_warning">Möglicherweise stehen einige Versionen nicht zum Herunterladen bereit oder sind mit deinem Gerät nicht kompatibel.</string>
     <string name="details_more_certificate_hash">Zertifikat-Hash</string>
     <string name="action_free_up_space">Speicherplatz freigeben</string>

@@ -46,8 +46,7 @@ fun UpdatesScreen(
     onPauseUpdate: (String) -> Unit = {},
     onResumeUpdate: (String) -> Unit = {},
     onPauseAll: () -> Unit = {},
-    onResumeAll: () -> Unit = {},
-    checkingPackages: Set<String> = emptySet()
+    onResumeAll: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val updates by viewModel.updates.collectAsStateWithLifecycle()
@@ -148,7 +147,6 @@ fun UpdatesScreen(
                             AppUpdateItem(
                                 update = update,
                                 download = download,
-                                isChecking = update.packageName in checkingPackages,
                                 // Served from the Aurora OSS feed, not Play — there is
                                 // no app details page to open.
                                 onClick = {},
@@ -204,8 +202,7 @@ fun UpdatesScreen(
                             onRequestUpdate = onRequestUpdate,
                             onCancelUpdate = onCancelUpdate,
                             onPauseUpdate = onPauseUpdate,
-                            onResumeUpdate = onResumeUpdate,
-                            checkingPackages = checkingPackages
+                            onResumeUpdate = onResumeUpdate
                         )
                     }
 
@@ -249,8 +246,7 @@ fun UpdatesScreen(
                             onRequestUpdate = onRequestUpdate,
                             onCancelUpdate = onCancelUpdate,
                             onPauseUpdate = onPauseUpdate,
-                            onResumeUpdate = onResumeUpdate,
-                            checkingPackages = checkingPackages
+                            onResumeUpdate = onResumeUpdate
                         )
                     }
 
@@ -268,8 +264,7 @@ fun UpdatesScreen(
                             onRequestUpdate = onRequestUpdate,
                             onCancelUpdate = onCancelUpdate,
                             onPauseUpdate = onPauseUpdate,
-                            onResumeUpdate = onResumeUpdate,
-                            checkingPackages = checkingPackages
+                            onResumeUpdate = onResumeUpdate
                         )
                     }
 
@@ -310,8 +305,7 @@ private fun LazyListScope.updateItems(
     onRequestUpdate: (Update) -> Unit,
     onCancelUpdate: (String) -> Unit,
     onPauseUpdate: (String) -> Unit,
-    onResumeUpdate: (String) -> Unit,
-    checkingPackages: Set<String>
+    onResumeUpdate: (String) -> Unit
 ) {
     items(
         items = entries,
@@ -320,7 +314,6 @@ private fun LazyListScope.updateItems(
         AppUpdateItem(
             update = update,
             download = download,
-            isChecking = update.packageName in checkingPackages,
             onClick = {
                 onNavigateTo(Destination.AppUpdate(update))
             },

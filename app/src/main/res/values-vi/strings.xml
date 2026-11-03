@@ -177,11 +177,6 @@
     <string name="filter_review_four">Bốn</string>
     <string name="filter_review_five">Năm</string>
     <string name="filter_review_all">Tất cả</string>
-    <string name="exodus_view_report">Xem báo cáo</string>
-    <string name="exodus_substring">(các) trình theo dõi đã biết được tìm thấy trong</string>
-    <string name="exodus_progress">Đang kiểm tra các trình theo dõi…</string>
-    <string name="exodus_powered">Được hỗ trợ bởi Exodus Privacy</string>
-    <string name="exodus_no_tracker">Không chứa trình theo dõi đã biết nào</string>
     <string name="download_speed_estimating">Đang ước tính</string>
     <string name="download_resume_all">Tiếp tục tất cả</string>
     <string name="download_queued">Đang chờ</string>
@@ -196,7 +191,6 @@
     <string name="download_cancel_all">Hủy hết</string>
     <string name="details_think_this_app">Bạn nghĩ thế nào về ứng dụng này\?</string>
     <string name="details_ratings">Đánh giá và nhận xét</string>
-    <string name="details_privacy">Riêng tư</string>
     <string name="details_permission">Quyền</string>
     <string name="details_paid">Trả phí</string>
     <string name="details_no_updates">Không có cập nhật mới</string>
@@ -267,7 +261,6 @@
     <string name="notification_updates_available_desc_1">Có phiên bản mới cho <xliff:g id="app_one_name">%1$s</xliff:g></string>
     <string name="title_search_suggestion">Gợi ý tìm kiếm</string>
     <string name="title_search_results">Kết quả tìm kiếm</string>
-    <string name="failed_to_fetch_report">Không thể lấy báo cáo riêng tư</string>
     <string name="access_denied_using_vpn">Truy cập bị từ chối! Bạn có đang dùng VPN hay Tor không\?</string>
     <string name="failed_generating_session">Không thể tạo phiên session, mã lỗi: <xliff:g id="status_code">%1$d</xliff:g></string>
     <string name="bad_request">Lỗi nội bộ! Hãy thử lại sau một thời gian</string>
@@ -297,7 +290,6 @@
     <string name="verifying_new_session">Xác minh phiên mới</string>
     <string name="google_play_store_desc">Google Play, còn được gọi là Cửa hàng Google Play và trước đây là Android Market.</string>
     <string name="app_language">Ngôn ngữ ứng dụng</string>
-    <string name="action_request_analysis">Yêu cầu phân tích mới</string>
     <string name="pref_aurora_only_desc">Chỉ kiểm tra cập nhật cho các ứng dụng được cài đặt từ Aurora Store</string>
     <string name="pref_updates_incompatible">Cập nhật không tương thích</string>
     <string name="pref_updates_incompatible_desc">Hiển thị các bản cập nhật cho các ứng dụng không tương thích hoặc bị vô hiệu hóa có thể không cài đặt được</string>

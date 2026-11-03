@@ -89,7 +89,6 @@
     <string name="action_pending">In suspesu</string>
     <string name="action_post">Pùblica</string>
     <string name="action_remove_all">Boga totu</string>
-    <string name="action_request_analysis">Pedi un\'anàlisi noa</string>
     <string name="action_restart">Torra a allùghere</string>
     <string name="action_resume">Sighi</string>
     <string name="action_retry">Torra a proare</string>
@@ -138,7 +137,6 @@
     <string name="details_data_safety_share_none">S\'isvilupadore narat chi custa aplicatzione non cumpartzit datos de sos impreadores cun àteras impresas o organizatziones.</string>
     <string name="details_data_safety_title">Seguresa de sos datos</string>
     <string name="details_data_safety_subtitle">Pràticas de riservadesa e de seguresa de sos datos declaradas dae s\'isvilupadore</string>
-    <string name="details_privacy">Riservadesa</string>
     <string name="details_ratings">Votos e retzensiones</string>
     <string name="details_ratings_title_hint">Tìtulu de sa retzensione</string>
     <string name="details_review_comment_hint">Descrie s\'esperièntzia tua (a issèberu)</string>
@@ -167,17 +165,6 @@
     <string name="download_queued">In isetu</string>
     <string name="download_resume_all">Sighi cun totu</string>
     <string name="download_speed_estimating">Stima in cursu</string>
-    <string name="exodus_no_tracker">Non cuntenet arrastadores connotos</string>
-    <string name="exodus_tracker_desc">Custa versione de s\'aplicatzione podet cuntènnere fintzas àteros arrastadores chi non sunt ancora in sa base de datos de Exodus Privacy.</string>
-    <string name="exodus_powered">Alimentadu dae Exodus Privacy</string>
-    <string name="exodus_progress">Chirchende arrastadores…</string>
-    <string name="exodus_substring">arrastadore(s) connotu(os) agatadu(os) in</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> arrastadore(s) connotu(os) agatadu(os) in <xliff:g id="app_version_name">%2$s</xliff:g></string>
-    <string name="exodus_view_report">Abbàida su raportu</string>
-    <string name="exodus_report_history">Cronologia de sas versiones</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d arrastadores</string>
-    <string name="exodus_latest">Ùrtima</string>
     <string name="filter_review_all">Totus</string>
     <string name="filter_latest">Prus reghentes</string>
     <string name="filter_review_critical">Crìticas</string>
@@ -256,8 +243,6 @@
     <string name="pref_ui_similar_apps">Aplicatziones simigiantes e ligadas</string>
     <string name="pref_updates_incompatible">Ammustra sos agiornamentos chi podent fallire</string>
     <string name="pref_updates_incompatible_desc">Ammustra sos agiornamentos pro sas aplicatziones non cumpatìbiles o disabilitadas chi diant pòdere non s\'installare.</string>
-    <string name="pref_updates_warn_trackers">Avisa de sos arrastadores noos in sos agiornamentos de sas aplicatziones</string>
-    <string name="pref_updates_warn_trackers_desc">Ammustra un\'avisu in antis de agiornare cando sa versione noa annanghet arrastadores chi non bi fiant in sa versione installada</string>
     <string name="pref_self_update">Agiornamentu de Aurora Store</string>
     <string name="pref_self_update_desc">Propone sas versiones noas de Aurora Store in s\'ischeda Agiornamentos.</string>
     <string name="pref_aurora_only">Filtra sas aplicatziones dae àteras fontes.</string>
@@ -296,8 +281,6 @@
     <string name="tab_top_grossing">Prus redditìtzias</string>
     <string name="tab_top_paid">Prus bèndidas</string>
     <string name="tab_trending">De tendèntzia</string>
-    <string name="tracker_warning_title">Agatados arrastadores noos</string>
-    <string name="tracker_warning_desc">Custu agiornamentu annanghet arrastadores chi non bi fiant in sa versione installada:</string>
     <string name="title_about">Informatziones</string>
     <string name="title_account_manager">Contos</string>
     <string name="title_apps">Aplicatziones</string>
@@ -408,7 +391,6 @@
     <string name="pref_updates_check_frequency_3d">Cada 3 dies</string>
     <string name="pref_updates_check_frequency_7d">Cada 7 dies</string>
     <string name="pref_updates_check_frequency_15d">Cada 15 dies</string>
-    <string name="failed_to_fetch_report">No est istadu possìbile otènnere su raportu de riservadesa</string>
     <string name="access_denied_using_vpn">Atzessu dennegadu! Ses impreende una VPN o Tor?</string>
     <string name="bad_request">Faddina interna! Torra a proare dae inoghe a unu pagu</string>
     <string name="login_rate_limited">As barigadu su lìmite de rechestas</string>
@@ -477,9 +459,6 @@
     <string name="shizuku_installer_desc">Tenet bisòngiu de Shizuku o Sui, impostados e cun su permissu frunidu</string>
     <string name="manual_download_hint">Inserta su còdighe de sa versione chi cheres iscarrigare</string>
     <string name="manual_download_version_error">Su còdighe de sa versione podet cuntènnere petzi tzifras</string>
-    <string name="manual_download_lookup">Chirca versiones</string>
-    <string name="manual_download_select_version">Seletziona una versione</string>
-    <string name="manual_download_no_versions">Peruna versione connota agatada</string>
     <string name="manual_download_availability_warning">Unas cantas versiones podent no èssere a disponimentu pro s\'iscarrigamentu o non cumpatìbiles cun su dispositivu tuo.</string>
     <string name="faqs_subtitle">Tenes preguntas? Agata sas rispostas</string>
     <string name="source_code_title">Còdighe de orìgine</string>

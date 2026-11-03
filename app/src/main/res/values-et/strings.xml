@@ -51,7 +51,6 @@
     <string name="action_installing">Paigaldan</string>
     <string name="action_logout">Logi välja</string>
     <string name="action_next">Edasi</string>
-    <string name="action_request_analysis">Taotle uut analüüsi</string>
     <string name="action_resume">Jätka</string>
     <string name="action_uninstall">Eemalda</string>
     <string name="action_uninstall_success">Edukalt eemaldatud</string>
@@ -71,7 +70,6 @@
     <string name="details_no_permission">Lubasid pole</string>
     <string name="details_data_safety_title">Andmete ohutus</string>
     <string name="details_data_safety_subtitle">Arendaja deklareeritud andmete privaatsus- ja turvatavad</string>
-    <string name="details_privacy">Privaatsus</string>
     <string name="details_ratings">Hinnang ja arvustused</string>
     <string name="details_ratings_title_hint">Hinda rakendust</string>
     <string name="details_think_this_app">Mida arvad sellest rakendusest?</string>
@@ -121,15 +119,10 @@
     <string name="menu_disclaimer">Vastutusest loobumine</string>
     <string name="notification_channel_export">Rakenduse ekspordi teavitused</string>
     <string name="installer_service_unavailable">Paigalda Aurora teenused 1.0.9 või uuem või muuda paigaldusrakendust.</string>
-    <string name="exodus_view_report">Vaata aruannet</string>
     <string name="download_metadata">Metaandmete hankimine</string>
     <string name="download_force_clear_all">Tühjenda kõik jõuga</string>
     <string name="download_none">Allalaadimisi pole</string>
     <string name="download_paused">Peatatud • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g></string>
-    <string name="exodus_no_tracker">Ei sisalda teadaolevaid jälgijaid</string>
-    <string name="exodus_powered">Analüüsitud Exodus Privacy poolt</string>
-    <string name="exodus_progress">Jälgijate otsimine…</string>
-    <string name="exodus_substring">teadaolevat jälgijat leiti rakendusest</string>
     <string name="filter_review_four">Neli</string>
     <string name="filter_review_three">Kolm</string>
     <string name="filter_review_two">Kaks</string>
@@ -351,7 +344,6 @@
     <string name="app_links_title">Rakenduse lingid</string>
     <string name="disclaimer_subtitle">Vastutus ja kohustus</string>
     <string name="pref_updates_auto_notify">Otsi saadaolevaid uuendusi ja teavita neist</string>
-    <string name="failed_to_fetch_report">Privaatsusaruande laadimine ei õnnestunud</string>
     <string name="verifying_new_session">Uue seansi kinnitamine</string>
     <string name="source_code_title">Lähtekood</string>
     <string name="source_code_subtitle">Uuri, mis on sees</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Arendaja kinnitab, et see rakendus ei kogu kasutajate kohta andmeid.</string>
     <string name="details_data_safety_share_none">Arendaja kinnitab, et see rakendus ei jaga kasutajate andmeid muude äriühingute või organisatsioonidega.</string>
     <string name="details_data_safety_shared">Andmed, mida see rakendus võib jagada</string>
-    <string name="exodus_tracker_desc">Siiski võib selles rakenduses leiduda jälitajaid, mida pole veel Exodus Privacy andmebaasis kirjeldatud.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> teadaolev(at) jälitaja(t) leidub rakenduses <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">Kirjeldus pole saadaval</string>
     <string name="details_more_info">Lisateave</string>
     <string name="details_more_target_api">Sihtplatvorm</string>
@@ -609,19 +599,8 @@
     </plurals>
     <string name="account_exists">Kasutajakonto on juba lisatud</string>
     <string name="action_update_anyway">Uuenda ikkagi</string>
-    <string name="exodus_report_history">Versioonide ajalugu</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d jälitajat</string>
-    <string name="exodus_latest">Viimane</string>
-    <string name="pref_updates_warn_trackers">Rakenduste uuendamisel teavita uutest lisandunud jälitajatest</string>
-    <string name="manual_download_no_versions">Ühtegi teadaolevat versiooni ei leidu</string>
     <string name="manual_download_availability_warning">Mõned versioonid ei pruugi olla allalaadimiseks saadaval või ei pruugi sinu seadmega ühilduda.</string>
     <string name="details_more_certificate_hash">Sertifikaadi räsi</string>
-    <string name="pref_updates_warn_trackers_desc">Näita enne uuendamist hoiatust, kui uude versiooni on lisandunud jälitajaid, mida senises versioonis ei leidu</string>
-    <string name="tracker_warning_title">Tuvastasin uued jälitajad</string>
-    <string name="tracker_warning_desc">Selle uuendusega lisandub jälitajaid, mida paigaldatud versioonis pole:</string>
-    <string name="manual_download_lookup">Otsi versiooni</string>
-    <string name="manual_download_select_version">Vali versioon</string>
     <string name="action_free_up_space">Vabasta andmeruumi</string>
     <string name="installer_provider">%1$s · Kasutusel on %2$s</string>
     <string name="insufficient_storage_title">Ei ole piisavalt andmeruumi</string>

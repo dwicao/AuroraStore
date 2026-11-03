@@ -63,7 +63,6 @@
     <string name="download_cancel_all">Tout annuler</string>
     <string name="details_think_this_app">Que pensez-vous de cette appli ?</string>
     <string name="details_ratings">Évaluation et avis</string>
-    <string name="details_privacy">Protection des données personnelles</string>
     <string name="details_permission">Autorisation</string>
     <string name="details_paid">Payante</string>
     <string name="details_no_updates">Aucune mise à jour n’est proposée</string>
@@ -191,11 +190,6 @@
     <string name="installer_service_available">Aurora Services est disponible et prêt à être installé.</string>
     <string name="installer_root_unavailable">L’accès superutilisateur manque. Accordez-le ou changez le programme d’installation.</string>
     <string name="filter_review_all">Tout</string>
-    <string name="exodus_view_report">Afficher le rapport</string>
-    <string name="exodus_substring">tracker(s) connu(s) trouvé(s) dans</string>
-    <string name="exodus_progress">Recherche de traqueurs…</string>
-    <string name="exodus_powered">Analyse propulsée par Exodus Privacy</string>
-    <string name="exodus_no_tracker">Ne comprend aucun traqueur connu</string>
     <string name="download_speed_estimating">Estimation</string>
     <string name="download_resume_all">Tout reprendre</string>
     <string name="download_queued">En attente</string>
@@ -268,7 +262,6 @@
     <string name="title_search_suggestion">Suggestion de recherche</string>
     <string name="title_search_results">Résultats de la recherche</string>
     <string name="failed_generating_session">Échec de génération de la session. Code d’erreur : <xliff:g id="status_code">%1$d</xliff:g></string>
-    <string name="failed_to_fetch_report">Échec de récupération du relevé de confidentialité</string>
     <string name="access_denied_using_vpn">Accès refusé ! Utilisez-vous un VPN ou Tor ?</string>
     <string name="bad_request">Erreur interne ! Réessayez plus tard</string>
     <string name="login_rate_limited">Votre débit est limité</string>
@@ -300,7 +293,6 @@
     <string name="onboarding_permission_doze_desc">Autoriser Aurora Store à télécharger et à mettre à jour les applis en arrière-plan</string>
     <string name="pref_updates_auto_desc">Configurer le comportement des mises à jour automatiques</string>
     <string name="pref_updates_auto_install">Chercher les mises à jour et les installer automatiquement</string>
-    <string name="action_request_analysis">Demander une nouvelle analyse</string>
     <string name="failed_apk_export">Échec d’exportation des APK</string>
     <string name="download_clear_finished">Effacer les terminés</string>
     <string name="pref_updates_incompatible">Afficher les mises à jour susceptibles d’échouer</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Selon le développeur, cette appli ne collecte pas les données des utilisateurs.</string>
     <string name="details_data_safety_shared">Données que cette appli peut partager</string>
     <string name="details_data_safety_share_none">Selon le développeur, cette appli ne partage pas les données des utilisateurs avec d’autres entreprises ou organisations.</string>
-    <string name="exodus_tracker_desc">Cette version de l\'appli peut encore contenir d\'autres traceurs qui ne figurent pas encore dans la base de données d\'Exodus Privacy.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> traceurs connus ont été détectés dans <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">Aucune description n’est proposée</string>
     <string name="details_more_info">Plus de précisions</string>
     <string name="details_more_target_api">Cibles</string>
@@ -614,17 +604,6 @@
     </plurals>
     <string name="account_exists">Le compte est déjà ajouté</string>
     <string name="action_update_anyway">Mettre à jour quand même</string>
-    <string name="exodus_report_history">Historique des versions</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d traceurs</string>
-    <string name="exodus_latest">Dernières nouvelles</string>
-    <string name="pref_updates_warn_trackers">Signaler la présence de nouveaux traceurs dans les mises à jour d’applis</string>
-    <string name="pref_updates_warn_trackers_desc">Afficher un avertissement avant la mise à jour si la nouvelle version ajoute des traceurs absents dans la version installée</string>
-    <string name="tracker_warning_title">De nouveaux traceurs ont été détectés</string>
-    <string name="tracker_warning_desc">Cette mise à jour ajoute des traceurs absents dans la version installée :</string>
-    <string name="manual_download_lookup">Consulter les versions</string>
-    <string name="manual_download_select_version">Sélectionnez une version</string>
-    <string name="manual_download_no_versions">Aucune version connue n\'a été trouvée</string>
     <string name="manual_download_availability_warning">Certaines versions peuvent ne pas être disponibles au téléchargement ou être incompatibles avec votre appareil.</string>
     <string name="details_more_certificate_hash">Empreinte numérique du certificat</string>
     <string name="action_free_up_space">Libérer de l’espace</string>

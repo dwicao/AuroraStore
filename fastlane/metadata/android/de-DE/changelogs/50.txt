@@ -4,6 +4,5 @@
 • Die Navigationsleiste kann nur noch auf dem Hauptbildschirm geöffnet werden
 • Die Zurück-Aktion beendet die App auf bestimmten Bildschirmen jetzt ordnungsgemäß
 • Die Einstellungsschaltflächen haben im dunklen Design jetzt den richtigen Farbton
-• Der App-Name ist in der Symbolleiste für Exodus-Berichte wieder sichtbar
 • Interne Verbesserungen im Zusammenhang mit Bildern
 • Übersetzungen aktualisiert

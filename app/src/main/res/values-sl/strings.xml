@@ -69,7 +69,6 @@
     <string name="details_no_permission">Ne zahteva dovoljenj</string>
     <string name="details_paid">Plačljivo</string>
     <string name="details_permission">Dovoljenje</string>
-    <string name="details_privacy">Zasebnost</string>
     <string name="details_think_this_app">Kaj menite o tej aplikaciji\?</string>
     <string name="download_cancel_all">Prekliči vse</string>
     <string name="download_canceled">Preklicano</string>
@@ -80,11 +79,6 @@
     <string name="download_pause_all">Pavza za vse</string>
     <string name="download_queued">V čakalni vrsti</string>
     <string name="download_resume_all">Nadaljuj vse</string>
-    <string name="exodus_no_tracker">Ne vsebuje znanih sledilnikov</string>
-    <string name="exodus_powered">Omogoča Exodus Privacy</string>
-    <string name="exodus_progress">Preverjanje sledilnikov .…</string>
-    <string name="exodus_substring">zaznani sledilniki v</string>
-    <string name="exodus_view_report">Prikaži poročilo</string>
     <string name="filter_review_all">Vse</string>
     <string name="filter_review_five">Petka</string>
     <string name="filter_review_four">Štirka</string>
@@ -254,7 +248,6 @@
     <string name="notification_updates_available_1"><xliff:g id="apps_count">%1$d</xliff:g> posodobitev na voljo</string>
     <string name="notification_updates_available_desc_1">Nova različica <xliff:g id="app_one_name">%1$s</xliff:g> je na voljo</string>
     <string name="notification_updates_available_desc_2"><xliff:g id="app_one_name">%1$s</xliff:g> in <xliff:g id="app_two_name">%2$s</xliff:g></string>
-    <string name="failed_to_fetch_report">Poročila o zasebnosti ni bilo mogoče pridobiti</string>
     <string name="access_denied_using_vpn">Dostop zavrnjen! Ali uporabljate VPN ali Tor\?</string>
     <string name="server_unreachable">Strežnik nedosegljiv</string>
     <string name="failed_generating_session">Seje ni bilo mogoče ustvariti, koda napake: <xliff:g id="status_code">%1$d</xliff:g></string>
@@ -275,7 +268,6 @@
     <string name="about_wiki_summary">Poiščite odgovore na pogosto zastavljena vprašanja (F.A.Q.), korake za odpravljanje težav in več</string>
     <string name="details_no_favourites">Ni najdenih priljubljenih aplikacij</string>
     <string name="action_favourite">Priljubljeno</string>
-    <string name="action_request_analysis">Zahtevaj novo analizo</string>
     <string name="details_data_safety_title">Varnost podatkov</string>
     <string name="details_data_safety_subtitle">Zasebnost podatkov in varnostne prakse deklarirane iz strani razvijalca</string>
     <string name="action_home_screen">Dodaj na Domači zaslon</string>

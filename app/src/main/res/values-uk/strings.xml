@@ -3,11 +3,6 @@
     <string name="details_dev_website">Вебсайт</string>
     <string name="details_dev_email">Е-пошта</string>
     <string name="filter_review_all">Усі</string>
-    <string name="exodus_view_report">Переглянути звіт</string>
-    <string name="exodus_substring">відомих відстежувачів виявлено в</string>
-    <string name="exodus_progress">Перевірка на наявність відстежувачів…</string>
-    <string name="exodus_powered">На основі Exodus Privacy</string>
-    <string name="exodus_no_tracker">Не містить відомих відстежувачів</string>
     <string name="download_speed_estimating">Оцінювання</string>
     <string name="download_resume_all">Відновити всі</string>
     <string name="download_queued">У черзі</string>
@@ -23,7 +18,6 @@
     <string name="details_think_this_app">Що ви думаєте про цей застосунок\?</string>
     <string name="details_ratings">Оцінки та відгуки</string>
     <string name="details_paid">Платний</string>
-    <string name="details_privacy">Приватність</string>
     <string name="details_permission">Дозволи</string>
     <string name="details_no_updates">Немає доступних оновлень</string>
     <string name="details_no_permission">Без дозволів</string>
@@ -267,7 +261,6 @@
     <string name="pref_install_mode_shizuku">Установлювач Shizuku</string>
     <string name="title_search_suggestion">Пошукова пропозиція</string>
     <string name="title_search_results">Результати пошуку</string>
-    <string name="failed_to_fetch_report">Не вдалось отримати звіт про приватність</string>
     <string name="access_denied_using_vpn">У доступі відмовлено! Ви використовуєте VPN або Tor\?</string>
     <string name="login_rate_limited">Ви обмежені тарифом</string>
     <string name="failed_generating_session">Не вдалося створити сеанс, код помилки: <xliff:g id="status_code">%1$d</xliff:g></string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">Не оновлювати застосунки автоматично</string>
     <string name="pref_updates_auto_desc">Налаштувати поведінку автоматичних оновлень</string>
     <string name="pref_updates_auto_install">Перевіряти та встановлювати доступні оновлення автоматично</string>
-    <string name="action_request_analysis">Запросити новий аналіз</string>
     <string name="failed_apk_export">Не вдалось експортувати APK</string>
     <string name="download_clear_finished">Очистити завершені</string>
     <string name="pref_updates_incompatible">Показувати оновлення, які можуть не вдатися</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Розробник стверджує, що цей застосунок не збирає дані користувачів.</string>
     <string name="details_data_safety_shared">Дані, якими може ділитися цей застосунок</string>
     <string name="details_data_safety_share_none">Розробник стверджує, що цей застосунок не передає дані користувачів іншим компаніям чи організаціям.</string>
-    <string name="exodus_tracker_desc">Ця версія застосунку може містити більше трекерів, яких ще немає в базі даних Exodus Privacy.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> відомих трекерів знайдено в <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">Опис недоступний</string>
     <string name="details_more_info">Більше інформації</string>
     <string name="details_more_target_api">Цілі</string>
@@ -619,17 +609,6 @@
     </plurals>
     <string name="account_exists">Обліковий запис уже додано</string>
     <string name="action_update_anyway">Усе одно оновити</string>
-    <string name="exodus_report_history">Історія версій</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d відстежувачів</string>
-    <string name="exodus_latest">Останній</string>
-    <string name="pref_updates_warn_trackers">Попереджати про нові відстежувачі в оновленнях застосунків</string>
-    <string name="pref_updates_warn_trackers_desc">Показувати попередження перед оновленням, якщо нова версія додає відстежувачі, яких не було у встановленій версії</string>
-    <string name="tracker_warning_title">Виявлено нові відстежувачі</string>
-    <string name="tracker_warning_desc">Це оновлення додає відстежувачі, яких не було у встановленій версії:</string>
-    <string name="manual_download_lookup">Переглянути версії</string>
-    <string name="manual_download_select_version">Вибрати версію</string>
-    <string name="manual_download_no_versions">Відомих версій не знайдено</string>
     <string name="manual_download_availability_warning">Деякі версії можуть бути недоступними для завантаження або несумісними з вашим пристроєм.</string>
     <string name="details_more_certificate_hash">Хеш сертифіката</string>
     <string name="action_free_up_space">Звільнити простір</string>

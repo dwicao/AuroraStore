@@ -16,7 +16,6 @@
     <string name="about_xda">Forumuri XDA</string>
     <string name="action_get_local_apk">Salvează pachetul de aplicații</string>
     <string name="details_changelog">Jurnalul modificărilor</string>
-    <string name="exodus_powered">Susținut de Exodus Privacy</string>
     <string name="action_disable">Dezactivează</string>
     <string name="action_restart">Repornește</string>
     <string name="action_resume">Reia</string>
@@ -43,7 +42,6 @@
     <string name="download_queued">În așteptare</string>
     <string name="download_resume_all">Reia totul</string>
     <string name="download_speed_estimating">Estimare</string>
-    <string name="exodus_progress">Verificăm dacă există urmăritori…</string>
     <string name="filter_review_positive">Pozitiv</string>
     <string name="filter_review_three">Trei</string>
     <string name="installer_status_failure">Instalare eșuată</string>
@@ -90,8 +88,6 @@
     <string name="action_filter_gsf_dependent_apps">Dependent de GSF</string>
     <string name="action_post">Trimite</string>
     <string name="details_free">Gratuit</string>
-    <string name="exodus_substring">urmăritori cunoscuți găsiți în</string>
-    <string name="exodus_view_report">Vizualizează raportul</string>
     <string name="action_filter_misc">Diverse</string>
     <string name="action_granted">Acordat</string>
     <string name="action_ignore">Ignoră</string>
@@ -107,7 +103,6 @@
     <string name="details_beta_description">Vei vedea noi caracteristici și bug-uri înainte ca publicul să o facă. Oferă feedback dezvoltatorilor pentru a-i ajuta să devină mai buni.</string>
     <string name="details_changelog_unavailable">Jurnalul modificărilor nu este furnizat</string>
     <string name="details_dev_address">Adresă</string>
-    <string name="exodus_no_tracker">Nu conține urmăritori cunoscuți</string>
     <string name="details_contains_ads">Conține anunțuri</string>
     <string name="details_dev_details">Contact dezvoltator</string>
     <string name="details_dependencies">Dependențe</string>
@@ -123,7 +118,6 @@
     <string name="details_paid">Plătită</string>
     <string name="filter_review_four">Patru</string>
     <string name="details_permission">Permisiune</string>
-    <string name="details_privacy">Confidențialitate</string>
     <string name="details_ratings">Evaluare și recenzii</string>
     <string name="filter_review_five">Cinci</string>
     <string name="details_think_this_app">Ce părere ai despre această aplicație\?</string>
@@ -269,7 +263,6 @@
     <string name="app_language">Limba aplicației</string>
     <string name="title_search_suggestion">Sugestie de căutare</string>
     <string name="title_search_results">Rezultatul căutării</string>
-    <string name="failed_to_fetch_report">Nu s-a reușit preluarea raportului de confidențialitate</string>
     <string name="access_denied_using_vpn">Acces refuzat! Utilizezi VPN sau Tor\?</string>
     <string name="bad_request">Eroare internă! Încearcă din nou mai târziu</string>
     <string name="login_rate_limited">Ești limitat</string>
@@ -298,7 +291,6 @@
     <string name="pref_updates_auto_install">Verifică și instalează automat actualizările disponibile</string>
     <string name="pref_updates_auto_off">Nu se actualizează automat aplicațiile</string>
     <string name="pref_updates_auto_desc">Configurează comportamentul actualizărilor automate</string>
-    <string name="action_request_analysis">Solicită o nouă analiză</string>
     <string name="onboarding_permission_doze">Descărcări în fundal</string>
     <string name="onboarding_permission_doze_desc">Permite magazinului Aurora să descarce și să actualizeze aplicațiile în fundal</string>
     <string name="failed_apk_export">Fișierele APK nu au putut fi exportate</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Dezvoltatorul spune că această aplicație nu colectează datele utilizatorilor.</string>
     <string name="details_data_safety_shared">Date pe care această aplicație le poate partaja</string>
     <string name="details_data_safety_share_none">Dezvoltatorul spune că această aplicație nu partajează datele utilizatorilor altor companii sau organizații.</string>
-    <string name="exodus_tracker_desc">Această versiune a aplicației poate conține mai mulți urmăritori care nu sunt încă prezenți în baza de date a confidențialității Exodus.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> urmăritori cunoscuți găsiți în <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">Fără descriere</string>
     <string name="details_more_info">Mai multe informații</string>
     <string name="details_more_target_api">Obiective</string>
@@ -614,17 +604,6 @@
     </plurals>
     <string name="account_exists">Cont adăugat deja</string>
     <string name="action_update_anyway">Actualizare oricum</string>
-    <string name="exodus_report_history">Istoric versiune</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d urmăritori</string>
-    <string name="exodus_latest">Ultimul</string>
-    <string name="pref_updates_warn_trackers">Avertizează cu privire la noile urmăritoare în actualizările aplicațiilor</string>
-    <string name="pref_updates_warn_trackers_desc">Afișează un avertisment înainte de actualizare atunci când noua versiune adaugă urmăritoare care nu erau în versiunea instalată</string>
-    <string name="tracker_warning_title">Urmăritoare noi detectate</string>
-    <string name="tracker_warning_desc">Această actualizare adaugă urmăritoare care nu au fost în versiunea instalată:</string>
-    <string name="manual_download_lookup">Vezi versiuni</string>
-    <string name="manual_download_select_version">Alege versiunea</string>
-    <string name="manual_download_no_versions">Nu s-au găsit versiuni cunoscute</string>
     <string name="manual_download_availability_warning">Unele versiuni pot fi indisponibile pentru descărcare sau sunt incompatibile cu acest dispozitiv.</string>
     <string name="details_more_certificate_hash">Hash de certificat</string>
     <string name="action_free_up_space">Eliberează spațiu</string>

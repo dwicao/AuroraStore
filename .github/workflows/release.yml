@@ -120,11 +120,6 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build release APK
-        env:
-          # Optional: a personal Exodus API token. Empty/absent falls back to the
-          # bundled shared key (see app/build.gradle.kts); a dead bundled key only
-          # degrades the tracker-report UI, never auth or downloads.
-          EXODUS_API_KEY: ${{ secrets.EXODUS_API_KEY }}
         run: ./gradlew "assemble${{ steps.flavor.outputs.title }}Release" --stacktrace
 
       - name: Locate APK

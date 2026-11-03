@@ -87,11 +87,6 @@
     <string name="filter_review_five">Cinco</string>
     <string name="filter_review_critical">Críticas</string>
     <string name="filter_review_all">Todas</string>
-    <string name="exodus_view_report">Visualizar relatório</string>
-    <string name="exodus_substring">rastreador(es) conhecido(s) encontrado(s) em</string>
-    <string name="exodus_progress">Conferindo se há rastreadores…</string>
-    <string name="exodus_powered">Disponibilizado pelo Exodus Privacy</string>
-    <string name="exodus_no_tracker">Não contém rastreadores conhecidos</string>
     <string name="download_speed_estimating">Estimando</string>
     <string name="download_resume_all">Retomar tudo</string>
     <string name="download_queued">Em fila</string>
@@ -106,7 +101,6 @@
     <string name="download_cancel_all">Cancelar tudo</string>
     <string name="details_think_this_app">O que você acha deste app\?</string>
     <string name="details_ratings">Avaliações e comentários</string>
-    <string name="details_privacy">Privacidade</string>
     <string name="details_permission">Permissões</string>
     <string name="details_paid">Pago</string>
     <string name="details_no_updates">Não há atualizações disponíveis</string>
@@ -267,7 +261,6 @@
     <string name="spoof_property"><xliff:g id="manufacturer">%1$s</xliff:g> • API <xliff:g id="api">%2$s</xliff:g></string>
     <string name="title_search_suggestion">Sugestão de busca</string>
     <string name="title_search_results">Resultados da busca</string>
-    <string name="failed_to_fetch_report">Falha ao obter o relatório de privacidade</string>
     <string name="access_denied_using_vpn">Acesso negado! Você está usando uma VPN ou o Tor?</string>
     <string name="bad_request">Erro interno! Tente de novo mais tarde</string>
     <string name="login_rate_limited">Você foi limitado</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">Não atualizar os apps automaticamente</string>
     <string name="pref_updates_auto_desc">Configure o comportamento das atualizações automáticas</string>
     <string name="pref_updates_auto_install">Verificar se há atualizações disponíveis e instalá-las automaticamente</string>
-    <string name="action_request_analysis">Solicitar uma nova análise</string>
     <string name="failed_apk_export">Falha ao exportar APKs</string>
     <string name="pref_updates_incompatible">Mostrar atualizações que podem falhar</string>
     <string name="pref_updates_incompatible_desc">Exibir atualizações de apps incompatíveis ou desativados que podem falhar ao instalar.</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">O desenvolvedor diz que este app não coleta dados do usuário.</string>
     <string name="details_data_safety_shared">Dados que este app pode compartilhar</string>
     <string name="details_data_safety_share_none">O desenvolvedor diz que este app não compartilha dados do usuário com outras empresas ou organizações.</string>
-    <string name="exodus_tracker_desc">Esta versão do app ainda pode conter mais rastreadores não presentes ainda no banco de dados do Exodus Privacy.</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> rastreador(es) conhecidos encontrados na <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="no_description">Nenhuma descrição disponível</string>
     <string name="details_more_info">Mais informações</string>
     <string name="details_more_target_api">Alvos</string>
@@ -614,17 +604,6 @@
     <string name="account_remove_message">Remover %1$s da Aurora Store?</string>
     <string name="account_exists">A conta já foi adicionada</string>
     <string name="action_update_anyway">Atualizar mesmo assim</string>
-    <string name="exodus_report_history">Histórico de versões</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d rastreadores</string>
-    <string name="exodus_latest">Mais recente</string>
-    <string name="pref_updates_warn_trackers">Avisar sobre novos rastreadores em atualizações de apps</string>
-    <string name="pref_updates_warn_trackers_desc">Exibir aviso antes de atualizar quando a nova versão adiciona rastreadores que não estavam na versão instalada</string>
-    <string name="tracker_warning_title">Novos rastreadores detectados</string>
-    <string name="tracker_warning_desc">Esta atualização adiciona rastreadores que não estavam na versão instalada:</string>
-    <string name="manual_download_lookup">Buscar versões</string>
-    <string name="manual_download_select_version">Selecione uma versão</string>
-    <string name="manual_download_no_versions">Nenhuma versão conhecida encontrada</string>
     <string name="manual_download_availability_warning">Algumas versões podem estar indisponíveis para baixar ou ser incompatíveis com seu dispositivo.</string>
     <string name="details_more_certificate_hash">Hash do certificado</string>
     <string name="action_free_up_space">Libere espaço</string>

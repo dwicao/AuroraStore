@@ -104,16 +104,13 @@
     <string name="installer_status_failure_storage">Недостатъчно място в паметта</string>
     <string name="onboarding_permission_installer_desc">Разрешете инсталирането на приложения от Aurora Store</string>
     <string name="pref_common_extra">Екстри</string>
-    <string name="details_privacy">Поверителност</string>
     <string name="download_cancel_all">Отмени всички</string>
     <string name="action_search">Търси</string>
     <string name="details_beta_delay">Записването може да отнеме известно време, можете да проверите състоянието по-късно.</string>
     <string name="details_dev_address">Адрес</string>
     <string name="details_permission">разрешение</string>
     <string name="tab_editor_choice">Избор на редакторите</string>
-    <string name="exodus_substring">тракер(и), намерени в</string>
     <string name="download_pause_all">Пауза на всички</string>
-    <string name="exodus_no_tracker">Не съдържа тракери</string>
     <string name="details_changelog">Списък на промените</string>
     <string name="action_leave">Напускане</string>
     <string name="action_pending">В очакване</string>
@@ -130,8 +127,6 @@
     <string name="details_no_app_match">Не е намерено съответствие на приложението</string>
     <string name="download_eta_calculating">Изчисляване</string>
     <string name="download_paused">На пауза • <xliff:g id="completed_downloads">%1$d</xliff:g> / <xliff:g id="all_downloads">%2$d</xliff:g></string>
-    <string name="exodus_powered">Осъществено от Exodus</string>
-    <string name="exodus_progress">Проверява се за тракери…</string>
     <string name="pref_filter_fdroid_summary">Премахва приложенията на F-Droid от списъците с приложения</string>
     <string name="pref_install_mode_am">AM инсталатор.</string>
     <string name="pref_install_mode_root">Root инсталатор</string>
@@ -218,7 +213,6 @@
     <string name="installer_service_misconfigured">Първо настройте услугите на Aurora и дайте всички разрешения.</string>
     <string name="details_dependencies">Зависимости</string>
     <string name="download_canceled">Отменен</string>
-    <string name="exodus_view_report">Вижте отчета</string>
     <string name="installer_service_unavailable">Инсталирайте Aurora services 1.0.9 или по-нова или променете инсталатора.</string>
     <string name="installer_service_available">Услугите на Aurora са налични и готови за инсталиране.</string>
     <string name="installer_status_failure_blocked">Инсталацията беше блокирана</string>
@@ -263,7 +257,6 @@
     <string name="action_uninstall_success">Успешно деинсталиране</string>
     <string name="about_wiki_summary">Намери отговори на често задавани въпроси, стъпки за отстраняване на грешки и още</string>
     <string name="action_remove_all">Премахни всички</string>
-    <string name="action_request_analysis">Поискаи нов анализ</string>
     <string name="action_select_all">Избери всички</string>
     <string name="details_no_favourites">Не са намерени любими приложения</string>
     <string name="details_data_safety_collect">Данни, които това приложение може да събира</string>
@@ -273,7 +266,6 @@
     <string name="download_eta_hrs">%1$dч %2$dм %3$dс остават</string>
     <string name="download_eta_min">%1$dм %2$dс остават</string>
     <string name="download_eta_sec">%1$dс остават</string>
-    <string name="exodus_report_trackers"><xliff:g id="number_of_trackers">%1$d</xliff:g> тракер(и) намерени в <xliff:g id="app_version_name">%2$s</xliff:g></string>
     <string name="filter_latest">Най-нови</string>
     <string name="installer_microg_misconfigured">Грешка при инсталирането на MicroG, най-вероятно поради грешка в конфигурацията.</string>
 </resources>

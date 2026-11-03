@@ -46,7 +46,6 @@
     <string name="toast_apk_blacklisted">بلیک لسٹ</string>
     <string name="search_hint">ایپس اور کھیلوں کی تلاش کریں</string>
     <string name="requesting_new_session">نئے سیشن کی درخواست کرنا</string>
-    <string name="failed_to_fetch_report">رازداری کی رپورٹ لانے میں ناکام</string>
     <string name="access_denied_using_vpn">رسائی سے انکار! کیا آپ وی پی این یا ٹور استعمال کر رہے ہیں؟</string>
     <string name="pref_ui_layout_tab">ڈیفالٹ ٹیب منتخب کریں</string>
     <string name="app_links_title">ایپ لنکس</string>
@@ -106,7 +105,6 @@
     <string name="action_leave">چھوڑ دو</string>
     <string name="action_logout">لاگ آؤٹ</string>
     <string name="action_next">اگلا</string>
-    <string name="action_request_analysis">نئے تجزیہ کی درخواست کریں</string>
     <string name="action_ok">ٹھیک ہے</string>
     <string name="action_open">کھلا</string>
     <string name="action_pending">زیر التوا</string>
@@ -145,7 +143,6 @@
     <string name="details_paid">ادا</string>
     <string name="details_permission">اجازت</string>
     <string name="details_data_safety_title">ڈیٹا سیفٹی</string>
-    <string name="details_privacy">رازداری</string>
     <string name="details_data_safety_subtitle">ڈیٹا کی رازداری اور سیکیورٹی کے طریقوں کو ڈویلپر کے ذریعہ اعلان کیا گیا ہے</string>
     <string name="details_ratings">درجہ بندی اور جائزے</string>
     <string name="details_ratings_title_hint">جائزہ عنوان</string>
@@ -165,13 +162,8 @@
     <string name="download_progress"><xliff:g id="completed_downloads">%1$d</xliff:g> <xliff:g id="all_downloads">%2$d</xliff:g> <xliff:g id="speed">%3$s</xliff:g>ڈاؤن لوڈ کرنا • / •</string>
     <string name="download_queued">قطار</string>
     <string name="download_speed_estimating">تخمینہ لگانا</string>
-    <string name="exodus_no_tracker">کوئی معلوم ٹریکر نہیں ہے</string>
-    <string name="exodus_powered">خروج کی رازداری کے ذریعہ تقویت یافتہ</string>
-    <string name="exodus_progress">ٹریکروں کی جانچ پڑتال…</string>
     <string name="filter_review_all">سب</string>
     <string name="filter_latest">تازہ ترین</string>
-    <string name="exodus_substring">معلوم ٹریکر (زبانیں) میں پائے گئے</string>
-    <string name="exodus_view_report">رپورٹ دیکھیں</string>
     <string name="filter_review_critical">تنقیدی</string>
     <string name="filter_review_five">پانچ</string>
     <string name="filter_review_four">چار</string>

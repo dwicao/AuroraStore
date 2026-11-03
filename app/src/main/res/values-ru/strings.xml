@@ -71,11 +71,6 @@
     <string name="filter_review_four">Четыре</string>
     <string name="filter_review_five">Пять</string>
     <string name="filter_review_all">Все</string>
-    <string name="exodus_view_report">Посмотреть отчет</string>
-    <string name="exodus_substring">найдены известные трекеры</string>
-    <string name="exodus_progress">Проверка трекеров…</string>
-    <string name="exodus_powered">При поддержке Exodus Privacy</string>
-    <string name="exodus_no_tracker">Не содержит известных трекеров</string>
     <string name="download_speed_estimating">Оценка</string>
     <string name="download_pause_all">Приостановить все</string>
     <string name="download_resume_all">Продолжить все</string>
@@ -90,7 +85,6 @@
     <string name="download_cancel_all">Отменить все</string>
     <string name="details_think_this_app">Что вы думаете об этом приложении\?</string>
     <string name="details_ratings">Рейтинг и отзывы</string>
-    <string name="details_privacy">Конфиденциальность</string>
     <string name="details_permission">Разрешение</string>
     <string name="details_paid">Платное</string>
     <string name="details_no_updates">Нет доступных обновлений</string>
@@ -271,7 +265,6 @@
     <string name="login_rate_limited">Слишком много попыток входа</string>
     <string name="server_unreachable">Сервер недоступен</string>
     <string name="failed_generating_session">Не удалось создать сессию, код ошибки: <xliff:g id="status_code">%1$d</xliff:g></string>
-    <string name="failed_to_fetch_report">Не удалось получить отчет о конфиденциальности</string>
     <string name="access_denied_using_vpn">Доступ запрещен! Вы используете VPN или Tor\?</string>
     <string name="check_connectivity">Проверьте соединение с интернетом</string>
     <string name="app_language">Язык приложения</string>
@@ -300,7 +293,6 @@
     <string name="pref_updates_auto_off">Не обновлять приложения автоматически</string>
     <string name="pref_updates_auto_desc">Настройка поведения автоматических обновлений</string>
     <string name="pref_updates_auto_install">Проверять доступные обновления и устанавливать их автоматически</string>
-    <string name="action_request_analysis">Запросить новый анализ</string>
     <string name="failed_apk_export">Не удалось экспортировать APK-файлы</string>
     <string name="download_clear_finished">Очистить завершенные</string>
     <string name="pref_updates_incompatible">Показывать обновления которые могут не сработать</string>
@@ -444,8 +436,6 @@
     <string name="details_data_safety_collect_none">Разработчик утверждает, что это приложение не собирает данные пользователей.</string>
     <string name="details_data_safety_shared">Данные, которые может передавать это приложение</string>
     <string name="details_data_safety_share_none">Разработчик утверждает, что это приложение не передает данные пользователей другим компаниям или организациям.</string>
-    <string name="exodus_tracker_desc">Эта версия приложения может содержать дополнительные трекеры, которые еще не внесены в базу данных Exodus Privacy.</string>
-    <string name="exodus_report_trackers">Известных трекеров, найденных в <xliff:g id="app_version_name">%2$s</xliff:g>: <xliff:g id="number_of_trackers">%1$d</xliff:g></string>
     <string name="no_description">Описание отсутствует</string>
     <string name="details_more_info">Дополнительная информация</string>
     <string name="details_more_target_api">Цели</string>
@@ -617,19 +607,8 @@
         <item quantity="many">Не удалось обновить %1$d аккаунтов</item>
         <item quantity="other">Не удалось обновить %1$d аккаунтов</item>
     </plurals>
-    <string name="exodus_report_history">История версий</string>
-    <string name="exodus_history_version">%1$s (%2$s)</string>
-    <string name="exodus_history_subtitle">%1$s • %2$d трекеров</string>
-    <string name="exodus_latest">Последний</string>
     <string name="account_exists">Аккаунт уже добавлен</string>
     <string name="action_update_anyway">Все равно обновить</string>
-    <string name="pref_updates_warn_trackers">Предупреждать о появлении трекеров в обновлениях приложений</string>
-    <string name="pref_updates_warn_trackers_desc">Перед обновлением отображать предупреждение, если в новую версию добавлены трекеры, которых не было в установленной версии</string>
-    <string name="tracker_warning_title">Обнаружены новые трекеры</string>
-    <string name="tracker_warning_desc">В это обновление добавлены трекеры, которых не было в установленной версии:</string>
-    <string name="manual_download_lookup">Посмотреть версии</string>
-    <string name="manual_download_select_version">Выбрать версию</string>
-    <string name="manual_download_no_versions">Известных версий не найдено</string>
     <string name="manual_download_availability_warning">Некоторые версии могут быть недоступны для скачивания или несовместимы с вашим устройством.</string>
     <string name="details_more_certificate_hash">Хэш сертификата</string>
     <string name="action_free_up_space">Освободить место</string>
