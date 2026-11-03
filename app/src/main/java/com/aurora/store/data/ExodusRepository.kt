@@ -59,6 +59,11 @@ class ExodusRepository @Inject constructor(
         // errors are permanent and never retried.
         private const val MAX_RETRIES = 3
         private const val RETRY_BASE_DELAY_MS = 1000L
+
+        /** Sentinel id for device-scanned reports (server ids are >= 1, -1 is progress). */
+        const val LOCAL_SCAN_REPORT_ID = -2
+
+        private const val MAX_CACHED_SCANS = 64
     }
 
     private val authHeaders: Map<String, String>
@@ -256,7 +261,7 @@ class ExodusRepository @Inject constructor(
         )
     }
 
-    private fun localApkFiles(packageName: String, versionCode: Long): List<File> {
+    private suspend fun localApkFiles(packageName: String, versionCode: Long): List<File> {
         // A downloaded copy of this exact version wins: it is the build the user is
         // about to install, while the installed copy may be older.
         val download = runCatching { downloadDao.getDownload(packageName) }.getOrNull()
@@ -281,13 +286,6 @@ class ExodusRepository @Inject constructor(
             return paths.map(::File).filter { it.isFile }
         }
         return emptyList()
-    }
-
-    companion object {
-        /** Sentinel id for device-scanned reports (server ids are >= 1, -1 is progress). */
-        const val LOCAL_SCAN_REPORT_ID = -2
-
-        private const val MAX_CACHED_SCANS = 64
     }
 
     private data class ScanKey(
