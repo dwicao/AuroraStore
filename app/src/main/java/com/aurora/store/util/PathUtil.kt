@@ -143,6 +143,12 @@ object PathUtil {
         "${packageName}_$versionCode.apks"
     )
 
+    /**
+     * The in-progress sidecar a transfer streams into; resume continues from its
+     * length. Everyone probing partials must use this so the name can't drift.
+     */
+    fun getPartialFile(target: File): File = File(target.absolutePath + ".tmp")
+
     fun getObbDownloadDir(packageName: String): File =
         File(Environment.getExternalStorageDirectory(), "/Android/obb/$packageName")
 

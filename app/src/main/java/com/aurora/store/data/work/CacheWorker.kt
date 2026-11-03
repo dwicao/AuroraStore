@@ -67,13 +67,17 @@ class CacheWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         Log.i(TAG, "Cleaning cache")
 
-        // Files for downloads that are still in-flight or downloaded & awaiting install
-        // must be protected from the age-based purge, otherwise a download the user hasn't
-        // installed yet (e.g. they missed the system prompt) would lose its files and have
-        // to be re-downloaded. Keyed by packageName -> versionCode.
+        // Files for downloads that are still in-flight, paused, or downloaded & awaiting
+        // install must be protected from the age-based purge, otherwise a download the
+        // user hasn't installed yet (e.g. they missed the system prompt) — or one they
+        // deliberately paused — would lose its files and have to be re-downloaded.
+        // Keyed by packageName -> versionCode.
         val protectedVersions = runCatching {
             downloadDao.downloads().first()
-                .filter { it.isActive || it.status == DownloadStatus.COMPLETED }
+                .filter {
+                    it.isActive || it.status == DownloadStatus.PAUSED ||
+                        it.status == DownloadStatus.COMPLETED
+                }
                 .map { it.packageName to it.versionCode }
                 .toSet()
         }.getOrDefault(emptySet())

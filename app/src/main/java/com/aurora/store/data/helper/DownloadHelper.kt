@@ -364,7 +364,10 @@ class DownloadHelper @Inject constructor(
     }
 
     /**
-     * Resumes a paused download from its partial files. No-op unless paused.
+     * Resumes a paused download from its partial files. Seeds the displayed progress
+     * from bytes already on disk first, so the row shows the real percentage instead
+     * of flashing 0% — transfer() resumes from these same partials, so it is truthful.
+     * No-op unless paused.
      * @param packageName Name of the package to resume
      */
     suspend fun resumeDownload(packageName: String) {
@@ -374,6 +377,20 @@ class DownloadHelper @Inject constructor(
             return
         }
         Log.i(TAG, "Resuming download for $packageName")
+        val onDisk = (existing.fileList + existing.sharedLibs.flatMap { it.fileList })
+            .sumOf { gFile ->
+                val local = PathUtil.getLocalFile(context, gFile, existing)
+                val partial = PathUtil.getPartialFile(local)
+                when {
+                    partial.exists() -> partial.length()
+                    local.exists() -> local.length()
+                    else -> 0L
+                }
+            }
+        if (existing.size > 0) {
+            val progress = ((onDisk * 100) / existing.size).toInt().coerceIn(0, 99)
+            downloadDao.updateProgress(packageName, progress, 0, 0)
+        }
         downloadDao.updateStatus(packageName, DownloadStatus.QUEUED)
     }
 

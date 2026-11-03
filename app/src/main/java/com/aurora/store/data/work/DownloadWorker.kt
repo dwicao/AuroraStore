@@ -365,6 +365,10 @@ class DownloadWorker @AssistedInject constructor(
             return onFailure(VerificationFailedException())
         }
 
+        // A pause that landed during the (uncancellable) verify/hash pass must not fall
+        // through to install: stop here and keep the verified files for the resume.
+        if (isPausedByUser()) return onFailure(DownloadCancelledException())
+
         Log.i(TAG, "Finished downloading & verifying ${download.packageName}")
         notifyStatus(DownloadStatus.COMPLETED)
 
@@ -872,7 +876,7 @@ class DownloadWorker @AssistedInject constructor(
         withContext(Dispatchers.IO) {
             try {
                 // Download as a temporary file to avoid installing corrupted files
-                val tmpFile = File(file.absolutePath + ".tmp")
+                val tmpFile = PathUtil.getPartialFile(file)
                 if (fromScratch) tmpFile.delete()
                 val existingBytes = if (tmpFile.exists()) tmpFile.length() else 0L
 
@@ -1032,6 +1036,13 @@ class DownloadWorker @AssistedInject constructor(
         isProgress: Boolean = false,
         message: String? = null
     ) {
+        // A pause that landed mid-flight wins over any in-flight status write: the
+        // worker may drain one more chunk after pauseDownload() set PAUSED but before
+        // the cancellation stops it. Letting that write through would resurrect the row
+        // as DOWNLOADING (wedging the serial queue on a dead worker) or let onFailure
+        // record CANCELLED and purge the partials — the "resume restarts at 0%" bug.
+        if (status != DownloadStatus.PAUSED && isPausedByUser()) return
+
         // Update status in database
         download.status = status
         downloadDao.updateStatus(download.packageName, status)
