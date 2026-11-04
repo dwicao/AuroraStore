@@ -1,12 +1,12 @@
 {
-  "version_name": "4.8.16",
-  "version_code": "81",
-  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.16/app-vanilla-release.apk",
+  "version_name": "4.8.17",
+  "version_code": "82",
+  "download_url": "https://github.com/dwicao/AuroraStore/releases/download/v4.8.17/app-vanilla-release.apk",
   "icon_url": "",
   "sha1": "",
-  "sha256": "e4e4cc73c1abe26c4e7d1a13866dcc39cede8fcfff7e8e42e753c418b647d9df",
-  "changelog": "**Full Changelog**: https://github.com/dwicao/AuroraStore/compare/v4.8.15...v4.8.16",
-  "size": "10146676",
+  "sha256": "a2265596f11564946e3905b3322513c0b186d9da2fc21af2360295a6ee777671",
+  "changelog": "**Full Changelog**: https://github.com/dwicao/AuroraStore/compare/v4.8.16...v4.8.17",
+  "size": "10061578",
   "last_commit": "",
   "updated_on": "",
   "timestamp": "0"
