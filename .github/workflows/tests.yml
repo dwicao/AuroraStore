@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: 2026 Aurora OSS
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# JVM unit tests on every master push (and on demand). These are offline, deterministic
+# tests of in-repo logic — the Play-error taxonomy, the dispenser health policy, the
+# self-update feed parser, the proxy parsers — so they gate merges, not upstream health.
+# Upstream breakage (Play API / dispensers) is watched by nightly-health.yml instead.
+#
+# The build cache from actions/setup-java keeps repeat runs fast. This workflow is the
+# fork's only push-triggered check, so keep it green before tagging a release.
+
+name: Unit tests
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # No tags needed: the version-name fallback in app/build.gradle.kts covers
+          # tagless builds, and the tests don't assert it.
+          fetch-depth: 1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          # Accepts all licenses; AGP auto-downloads whatever else the build needs
+          # (platform android-37, build-tools) during the Gradle run.
+          packages: 'platform-tools'
+
+      - name: Run JVM unit tests
+        run: |
+          chmod +x gradlew
+          ./gradlew testVanillaDebugUnitTest --stacktrace
+
+      - name: Upload test reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: app/build/reports/tests/

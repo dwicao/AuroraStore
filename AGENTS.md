@@ -19,7 +19,7 @@ All CI jobs use these exact invocations:
 ```bash
 ./gradlew assembleVanillaDebug          # debug build (GitLab CI build stage)
 ./gradlew ktlintCheck                   # lint (GitLab CI lint stage)
-./gradlew testVanillaDebugUnitTest      # JVM unit tests (GitHub nightly-health)
+./gradlew testVanillaDebugUnitTest      # JVM unit tests (GitHub tests.yml, on master push)
 ./gradlew assembleVanillaRelease        # release APK (needs signing.properties, else unsigned)
 ```
 
@@ -169,7 +169,8 @@ data layer → gplayapi / Room / WorkManager.
     push the tag. Secrets: `ANDROID_KEYSTORE_BASE64`, `KEY_ALIAS`,
     `KEY_PASSWORD` (builds unsigned without them).
   - `nightly-health.yml` — daily probes (default dispenser, Play
-    reachability), gplayapi-freshness check (warning only), unit tests.
+    reachability), gplayapi-freshness check (warning only). Fast; no build.
+  - `tests.yml` — JVM unit tests on every master push + manual dispatch.
   - `bootstrap-verification.yml` — regenerates dependency verification
     metadata (manual dispatch).
 

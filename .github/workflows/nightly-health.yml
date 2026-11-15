@@ -6,11 +6,11 @@
 #
 # - Probes the default dispenser and Play reachability over plain HTTPS (no build).
 # - Checks whether the pinned gplayapi is behind Maven Central (warning only).
-# - Runs the JVM unit tests, which cover the Play-error taxonomy mapping and the
-#   dispenser health policy — the seams that have to hold when upstream changes.
 #
 # A red probes job is the signal to look at Play/gplayapi before users report breakage.
-# The full release pipeline (build + sign + publish) lives in release.yml.
+# The full release pipeline (build + sign + publish) lives in release.yml. The JVM unit
+# tests cannot detect either failure mode (they are offline and deterministic), so they
+# run on every master push via tests.yml instead — this workflow stays a fast probe.
 
 name: Nightly health
 
@@ -85,36 +85,3 @@ jobs:
             echo "::warning::gplayapi $LATEST available (repo pins $PINNED) — review the diff before bumping"
           fi
           exit 0
-
-  unit-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-          cache: gradle
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          # Accepts all licenses; AGP auto-downloads whatever else the build needs.
-          packages: 'platform-tools'
-
-      - name: Run JVM unit tests
-        run: |
-          chmod +x gradlew
-          ./gradlew testVanillaDebugUnitTest --stacktrace
-
-      - name: Upload test reports on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-test-reports
-          path: app/build/reports/tests/

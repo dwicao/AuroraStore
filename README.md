@@ -119,9 +119,9 @@ and security. Upstream behavior is unchanged everywhere else.
 - **CI.** `.github/workflows/release.yml` builds a signed release APK,
   attaches it to the GitHub Release on `v*` tags and refreshes `updates.json`
   from the published artifacts;
-  `.github/workflows/nightly-health.yml` runs daily dispenser/Play probes, a
-  gplayapi freshness check, and the JVM unit tests as an early warning for
-  upstream breakage.
+  `.github/workflows/nightly-health.yml` runs fast daily dispenser/Play probes
+  and a gplayapi freshness check as an early warning for upstream breakage,
+  and `.github/workflows/tests.yml` runs the JVM unit tests on every master push.
 - **Migration integrity & tests.** Room migrations now fail loudly (transaction
   rolled back and an `IllegalStateException` thrown so startup aborts with the
   cause attached) instead of logging and limping on with a half-migrated
