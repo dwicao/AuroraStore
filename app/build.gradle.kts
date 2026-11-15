@@ -29,15 +29,15 @@ val lastCommitTimestamp = providers.exec {
 /**
  * The in-app version follows the fork's release tags (v4.8.15 -> "4.8.15") instead of
  * a hardcoded upstream version, so the app, the Updates screen and the self-update
- * feed never disagree about what is installed. Falls back to the last known version
+ * feed never disagree about what is installed. Falls back to the last release
  * when git tags are unavailable (e.g. shallow/local builds without tags).
  */
 val appVersionName: String = try {
     providers.exec {
         commandLine("git", "describe", "--tags", "--abbrev=0", "--match", "v*")
-    }.standardOutput.asText.get().trim().removePrefix("v").ifBlank { "4.8.4" }
+    }.standardOutput.asText.get().trim().removePrefix("v").ifBlank { "4.8.17" }
 } catch (_: Exception) {
-    "4.8.4"
+    "4.8.17"
 }
 
 java {
@@ -167,6 +167,10 @@ configure<ApplicationExtension> {
         compose = true
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     lint {
         lintConfig = file("lint.xml")
     }
@@ -215,7 +219,6 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.navigation3)
-    implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.paging.runtime)
@@ -232,7 +235,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)

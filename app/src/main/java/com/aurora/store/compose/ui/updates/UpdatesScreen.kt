@@ -170,7 +170,11 @@ fun UpdatesScreen(
                             SectionHeader(
                                 title = title,
                                 trailing = {
-                                    Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            dimensionResource(R.dimen.spacing_small)
+                                        )
+                                    ) {
                                         if (mainAnyPausable) {
                                             TextButton(onClick = onPauseAll) {
                                                 Text(stringResource(R.string.download_pause_all))
@@ -212,7 +216,11 @@ fun UpdatesScreen(
                                 title = stringResource(R.string.updates_approval_header),
                                 subtitle = stringResource(R.string.updates_approval_desc),
                                 trailing = {
-                                    Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            dimensionResource(R.dimen.spacing_small)
+                                        )
+                                    ) {
                                         if (approvalAnyPausable) {
                                             TextButton(onClick = onPauseAll) {
                                                 Text(stringResource(R.string.download_pause_all))

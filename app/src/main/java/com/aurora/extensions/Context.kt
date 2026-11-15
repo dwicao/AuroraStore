@@ -121,9 +121,14 @@ fun Context.getEmptyActivityBundle(): Bundle? = ActivityOptionsCompat.makeCustom
     android.R.anim.fade_out
 ).toBundle()
 
-fun Context.copyToClipBoard(data: String?) {
+/**
+ * Copies [data] to the clipboard. [label] is the human-readable description Android shows in
+ * the clipboard preview/notification — pass something meaningful for what's being copied
+ * (URL, certificate hash, error report, …) instead of a generic label.
+ */
+fun Context.copyToClipBoard(data: String?, label: String = "Aurora Store") {
     val clipboard = getSystemService<ClipboardManager>()
-    val clip = ClipData.newPlainText("Download Url", data)
+    val clip = ClipData.newPlainText(label, data)
     clipboard?.setPrimaryClip(clip)
 }
 

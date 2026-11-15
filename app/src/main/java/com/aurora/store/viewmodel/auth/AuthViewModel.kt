@@ -15,9 +15,7 @@ import com.aurora.Constants
 import com.aurora.extensions.TAG
 import com.aurora.gplayapi.session.AuthenticatedSession
 import com.aurora.gplayapi.session.TokenType
-import com.aurora.store.AuroraApp
 import com.aurora.store.R
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.model.AccountType
 import com.aurora.store.data.model.AuthState
 import com.aurora.store.data.providers.AccountProvider
@@ -60,6 +58,14 @@ class AuthViewModel @Inject constructor(
     private val _accountAdded = MutableSharedFlow<String?>()
     val accountAdded = _accountAdded.asSharedFlow()
 
+    /**
+     * One-shot result of the embedded WebView Google login. Delivered on a view-model-scoped
+     * flow so the minted AAS token never travels the process-wide event bus, where every
+     * collector in the app (and its replay buffer) could read it.
+     */
+    private val _googleLogin = MutableSharedFlow<GoogleLoginResult>(extraBufferCapacity = 1)
+    val googleLogin = _googleLogin.asSharedFlow()
+
     private var sessionChecked = false
 
     /**
@@ -73,6 +79,7 @@ class AuthViewModel @Inject constructor(
     companion object {
         /** Upper bound for any single session validation/mint. OkHttp already times out at 25s. */
         private const val SESSION_TIMEOUT_MS = 35_000L
+
         /** Longer bound for the microG path, which may show user consent UI. */
         private const val MICROG_TIMEOUT_MS = 120_000L
     }
@@ -210,7 +217,9 @@ class AuthViewModel @Inject constructor(
             } catch (exception: Exception) {
                 Log.e(TAG, "Failed to generate Session", exception)
                 val message = when {
-                    exception is UnknownHostException -> context.getString(R.string.check_connectivity)
+                    exception is UnknownHostException -> context.getString(
+                        R.string.check_connectivity
+                    )
                     isDispenserMisconfigured(exception) -> context.getString(
                         R.string.dispensers_not_configured
                     )
@@ -232,24 +241,26 @@ class AuthViewModel @Inject constructor(
                         val accountEmail = response["Email"]?.takeIf { it.isNotBlank() } ?: email
                         AuthPrefs.putString(context, Constants.ACCOUNT_EMAIL_PLAIN, accountEmail)
                         AuthPrefs.putString(context, Constants.ACCOUNT_AAS_PLAIN, aasToken)
-                        AuroraApp.events.send(
-                            AuthEvent.GoogleLogin(true, accountEmail, aasToken)
+                        _googleLogin.tryEmit(
+                            GoogleLoginResult(
+                                success = true,
+                                email = accountEmail,
+                                token = aasToken
+                            )
                         )
                     } else {
                         AuthPrefs.putString(context, Constants.ACCOUNT_EMAIL_PLAIN, "")
                         AuthPrefs.putString(context, Constants.ACCOUNT_AAS_PLAIN, "")
-                        AuroraApp.events.send(AuthEvent.GoogleLogin(false, "", ""))
+                        _googleLogin.tryEmit(GoogleLoginResult(success = false))
                     }
                 } else {
-                    AuroraApp.events.send(AuthEvent.GoogleLogin(false, "", ""))
+                    _googleLogin.tryEmit(GoogleLoginResult(success = false))
                 }
             } catch (exception: Exception) {
                 Log.e(TAG, "Failed to build AuthData", exception)
-                AuroraApp.events.send(
-                    AuthEvent.GoogleLogin(
+                _googleLogin.tryEmit(
+                    GoogleLoginResult(
                         success = false,
-                        email = "",
-                        token = "",
                         error = googleLoginError(exception, R.string.toast_aas_token_failed)
                     )
                 )
@@ -286,10 +297,13 @@ class AuthViewModel @Inject constructor(
     private fun updateAuthState(force: Boolean = false) {
         // Guard against overlapping checks, but allow a forced retry to break out of a
         // hung Fetching/Verifying/Pending state (retry() cancels authJob first).
-        if (!force && (_authState.value == AuthState.Fetching ||
-                _authState.value == AuthState.Verifying ||
-                _authState.value is AuthState.PendingAccountManager ||
-                _authState.value == AuthState.Available)
+        if (!force &&
+            (
+                _authState.value == AuthState.Fetching ||
+                    _authState.value == AuthState.Verifying ||
+                    _authState.value is AuthState.PendingAccountManager ||
+                    _authState.value == AuthState.Available
+                )
         ) {
             return
         }
@@ -355,7 +369,9 @@ class AuthViewModel @Inject constructor(
                 _authState.value = AuthState.Failed(context.getString(R.string.session_timeout))
             } catch (exception: Exception) {
                 val error = when {
-                    exception is UnknownHostException -> context.getString(R.string.title_no_network)
+                    exception is UnknownHostException -> context.getString(
+                        R.string.title_no_network
+                    )
                     exception is IOException -> context.getString(R.string.server_unreachable)
                     isDispenserMisconfigured(exception) -> context.getString(
                         R.string.dispensers_not_configured
@@ -411,3 +427,14 @@ class AuthViewModel @Inject constructor(
         }
     }
 }
+
+/**
+ * One-shot result of the embedded WebView Google login. Delivered on the view-model-scoped
+ * [AuthViewModel.googleLogin] flow so the AAS token never travels the process-wide event bus.
+ */
+data class GoogleLoginResult(
+    val success: Boolean,
+    val email: String = "",
+    val token: String = "",
+    val error: String? = null
+)

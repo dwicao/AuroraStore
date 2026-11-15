@@ -96,7 +96,10 @@ fun InstallErrorSheet(
             ) {
                 TextButton(
                     onClick = {
-                        context.copyToClipBoard(listOfNotNull(error, extra).joinToString("\n\n"))
+                        context.copyToClipBoard(
+                            listOfNotNull(error, extra).joinToString("\n\n"),
+                            "Error report"
+                        )
                         context.toast(R.string.toast_clipboard_copied)
                     }
                 ) {

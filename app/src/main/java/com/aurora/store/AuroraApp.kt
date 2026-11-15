@@ -11,6 +11,7 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.util.Log.DEBUG
 import android.util.Log.INFO
 import androidx.compose.material3.ComposeMaterial3Flags
@@ -21,6 +22,7 @@ import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
+import com.aurora.extensions.TAG
 import com.aurora.extensions.setAppTheme
 import com.aurora.store.data.event.EventFlow
 import com.aurora.store.data.helper.DownloadHelper
@@ -33,8 +35,12 @@ import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.Preferences
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import rikka.shizuku.Shizuku
@@ -61,10 +67,19 @@ class AuroraApp : Application(), Configuration.Provider, SingletonImageLoader.Fa
             .build()
 
     companion object {
-        var scope = MainScope()
+        // Supervised + a last-resort exception handler so an uncaught failure inside one of the
+        // fire-and-forget scopes (e.g. Shizuku binder callbacks) logs instead of crashing the app.
+        var scope = CoroutineScope(
+            SupervisorJob() +
+                Dispatchers.Main.immediate +
+                CoroutineExceptionHandler { _, throwable ->
+                    Log.e(TAG, "Uncaught exception in app scope", throwable)
+                }
+        )
             private set
 
-        val enqueuedInstalls: MutableSet<String> = mutableSetOf()
+        // Mutated from binder callbacks, receiver posts and service callbacks: needs to be safe.
+        val enqueuedInstalls: MutableSet<String> = ConcurrentHashMap.newKeySet()
         val events = EventFlow()
 
         private var startedActivities = 0

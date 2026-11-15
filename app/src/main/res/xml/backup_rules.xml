@@ -16,6 +16,18 @@
         <exclude
             domain="sharedpref"
             path="auth_prefs.xml" />
+        <!-- The account table stores the same tokens (aasToken/authToken/authDataJson)
+             as auth_prefs.xml; the DB is not encrypted at rest, so it must not ride
+             along in a backup either (it subsumes the auth_prefs exclusions). -->
+        <exclude
+            domain="database"
+            path="aurora_database" />
+        <exclude
+            domain="database"
+            path="aurora_database-wal" />
+        <exclude
+            domain="database"
+            path="aurora_database-shm" />
     </cloud-backup>
     <device-transfer>
         <exclude
@@ -27,5 +39,14 @@
         <exclude
             domain="sharedpref"
             path="auth_prefs.xml" />
+        <exclude
+            domain="database"
+            path="aurora_database" />
+        <exclude
+            domain="database"
+            path="aurora_database-wal" />
+        <exclude
+            domain="database"
+            path="aurora_database-shm" />
     </device-transfer>
 </data-extraction-rules>

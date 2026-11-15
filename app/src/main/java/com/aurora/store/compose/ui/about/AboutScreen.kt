@@ -5,7 +5,6 @@
 
 package com.aurora.store.compose.ui.about
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,6 +38,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.aurora.extensions.browse
 import com.aurora.extensions.copyToClipBoard
+import com.aurora.extensions.toast
 import com.aurora.extensions.viewExternal
 import com.aurora.store.BuildConfig.VERSION_CODE
 import com.aurora.store.BuildConfig.VERSION_NAME
@@ -122,12 +122,8 @@ private fun ScreenContent(onAboutAurora: () -> Unit = {}) {
                             // addresses, which have no handler) copy the value to the clipboard.
                             link.url.startsWith("upi") && context.viewExternal(link.url) -> Unit
                             else -> {
-                                context.copyToClipBoard(link.url)
-                                Toast.makeText(
-                                    context,
-                                    R.string.toast_clipboard_copied,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                context.copyToClipBoard(link.url, "Link")
+                                context.toast(R.string.toast_clipboard_copied)
                             }
                         }
                     }

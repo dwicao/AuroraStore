@@ -16,7 +16,6 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -25,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -60,7 +60,7 @@ fun DevProfileScreen(
     fallbackTitle: String = developerId,
     viewModel: DevProfileViewModel = hiltViewModel()
 ) {
-    val state by viewModel.liveData.observeAsState()
+    val state by viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(developerId) { viewModel.getStreamBundle(developerId) }
 

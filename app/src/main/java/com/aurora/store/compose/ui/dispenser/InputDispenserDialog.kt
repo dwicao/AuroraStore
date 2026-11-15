@@ -45,7 +45,8 @@ fun InputDispenserDialog(onAdd: (url: String) -> Unit = {}, onDismiss: () -> Uni
     var url by remember { mutableStateOf(TextFieldValue()) }
     val isHttps = url.text.trim().startsWith("https://", ignoreCase = true)
     val showSchemeError = url.text.isNotBlank() &&
-        Patterns.WEB_URL.matcher(url.text.trim()).matches() && !isHttps
+        Patterns.WEB_URL.matcher(url.text.trim()).matches() &&
+        !isHttps
 
     LaunchedEffect(focusRequester) {
         awaitFrame()

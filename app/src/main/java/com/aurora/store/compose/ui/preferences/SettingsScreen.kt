@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.aurora.store.R
@@ -46,7 +47,7 @@ private fun ScreenContent(onNavigateTo: (Destination) -> Unit = {}) {
         ) {
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         onNavigateTo(
                             Destination.PermissionRationale(PermissionType.entries.toSet())
                         )
@@ -64,7 +65,7 @@ private fun ScreenContent(onNavigateTo: (Destination) -> Unit = {}) {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         onNavigateTo(Destination.InstallationPreference)
                     },
                     leadingContent = {
@@ -78,7 +79,9 @@ private fun ScreenContent(onNavigateTo: (Destination) -> Unit = {}) {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { onNavigateTo(Destination.UIPreference) },
+                    modifier = Modifier.clickable(role = Role.Button) {
+                        onNavigateTo(Destination.UIPreference)
+                    },
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.ic_ui),
@@ -90,7 +93,7 @@ private fun ScreenContent(onNavigateTo: (Destination) -> Unit = {}) {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         onNavigateTo(Destination.NotificationPreference)
                     },
                     leadingContent = {
@@ -104,7 +107,9 @@ private fun ScreenContent(onNavigateTo: (Destination) -> Unit = {}) {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { onNavigateTo(Destination.NetworkPreference) },
+                    modifier = Modifier.clickable(role = Role.Button) {
+                        onNavigateTo(Destination.NetworkPreference)
+                    },
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.ic_network),
@@ -116,7 +121,9 @@ private fun ScreenContent(onNavigateTo: (Destination) -> Unit = {}) {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { onNavigateTo(Destination.UpdatesPreference) },
+                    modifier = Modifier.clickable(role = Role.Button) {
+                        onNavigateTo(Destination.UpdatesPreference)
+                    },
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.ic_updates),
@@ -128,7 +135,9 @@ private fun ScreenContent(onNavigateTo: (Destination) -> Unit = {}) {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { onNavigateTo(Destination.SecurityPreference) },
+                    modifier = Modifier.clickable(role = Role.Button) {
+                        onNavigateTo(Destination.SecurityPreference)
+                    },
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.ic_lock),

@@ -62,50 +62,50 @@ open class AuthWorker @AssistedInject constructor(
             withTimeout(AUTH_REFRESH_TIMEOUT_MS) {
                 val accountType = AccountProvider.getAccountType(context)
                 val authData = when (accountType) {
-                AccountType.GOOGLE -> {
-                    val email = AccountProvider.getLoginEmail(context)
-                    val tokenPair = AccountProvider.getLoginToken(context)
+                    AccountType.GOOGLE -> {
+                        val email = AccountProvider.getLoginEmail(context)
+                        val tokenPair = AccountProvider.getLoginToken(context)
 
-                    if (email == null || tokenPair == null) {
-                        throw Exception()
+                        if (email == null || tokenPair == null) {
+                            throw Exception()
+                        }
+
+                        when (tokenPair.second) {
+                            TokenType.AAS -> {
+                                Log.i(TAG, "Refreshing AuthData for personal account")
+                                authProvider.buildGoogleAuthData(
+                                    email,
+                                    tokenPair.first,
+                                    TokenType.AAS
+                                ).getOrThrow()
+                            }
+
+                            TokenType.AUTH -> {
+                                Log.i(TAG, "Refreshing AuthData via AccountManager")
+                                val newToken = tokenProvider.fetchAuthToken(email, tokenPair.first)
+                                authProvider.buildGoogleAuthData(email, newToken, TokenType.AUTH)
+                                    .getOrThrow()
+                            }
+                        }
                     }
 
-                    when (tokenPair.second) {
-                        TokenType.AAS -> {
-                            Log.i(TAG, "Refreshing AuthData for personal account")
-                            authProvider.buildGoogleAuthData(
-                                email,
-                                tokenPair.first,
-                                TokenType.AAS
-                            ).getOrThrow()
-                        }
-
-                        TokenType.AUTH -> {
-                            Log.i(TAG, "Refreshing AuthData via AccountManager")
-                            val newToken = tokenProvider.fetchAuthToken(email, tokenPair.first)
-                            authProvider.buildGoogleAuthData(email, newToken, TokenType.AUTH)
-                                .getOrThrow()
-                        }
+                    AccountType.ANONYMOUS -> {
+                        Log.i(TAG, "Refreshing AuthData for anonymous account")
+                        authProvider.buildAnonymousAuthData().getOrThrow()
                     }
                 }
 
-                AccountType.ANONYMOUS -> {
-                    Log.i(TAG, "Refreshing AuthData for anonymous account")
-                    authProvider.buildAnonymousAuthData().getOrThrow()
-                }
-            }
-
-            require(verifyAndSaveAuth(authData, accountType) != null)
-            authProvider.persistAccount(
-                authData = authData,
-                accountType = accountType,
-                authViaMicroG = AuthPrefs.getBoolean(
-                    context,
-                    Preferences.PREFERENCE_AUTH_VIA_MICROG,
-                    false
-                ),
-                makeDefault = true
-            )
+                require(verifyAndSaveAuth(authData, accountType) != null)
+                authProvider.persistAccount(
+                    authData = authData,
+                    accountType = accountType,
+                    authViaMicroG = AuthPrefs.getBoolean(
+                        context,
+                        Preferences.PREFERENCE_AUTH_VIA_MICROG,
+                        false
+                    ),
+                    makeDefault = true
+                )
             }
             Log.i(TAG, "Refreshed AuthData successfully")
             return Result.success()

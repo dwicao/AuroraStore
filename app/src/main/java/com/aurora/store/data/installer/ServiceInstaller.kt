@@ -14,7 +14,6 @@ import android.net.Uri
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.os.RemoteException
 import android.util.Log
 import com.aurora.extensions.TAG
 import com.aurora.services.IPrivilegedCallback
@@ -131,32 +130,21 @@ class ServiceInstaller @Inject constructor(
                                 }
                             }
 
+                            // Any failure here must terminate the wait below: post the error and
+                            // flip readyWithAction, otherwise the executor thread spins forever
+                            // and every subsequent service install queues behind it.
                             try {
                                 if (service.isMoreMethodImplemented) {
-                                    try {
-                                        service.installSplitPackageMore(
-                                            packageName,
-                                            uriList,
-                                            ACTION_INSTALL_REPLACE_EXISTING,
-                                            BuildConfig.APPLICATION_ID,
-                                            callback,
-                                            fileList
-                                        )
-                                    } catch (e: RemoteException) {
-                                        removeFromInstallQueue(packageName)
-                                        postError(
-                                            packageName,
-                                            e.localizedMessage,
-                                            e.stackTraceToString()
-                                        )
-                                        readyWithAction.set(true)
-                                    }
+                                    service.installSplitPackageMore(
+                                        packageName,
+                                        uriList,
+                                        ACTION_INSTALL_REPLACE_EXISTING,
+                                        BuildConfig.APPLICATION_ID,
+                                        callback,
+                                        fileList
+                                    )
                                 } else {
-                                    throw Exception("New method not implemented")
-                                }
-                            } catch (th: Throwable) {
-                                th.printStackTrace()
-                                try {
+                                    // Older privileged-service builds only know the legacy method.
                                     service.installSplitPackageX(
                                         packageName,
                                         uriList,
@@ -164,15 +152,16 @@ class ServiceInstaller @Inject constructor(
                                         BuildConfig.APPLICATION_ID,
                                         callback
                                     )
-                                } catch (e: RemoteException) {
-                                    removeFromInstallQueue(packageName)
-                                    postError(
-                                        packageName,
-                                        e.localizedMessage,
-                                        e.stackTraceToString()
-                                    )
-                                    readyWithAction.set(true)
                                 }
+                            } catch (throwable: Throwable) {
+                                Log.e(TAG, "Privileged service refused the install", throwable)
+                                removeFromInstallQueue(packageName)
+                                postError(
+                                    packageName,
+                                    throwable.localizedMessage,
+                                    throwable.stackTraceToString()
+                                )
+                                readyWithAction.set(true)
                             }
                         } else {
                             removeFromInstallQueue(packageName)
@@ -201,8 +190,14 @@ class ServiceInstaller @Inject constructor(
                     Context.BIND_AUTO_CREATE
                 )
             }
-            while (!readyWithAction.get()) {
+            // Bound the wait: if the privileged service never calls back we must not pin the
+            // single-thread executor forever, or every later service install queues behind it.
+            val deadline = System.nanoTime() + TimeUnit.MINUTES.toNanos(10)
+            while (!readyWithAction.get() && System.nanoTime() < deadline) {
                 Thread.sleep(1000)
+            }
+            if (!readyWithAction.get()) {
+                Log.e(TAG, "Timed out waiting for privileged service callback for $packageName")
             }
             Log.i(TAG, "Services Callback : install wait done")
         }
@@ -222,8 +217,8 @@ class ServiceInstaller @Inject constructor(
             if (::serviceConnection.isInitialized) {
                 context.unbindService(serviceConnection)
             }
-        } catch (th: Throwable) {
-            th.printStackTrace()
+        } catch (throwable: Throwable) {
+            Log.e(TAG, "Failed to handle uninstall callback for $packageName", throwable)
         }
     }
 
@@ -243,8 +238,8 @@ class ServiceInstaller @Inject constructor(
             if (::serviceConnection.isInitialized) {
                 context.unbindService(serviceConnection)
             }
-        } catch (th: Throwable) {
-            th.printStackTrace()
+        } catch (throwable: Throwable) {
+            Log.e(TAG, "Failed to handle install callback for $packageName", throwable)
         }
     }
 
@@ -254,8 +249,8 @@ class ServiceInstaller @Inject constructor(
             if (::serviceConnection.isInitialized) {
                 context.unbindService(serviceConnection)
             }
-        } catch (th: Throwable) {
-            th.printStackTrace()
+        } catch (throwable: Throwable) {
+            Log.e(TAG, "Failed to unbind from privileged service for $packageName", throwable)
         }
     }
 }

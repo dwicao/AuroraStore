@@ -7,8 +7,6 @@ package com.aurora.store.compose.ui.spoof
 
 import android.net.Uri
 import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,6 +35,8 @@ import com.aurora.Constants
 import com.aurora.extensions.toast
 import com.aurora.store.R
 import com.aurora.store.compose.composable.TopAppBar
+import com.aurora.store.compose.composable.rememberCreateDocumentLauncher
+import com.aurora.store.compose.composable.rememberOpenDocumentLauncher
 import com.aurora.store.compose.navigation.Destination
 import com.aurora.store.compose.ui.spoof.menu.MenuItem
 import com.aurora.store.compose.ui.spoof.menu.SpoofMenu
@@ -66,26 +66,20 @@ private fun ScreenContent(
     val coroutineScope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
 
-    val docImportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = {
-            if (it != null) {
-                onDeviceSpoofImport(it)
-            } else {
-                context.toast(R.string.toast_import_failed)
-            }
+    val docImportLauncher = rememberOpenDocumentLauncher {
+        if (it != null) {
+            onDeviceSpoofImport(it)
+        } else {
+            context.toast(R.string.toast_import_failed)
         }
-    )
-    val docExportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument(Constants.PROPERTIES_EXPORT_MIME_TYPE),
-        onResult = {
-            if (it != null) {
-                onDeviceSpoofExport(it)
-            } else {
-                context.toast(R.string.toast_export_failed)
-            }
+    }
+    val docExportLauncher = rememberCreateDocumentLauncher(Constants.PROPERTIES_EXPORT_MIME_TYPE) {
+        if (it != null) {
+            onDeviceSpoofExport(it)
+        } else {
+            context.toast(R.string.toast_export_failed)
         }
-    )
+    }
 
     fun onRequestNavigateToSplash() {
         coroutineScope.launch {

@@ -43,11 +43,7 @@ object DispenserHealthPolicy {
         return minOf(BASE_COOLDOWN_MS shl shift, MAX_COOLDOWN_MS)
     }
 
-    fun pick(
-        urls: Collection<String>,
-        health: Map<String, DispenserHealth>,
-        now: Long
-    ): String? {
+    fun pick(urls: Collection<String>, health: Map<String, DispenserHealth>, now: Long): String? {
         if (urls.isEmpty()) return null
         val eligible = urls.filter { url ->
             val state = health[url] ?: return@filter true

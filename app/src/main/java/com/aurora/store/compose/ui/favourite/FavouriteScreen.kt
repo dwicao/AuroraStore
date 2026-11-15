@@ -6,8 +6,6 @@
 
 package com.aurora.store.compose.ui.favourite
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,6 +51,8 @@ import com.aurora.store.compose.composable.Placeholder
 import com.aurora.store.compose.composable.ScrollHint
 import com.aurora.store.compose.composable.SectionHeader
 import com.aurora.store.compose.composable.TopAppBar
+import com.aurora.store.compose.composable.rememberCreateDocumentLauncher
+import com.aurora.store.compose.composable.rememberOpenDocumentLauncher
 import com.aurora.store.compose.navigation.Destination
 import com.aurora.store.compose.preview.FavouritePreviewProvider
 import com.aurora.store.compose.preview.ThemePreviewProvider
@@ -100,29 +100,23 @@ fun FavouriteScreen(
         }
     }
 
-    val documentOpenLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = {
-            if (it != null) {
-                viewModel.importFavourites(it)
-                context.toast(R.string.toast_fav_import_success)
-            } else {
-                context.toast(R.string.toast_fav_import_failed)
-            }
+    val documentOpenLauncher = rememberOpenDocumentLauncher {
+        if (it != null) {
+            viewModel.importFavourites(it)
+            context.toast(R.string.toast_fav_import_success)
+        } else {
+            context.toast(R.string.toast_fav_import_failed)
         }
-    )
+    }
 
-    val documentCreateLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument(JSON_MIME_TYPE),
-        onResult = {
-            if (it != null) {
-                viewModel.exportFavourites(it)
-                context.toast(R.string.toast_fav_export_success)
-            } else {
-                context.toast(R.string.toast_fav_export_failed)
-            }
+    val documentCreateLauncher = rememberCreateDocumentLauncher(JSON_MIME_TYPE) {
+        if (it != null) {
+            viewModel.exportFavourites(it)
+            context.toast(R.string.toast_fav_export_success)
+        } else {
+            context.toast(R.string.toast_fav_export_failed)
         }
-    )
+    }
 
     ScreenContent(
         favourites = favourites,

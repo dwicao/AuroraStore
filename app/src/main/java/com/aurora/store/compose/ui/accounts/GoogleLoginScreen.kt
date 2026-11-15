@@ -5,8 +5,12 @@
 
 package com.aurora.store.compose.ui.accounts
 
+import android.net.Uri
 import android.os.Build
+import android.util.Log
+import android.util.Patterns
 import android.webkit.CookieManager
+import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -29,11 +33,11 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aurora.extensions.TAG
+import com.aurora.extensions.toast
 import com.aurora.gplayapi.session.TokenType
-import com.aurora.store.AuroraApp
 import com.aurora.store.R
 import com.aurora.store.compose.navigation.Destination
-import com.aurora.store.data.event.AuthEvent
 import com.aurora.store.data.model.AuthState
 import com.aurora.store.util.AC2DMUtil
 import com.aurora.store.util.Preferences
@@ -66,26 +70,23 @@ fun GoogleLoginScreen(
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        AuroraApp.events.authEvent.collect { event ->
-            if (event is AuthEvent.GoogleLogin) {
-                if (event.success) {
-                    if (addAccount) {
-                        viewModel.addGoogleAuthData(event.email, event.token)
-                    } else {
-                        viewModel.buildGoogleAuthData(
-                            event.email,
-                            event.token,
-                            TokenType.AAS
-                        )
-                    }
+        viewModel.googleLogin.collect { event ->
+            if (event.success) {
+                if (addAccount) {
+                    viewModel.addGoogleAuthData(event.email, event.token)
                 } else {
-                    Toast.makeText(
-                        context,
-                        event.error ?: resources.getString(R.string.toast_aas_token_failed),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    onNavigateTo(if (addAccount) Destination.Accounts else Destination.Splash())
+                    viewModel.buildGoogleAuthData(
+                        event.email,
+                        event.token,
+                        TokenType.AAS
+                    )
                 }
+            } else {
+                context.toast(
+                    event.error ?: resources.getString(R.string.toast_aas_token_failed),
+                    Toast.LENGTH_LONG
+                )
+                onNavigateTo(if (addAccount) Destination.Accounts else Destination.Splash())
             }
         }
     }
@@ -95,7 +96,7 @@ fun GoogleLoginScreen(
     if (addAccount) {
         LaunchedEffect(Unit) {
             viewModel.accountAdded.collect { error ->
-                if (error != null) Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                if (error != null) context.toast(error, Toast.LENGTH_LONG)
                 onNavigateTo(Destination.Accounts)
             }
         }
@@ -149,18 +150,62 @@ fun GoogleLoginScreen(
 
                     webViewClient = object : WebViewClient() {
                         override fun onPageFinished(view: WebView, url: String) {
+                            // Only run the token extraction on pages served by Google itself;
+                            // anything else rendered inside the WebView is left alone.
+                            val host = runCatching { Uri.parse(url)?.host }.getOrNull()
+                            if (host == null ||
+                                !(host == "google.com" || host.endsWith(".google.com"))
+                            ) {
+                                return
+                            }
+
                             val cookies = CookieManager.getInstance().getCookie(url) ?: return
                             val cookieMap = AC2DMUtil.parseCookieString(cookies)
                             val oauthToken = cookieMap[AUTH_TOKEN] ?: return
                             view.evaluateJavascript(JS_PROFILE_EMAIL) { result ->
                                 val email = result.trim('"')
-                                viewModel.buildAuthData(view.context, email, oauthToken)
+                                if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                    viewModel.buildAuthData(view.context, email, oauthToken)
+                                } else {
+                                    // Never feed a non-email value into account creation.
+                                    Log.e(
+                                        TAG,
+                                        "EmbeddedSetup page did not yield a valid profile email"
+                                    )
+                                    context.toast(
+                                        R.string.toast_aas_token_failed,
+                                        Toast.LENGTH_LONG
+                                    )
+                                    onNavigateTo(
+                                        if (addAccount) {
+                                            Destination.Accounts
+                                        } else {
+                                            Destination.Splash()
+                                        }
+                                    )
+                                }
                             }
+                        }
+
+                        override fun onReceivedSslError(
+                            view: WebView,
+                            handler: SslErrorHandler,
+                            error: android.net.http.SslError
+                        ) {
+                            // Do NOT proceed past a certificate error. The Google sign-in must
+                            // never happen over an unverified connection.
+                            Log.e(TAG, "SSL error on Google login page: ${error.primaryError}")
+                            handler.cancel()
+                            context.toast(R.string.check_connectivity, Toast.LENGTH_LONG)
+                            onNavigateTo(
+                                if (addAccount) Destination.Accounts else Destination.Splash()
+                            )
                         }
                     }
 
                     settings.apply {
-                        allowContentAccess = true
+                        allowContentAccess = false
+                        allowFileAccess = false
                         domStorageEnabled = true
                         javaScriptEnabled = true
                         cacheMode = WebSettings.LOAD_DEFAULT

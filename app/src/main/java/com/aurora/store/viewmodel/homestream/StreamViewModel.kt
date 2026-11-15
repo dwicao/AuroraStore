@@ -7,7 +7,6 @@
 package com.aurora.store.viewmodel.homestream
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aurora.extensions.TAG
@@ -22,6 +21,9 @@ import com.aurora.store.data.play.PlayGateway
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -38,7 +40,10 @@ class StreamViewModel @Inject constructor(
     private val playGateway: PlayGateway
 ) : ViewModel() {
 
-    val liveData: MutableLiveData<ViewState> = MutableLiveData()
+    private val _viewState = MutableStateFlow<ViewState?>(null)
+
+    /** Latest stream state. `null` until the first load starts. */
+    val viewState: StateFlow<ViewState?> = _viewState.asStateFlow()
 
     private val stash: HomeStash = mutableMapOf()
 
@@ -46,7 +51,7 @@ class StreamViewModel @Inject constructor(
     private val stashMutex = Mutex()
 
     fun getStreamBundle(category: ContentType) {
-        liveData.postValue(ViewState.Loading)
+        _viewState.value = ViewState.Loading
         observe(category)
     }
 
@@ -57,7 +62,7 @@ class StreamViewModel @Inject constructor(
 
                 // Post existing data if any clusters exist
                 if (bundle.hasClusters()) {
-                    liveData.postValue(ViewState.Success(stash.toMap()))
+                    _viewState.value = ViewState.Success(stash.toMap())
                 }
 
                 if (!bundle.hasClusters() || bundle.hasNext()) {
@@ -76,11 +81,11 @@ class StreamViewModel @Inject constructor(
                         stash[category] = mergedBundle
 
                         // Post updated to UI
-                        liveData.postValue(ViewState.Success(stash.toMap()))
+                        _viewState.value = ViewState.Success(stash.toMap())
                     }.onFailure {
                         // Auth failures already redirect to Splash via the gateway.
                         if (!PlayErrors.isAuthFailure(it)) {
-                            liveData.postValue(ViewState.Error(it.message))
+                            _viewState.value = ViewState.Error(it.message)
                         }
                     }
                 } else {
@@ -100,10 +105,10 @@ class StreamViewModel @Inject constructor(
                         updateCluster(category, streamCluster.id, newCluster)
                     }
 
-                    liveData.postValue(ViewState.Success(stash.toMap()))
+                    _viewState.value = ViewState.Success(stash.toMap())
                 }.onFailure {
                     if (!PlayErrors.isAuthFailure(it)) {
-                        liveData.postValue(ViewState.Error(it.message))
+                        _viewState.value = ViewState.Error(it.message)
                     }
                 }
             } else {
@@ -111,7 +116,7 @@ class StreamViewModel @Inject constructor(
                     postClusterEnd(category, streamCluster.id)
                 }
 
-                liveData.postValue(ViewState.Success(stash.toMap()))
+                _viewState.value = ViewState.Success(stash.toMap())
             }
         }
     }

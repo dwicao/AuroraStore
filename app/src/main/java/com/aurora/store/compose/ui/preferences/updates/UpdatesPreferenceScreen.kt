@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.core.net.toUri
@@ -251,7 +252,7 @@ private fun ScreenContent(
         ) {
             item {
                 ListItem(
-                    modifier = Modifier.clickable { showAutoDialog = true },
+                    modifier = Modifier.clickable(role = Role.Button) { showAutoDialog = true },
                     headlineContent = { Text(stringResource(R.string.pref_updates_auto)) },
                     supportingContent = { Text(autoEntries.getOrElse(autoMode) { "" }) }
                 )
@@ -259,7 +260,10 @@ private fun ScreenContent(
             if (autoEnabled) {
                 item {
                     ListItem(
-                        modifier = Modifier.clickable { showFrequencyDialog = true },
+                        modifier = Modifier.clickable(role = Role.Button) {
+                            showFrequencyDialog =
+                                true
+                        },
                         headlineContent = {
                             Text(stringResource(R.string.pref_updates_check_frequency))
                         },
@@ -270,7 +274,10 @@ private fun ScreenContent(
                 }
                 item {
                     ListItem(
-                        modifier = Modifier.clickable { showRestrictionsDialog = true },
+                        modifier = Modifier.clickable(role = Role.Button) {
+                            showRestrictionsDialog =
+                                true
+                        },
                         headlineContent = {
                             Text(stringResource(R.string.pref_updates_restrictions_title))
                         },
@@ -288,7 +295,7 @@ private fun ScreenContent(
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         onNavigateTo(Destination.SourceFilters)
                     },
                     headlineContent = {
@@ -305,7 +312,7 @@ private fun ScreenContent(
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         filterFDroid = !filterFDroid
                         context.save(PREFERENCE_FILTER_FDROID, filterFDroid)
                         onCheckUpdatesNow()
@@ -328,7 +335,7 @@ private fun ScreenContent(
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         updatesExtended = !updatesExtended
                         context.save(PREFERENCE_UPDATES_EXTENDED, updatesExtended)
                         onCheckUpdatesNow()
@@ -351,7 +358,7 @@ private fun ScreenContent(
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         warnPermissions = !warnPermissions
                         context.save(PREFERENCE_UPDATES_WARN_PERMISSIONS, warnPermissions)
                     },
@@ -380,7 +387,7 @@ private fun ScreenContent(
                         if (enabled) onCheckUpdatesNow() else onDeleteSelfUpdate()
                     }
                     ListItem(
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.clickable(role = Role.Button) {
                             onSelfUpdateChanged(!selfUpdateEnabled)
                         },
                         headlineContent = { Text(stringResource(R.string.pref_self_update)) },

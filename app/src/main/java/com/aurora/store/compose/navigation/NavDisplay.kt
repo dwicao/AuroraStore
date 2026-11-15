@@ -230,8 +230,11 @@ fun NavDisplay(startDestination: NavKey) {
             // itself". Home is the only sane place to go from there instead.
             // Splash/Onboarding/Main keep the default behavior (exit / no-op).
             val last = backstack.lastOrNull()
-            if (backstack.size <= 1 && last != null &&
-                last !is Screen.Main && last !is Screen.Splash && last !is Screen.Onboarding
+            if (backstack.size <= 1 &&
+                last != null &&
+                last !is Screen.Main &&
+                last !is Screen.Splash &&
+                last !is Screen.Onboarding
             ) {
                 backstack.clear()
                 backstack.add(

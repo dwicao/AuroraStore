@@ -234,7 +234,7 @@ private fun AppInfoMore(app: App) {
                 title = AnnotatedString(text = title),
                 description = AnnotatedString(text = certHash),
                 onClick = {
-                    context.copyToClipBoard(certHash)
+                    context.copyToClipBoard(certHash, "Certificate hash")
                     context.toast(R.string.toast_clipboard_copied)
                 }
             )

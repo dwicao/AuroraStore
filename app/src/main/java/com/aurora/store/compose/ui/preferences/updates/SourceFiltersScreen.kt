@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -89,7 +90,7 @@ private fun ScreenContent(onCheckUpdatesNow: () -> Unit = {}) {
         ) {
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         auroraOnly = !auroraOnly
                         context.save(PREFERENCE_FILTER_AURORA_ONLY, auroraOnly)
                     },
@@ -152,7 +153,7 @@ private fun ScreenContent(onCheckUpdatesNow: () -> Unit = {}) {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { showAddDialog = true },
+                    modifier = Modifier.clickable(role = Role.Button) { showAddDialog = true },
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.ic_add),

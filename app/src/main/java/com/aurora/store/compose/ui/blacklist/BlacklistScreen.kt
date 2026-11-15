@@ -7,10 +7,6 @@
 package com.aurora.store.compose.ui.blacklist
 
 import android.net.Uri
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.LocalActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,10 +54,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aurora.Constants
 import com.aurora.extensions.toast
 import com.aurora.store.R
+import com.aurora.store.compose.composable.ArrowBackIconButton
 import com.aurora.store.compose.composable.BlackListItem
 import com.aurora.store.compose.composable.ContainedLoadingIndicator
 import com.aurora.store.compose.composable.ScrollHint
 import com.aurora.store.compose.composable.TextDividerComposable
+import com.aurora.store.compose.composable.rememberCreateDocumentLauncher
+import com.aurora.store.compose.composable.rememberOpenDocumentLauncher
 import com.aurora.store.compose.preview.ThemePreviewProvider
 import com.aurora.store.compose.ui.blacklist.menu.BlacklistMenu
 import com.aurora.store.compose.ui.blacklist.menu.MenuItem
@@ -117,34 +116,27 @@ private fun ScreenContent(
     onSearch: (query: String) -> Unit = {},
     onSortFilterStateChange: (SortFilterState) -> Unit = {}
 ) {
-    val activity = LocalActivity.current as? ComponentActivity
     val context = LocalContext.current
     val textFieldState = rememberTextFieldState()
     val searchBarState = rememberSearchBarState()
     val coroutineScope = rememberCoroutineScope()
     var sheetVisible by remember { mutableStateOf(false) }
 
-    val docImportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = {
-            if (it != null) {
-                onBlacklistImport(it)
-            } else {
-                context.toast(R.string.toast_black_import_failed)
-            }
+    val docImportLauncher = rememberOpenDocumentLauncher {
+        if (it != null) {
+            onBlacklistImport(it)
+        } else {
+            context.toast(R.string.toast_black_import_failed)
         }
-    )
+    }
 
-    val docExportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument(Constants.JSON_MIME_TYPE),
-        onResult = {
-            if (it != null) {
-                onBlacklistExport(it)
-            } else {
-                context.toast(R.string.toast_black_export_failed)
-            }
+    val docExportLauncher = rememberCreateDocumentLauncher(Constants.JSON_MIME_TYPE) {
+        if (it != null) {
+            onBlacklistExport(it)
+        } else {
+            context.toast(R.string.toast_black_export_failed)
         }
-    )
+    }
 
     LaunchedEffect(key1 = textFieldState) {
         snapshotFlow { textFieldState.text.toString() }
@@ -225,12 +217,7 @@ private fun ScreenContent(
             state = searchBarState,
             inputField = inputField,
             navigationIcon = {
-                IconButton(onClick = { activity?.onBackPressedDispatcher?.onBackPressed() }) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_arrow_back),
-                        contentDescription = stringResource(R.string.action_back)
-                    )
-                }
+                ArrowBackIconButton()
             },
             actions = {
                 IconButton(onClick = { sheetVisible = true }) {

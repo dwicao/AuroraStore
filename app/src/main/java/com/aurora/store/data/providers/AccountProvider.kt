@@ -56,8 +56,7 @@ object AccountProvider {
         }
     }
 
-    fun isLoggedIn(context: Context): Boolean =
-        getBoolean(context, Constants.ACCOUNT_SIGNED_IN)
+    fun isLoggedIn(context: Context): Boolean = getBoolean(context, Constants.ACCOUNT_SIGNED_IN)
 
     fun getLoginEmail(context: Context): String? {
         val email = getString(context, Constants.ACCOUNT_EMAIL_PLAIN)

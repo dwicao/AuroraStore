@@ -6,8 +6,6 @@
 
 package com.aurora.store.compose.ui.search
 
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,6 +67,7 @@ import com.aurora.extensions.emptyPagingItems
 import com.aurora.gplayapi.api.SearchSuggestion
 import com.aurora.gplayapi.model.App
 import com.aurora.store.R
+import com.aurora.store.compose.composable.ArrowBackIconButton
 import com.aurora.store.compose.composable.ContainedLoadingIndicator
 import com.aurora.store.compose.composable.Placeholder
 import com.aurora.store.compose.composable.ScrollHint
@@ -114,7 +113,6 @@ private fun ScreenContent(
     onFilter: (filter: SearchFilter) -> Unit = {},
     isAnonymous: Boolean = true
 ) {
-    val activity = LocalActivity.current as? ComponentActivity
     val textFieldState = rememberTextFieldState()
     val searchBarState = rememberSearchBarState(initialValue = SearchBarValue.Expanded)
     var isSearching by rememberSaveable { mutableStateOf(false) }
@@ -165,12 +163,7 @@ private fun ScreenContent(
                     )
                 },
                 leadingIcon = {
-                    IconButton(onClick = { activity?.onBackPressedDispatcher?.onBackPressed() }) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_back),
-                            contentDescription = stringResource(R.string.action_back)
-                        )
-                    }
+                    ArrowBackIconButton()
                 },
                 trailingIcon = {
                     if (textFieldState.text.isNotBlank()) {

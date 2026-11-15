@@ -52,10 +52,8 @@ import com.aurora.store.util.CommonUtil
 import com.aurora.store.util.PackageUtil
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_MICROG_AUTH
-import com.aurora.store.util.Preferences.PREFERENCE_PROXY_INFO
-import com.aurora.store.util.Preferences.PREFERENCE_PROXY_URL
 import com.aurora.store.util.Preferences.PREFERENCE_VENDING_VERSION
-import com.aurora.store.util.remove
+import com.aurora.store.util.ProxyPrefs
 import com.aurora.store.util.save
 import com.aurora.store.viewmodel.preferences.ProxyURLViewModel
 import com.jakewharton.processphoenix.ProcessPhoenix
@@ -74,16 +72,14 @@ fun NetworkPreferenceScreen(
         onSaveProxyUrl = { url ->
             val proxyInfo = CommonUtil.parseProxyUrl(url)
             if (proxyInfo != null) {
-                context.save(PREFERENCE_PROXY_URL, url)
-                context.save(PREFERENCE_PROXY_INFO, viewModel.json.encodeToString(proxyInfo))
+                ProxyPrefs.save(context, url, viewModel.json.encodeToString(proxyInfo))
                 true
             } else {
                 false
             }
         },
         onDeleteProxyUrl = {
-            Preferences.remove(context, PREFERENCE_PROXY_URL)
-            Preferences.remove(context, PREFERENCE_PROXY_INFO)
+            ProxyPrefs.clear(context)
         }
     )
 }
@@ -117,7 +113,7 @@ private fun ScreenContent(
 
     if (showProxyDialog) {
         ProxyURLDialog(
-            currentUrl = Preferences.getString(context, PREFERENCE_PROXY_URL),
+            currentUrl = ProxyPrefs.url(context),
             onSave = { url ->
                 onSaveProxyUrl(url).also { saved ->
                     if (saved) {
@@ -163,14 +159,16 @@ private fun ScreenContent(
         ) {
             item {
                 ListItem(
-                    modifier = Modifier.clickable { onNavigateTo(Destination.Dispenser) },
+                    modifier = Modifier.clickable(role = Role.Button) {
+                        onNavigateTo(Destination.Dispenser)
+                    },
                     headlineContent = { Text(stringResource(R.string.pref_dispenser_title)) },
                     supportingContent = { Text(stringResource(R.string.pref_dispenser_summary)) }
                 )
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { showProxyDialog = true },
+                    modifier = Modifier.clickable(role = Role.Button) { showProxyDialog = true },
                     headlineContent = { Text(stringResource(R.string.pref_network_proxy_url)) },
                     supportingContent = { Text(stringResource(R.string.pref_network_proxy_desc)) }
                 )
@@ -182,7 +180,7 @@ private fun ScreenContent(
             if (hasMicroG) {
                 item {
                     ListItem(
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.clickable(role = Role.Button) {
                             microGAuth = !microGAuth
                             context.save(PREFERENCE_MICROG_AUTH, microGAuth)
                         },
@@ -206,7 +204,7 @@ private fun ScreenContent(
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { showVendingDialog = true },
+                    modifier = Modifier.clickable(role = Role.Button) { showVendingDialog = true },
                     headlineContent = { Text(stringResource(R.string.pref_vending_version_title)) },
                     supportingContent = { Text(vendingEntries.getOrElse(vendingVersion) { "" }) }
                 )

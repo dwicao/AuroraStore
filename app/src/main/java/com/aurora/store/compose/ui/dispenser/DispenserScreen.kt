@@ -121,7 +121,7 @@ private fun ScreenContent(
                         } else {
                             null
                         },
-                        onClick = { context.copyToClipBoard(url) },
+                        onClick = { context.copyToClipBoard(url, "Dispenser URL") },
                         onClear = { onRemoveDispenser(url) }
                     )
                 }

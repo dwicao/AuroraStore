@@ -329,7 +329,8 @@ class DownloadWorker @AssistedInject constructor(
             // quota or device-state must also keep the partials so the retry resumes
             // instead of re-downloading from scratch (this was the source of
             // downloads appearing to "restart" on a flaky network).
-            if (exception is DownloadCancelledException && isCancelledByUser() &&
+            if (exception is DownloadCancelledException &&
+                isCancelledByUser() &&
                 !isPausedByUser()
             ) {
                 // Re-read the row immediately before deleting: a pause that landed after
@@ -911,11 +912,19 @@ class DownloadWorker @AssistedInject constructor(
                     // The server refuses the resume offset (partial longer than what it will
                     // serve, e.g. after URLs were re-purchased): drop the stale partial and
                     // restart from zero once, instead of looping on 416 forever.
-                    if (code == HTTP_RANGE_NOT_SATISFIABLE && existingBytes > 0 &&
+                    if (code == HTTP_RANGE_NOT_SATISFIABLE &&
+                        existingBytes > 0 &&
                         !fromScratch
                     ) {
                         Log.w(TAG, "Range rejected for $tmpFile (416), restarting from scratch")
-                        return@withContext transfer(url, file, expectedSize, maxSize, onLength, true)
+                        return@withContext transfer(
+                            url,
+                            file,
+                            expectedSize,
+                            maxSize,
+                            onLength,
+                            true
+                        )
                     }
                     // A 5xx is the CDN being sick, not our URLs: back off and retry.
                     if (code in 500..599) throw TransientServerException(code)

@@ -5,6 +5,7 @@
 
 package com.aurora.extensions
 
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
@@ -33,7 +34,8 @@ fun View.hideKeyboard(): Boolean {
     try {
         val imm = context.getSystemService<InputMethodManager>()
         return imm?.hideSoftInputFromWindow(windowToken, 0) ?: false
-    } catch (ignored: RuntimeException) {
+    } catch (exception: RuntimeException) {
+        Log.w(TAG, "Failed to hide the soft keyboard", exception)
     }
     return false
 }

@@ -10,7 +10,6 @@ import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aurora.extensions.observeAsStateFlow
-import com.aurora.store.data.DispenserHealth
 import com.aurora.store.data.DispenserHealthTracker
 import com.aurora.store.util.Preferences
 import com.aurora.store.util.Preferences.PREFERENCE_DISPENSER_URLS

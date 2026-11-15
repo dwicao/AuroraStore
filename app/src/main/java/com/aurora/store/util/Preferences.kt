@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import com.aurora.extensions.isOneUI
 import com.aurora.store.BuildConfig
 
@@ -56,9 +55,6 @@ object Preferences {
     const val PREFERENCE_INSTALLATION_DEVICE_OWNER = "PREFERENCE_INSTALLATION_DEVICE_OWNER"
     const val PREFERENCE_DOWNLOAD_SYSTEM_LANGUAGES = "PREFERENCE_DOWNLOAD_SYSTEM_LANGUAGES"
 
-    const val PREFERENCE_PROXY_URL = "PREFERENCE_PROXY_URL"
-    const val PREFERENCE_PROXY_INFO = "PREFERENCE_PROXY_INFO"
-
     const val PREFERENCE_MICROG_AUTH = "PREFERENCE_MICROG_AUTH"
     const val PREFERENCE_AUTH_VIA_MICROG = "PREFERENCE_AUTH_VIA_MICROG"
 
@@ -101,8 +97,13 @@ object Preferences {
     private var prefs: SharedPreferences? = null
 
     fun getPrefs(context: Context): SharedPreferences = when (BuildConfig.FLAVOR) {
+        // Keep the historical `<package>_preferences` file name getDefaultSharedPreferences() used,
+        // so existing installs keep their settings.
         "vanilla" -> {
-            prefs ?: PreferenceManager.getDefaultSharedPreferences(context).also { prefs = it }
+            prefs ?: context.getSharedPreferences(
+                "${context.packageName}_preferences",
+                Context.MODE_PRIVATE
+            ).also { prefs = it }
         }
 
         else -> {

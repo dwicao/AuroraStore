@@ -12,8 +12,7 @@ import com.aurora.store.BuildConfig
 import com.aurora.store.R
 import com.aurora.store.data.model.Algorithm
 import com.aurora.store.data.model.ProxyInfo
-import com.aurora.store.util.Preferences
-import com.aurora.store.util.Preferences.PREFERENCE_PROXY_INFO
+import com.aurora.store.util.ProxyPrefs
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,6 +35,8 @@ import okhttp3.Cache
 import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.Route
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -67,12 +68,14 @@ object OkHttpClientModule {
     fun providesOkHttpClientInstance(
         certificatePinner: CertificatePinner,
         proxy: Proxy?,
+        proxyAuthenticator: okhttp3.Authenticator,
         cache: Cache
     ): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient().newBuilder()
             .cache(cache)
             .addNetworkInterceptor(varyByAuthorizationInterceptor)
             .proxy(proxy)
+            .proxyAuthenticator(proxyAuthenticator)
             .connectTimeout(25, TimeUnit.SECONDS)
             .readTimeout(25, TimeUnit.SECONDS)
             .writeTimeout(25, TimeUnit.SECONDS)
@@ -106,33 +109,75 @@ object OkHttpClientModule {
     @Provides
     @Singleton
     fun providesProxyInstance(@ApplicationContext context: Context, json: Json): Proxy? {
-        val proxyInfoString = Preferences.getString(context, PREFERENCE_PROXY_INFO)
-        if (proxyInfoString.isNotBlank() && proxyInfoString != "{}") {
-            val proxyInfo = json.decodeFromString<ProxyInfo>(proxyInfoString)
-
-            val proxy = Proxy(
-                if (proxyInfo.protocol.removeSuffix("5") == "SOCKS") {
-                    Proxy.Type.SOCKS
-                } else {
-                    Proxy.Type.HTTP
-                },
-                InetSocketAddress.createUnresolved(proxyInfo.host, proxyInfo.port)
-            )
-
-            val proxyUser = proxyInfo.proxyUser
-            val proxyPassword = proxyInfo.proxyPassword
-
-            if (!proxyUser.isNullOrBlank() && !proxyPassword.isNullOrBlank()) {
-                Authenticator.setDefault(object : Authenticator() {
-                    override fun getPasswordAuthentication(): PasswordAuthentication =
-                        PasswordAuthentication(proxyUser, proxyPassword.toCharArray())
-                })
-            }
-            return proxy
-        } else {
+        // The proxy configuration (including credentials) is stored in the encrypted,
+        // backup-excluded AuthPrefs file — never in the default SharedPreferences.
+        val proxyInfo = parseProxyInfo(ProxyPrefs.infoJson(context), json) ?: run {
             Log.i(TAG, "Proxy is disabled")
             return null
         }
+        Log.i(TAG, "Using proxy at ${proxyInfo.host}:${proxyInfo.port}")
+
+        val proxy = Proxy(
+            if (proxyInfo.protocol.removeSuffix("5") == "SOCKS") {
+                Proxy.Type.SOCKS
+            } else {
+                Proxy.Type.HTTP
+            },
+            InetSocketAddress.createUnresolved(proxyInfo.host, proxyInfo.port)
+        )
+
+        // Java's Socket implementation performs SOCKS5 client authentication against the
+        // JVM-global default Authenticator; there is no per-socket API to supply the
+        // credentials instead. Only for SOCKS proxies with credentials do we install one,
+        // and only in-process. HTTP(S) proxies use the per-client OkHttp proxyAuthenticator.
+        val proxyUser = proxyInfo.proxyUser
+        val proxyPassword = proxyInfo.proxyPassword
+        if (proxy.type() == Proxy.Type.SOCKS &&
+            !proxyUser.isNullOrBlank() &&
+            !proxyPassword.isNullOrBlank()
+        ) {
+            Authenticator.setDefault(object : Authenticator() {
+                override fun getPasswordAuthentication(): PasswordAuthentication =
+                    PasswordAuthentication(proxyUser, proxyPassword.toCharArray())
+            })
+        }
+        return proxy
+    }
+
+    /**
+     * Per-client authenticator for HTTP(S) proxies (HTTP 407). Answers challenges with a
+     * `Proxy-Authorization: Basic ...` header built from the configured credentials; yields
+     * `null` (give up) when no credentials are configured so a password-protected proxy
+     * simply fails instead of hanging on repeated challenges. OkHttp only consults this for
+     * HTTP proxies, so exposing it alongside a SOCKS proxy is harmless.
+     */
+    @Provides
+    @Singleton
+    fun providesProxyAuthenticator(
+        @ApplicationContext context: Context,
+        json: Json
+    ): okhttp3.Authenticator = okhttp3.Authenticator { _: Route?, response: Response ->
+        val proxyInfo = parseProxyInfo(ProxyPrefs.infoJson(context), json)
+        val user = proxyInfo?.proxyUser
+        val pass = proxyInfo?.proxyPassword
+        if (user.isNullOrBlank() || pass.isNullOrBlank()) {
+            return@Authenticator null
+        }
+        response.request.newBuilder()
+            .header("Proxy-Authorization", okhttp3.Credentials.basic(user, pass))
+            .build()
+    }
+
+    /**
+     * Parses the stored proxy JSON. Blank / `{}` payloads mean "proxy disabled"; malformed
+     * payloads (e.g. after a restore of a stale backup) are treated as disabled rather than
+     * crashing the networking stack at startup.
+     */
+    fun parseProxyInfo(raw: String, json: Json): ProxyInfo? {
+        if (raw.isBlank() || raw == "{}") return null
+        return runCatching { json.decodeFromString<ProxyInfo>(raw) }
+            .onFailure { Log.e(TAG, "Failed to parse stored proxy info, disabling", it) }
+            .getOrNull()
     }
 
     @Provides

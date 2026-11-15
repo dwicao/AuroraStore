@@ -5,12 +5,8 @@
 
 package com.aurora.store.compose.composable
 
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -41,18 +37,12 @@ fun TopAppBar(
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     actions: @Composable (RowScope.() -> Unit) = {}
 ) {
-    val activity = LocalActivity.current as? ComponentActivity
     TopAppBar(
         modifier = modifier,
         title = { if (title != null) Text(text = title) },
         navigationIcon = {
             if (showNavigationIcon) {
-                IconButton(onClick = { activity?.onBackPressedDispatcher?.onBackPressed() }) {
-                    Icon(
-                        painter = navigationIcon,
-                        contentDescription = stringResource(R.string.action_back)
-                    )
-                }
+                ArrowBackIconButton(painter = navigationIcon)
             }
         },
         windowInsets = windowInsets,

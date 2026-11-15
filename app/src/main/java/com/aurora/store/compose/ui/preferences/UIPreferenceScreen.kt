@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.core.net.toUri
@@ -120,7 +121,7 @@ private fun ScreenContent() {
             if (isTAndAbove) {
                 item {
                     ListItem(
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.clickable(role = Role.Button) {
                             context.startActivity(
                                 Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
                                     data = ("package:" + context.packageName).toUri()
@@ -138,7 +139,7 @@ private fun ScreenContent() {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { showThemeDialog = true },
+                    modifier = Modifier.clickable(role = Role.Button) { showThemeDialog = true },
                     headlineContent = { Text(stringResource(R.string.pref_ui_theme)) },
                     supportingContent = { Text(themeEntries.getOrElse(themeStyle) { "" }) }
                 )
@@ -146,7 +147,7 @@ private fun ScreenContent() {
             if (isSAndAbove) {
                 item {
                     ListItem(
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.clickable(role = Role.Button) {
                             dynamicColors = !dynamicColors
                             context.save(PREFERENCE_DYNAMIC_COLORS, dynamicColors)
                         },
@@ -172,7 +173,7 @@ private fun ScreenContent() {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { showTabDialog = true },
+                    modifier = Modifier.clickable(role = Role.Button) { showTabDialog = true },
                     headlineContent = { Text(stringResource(R.string.pref_ui_layout_tab)) },
                     supportingContent = { Text(tabEntries.getOrElse(selectedTab) { "" }) }
                 )
@@ -183,7 +184,7 @@ private fun ScreenContent() {
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         forYou = !forYou
                         context.save(PREFERENCE_FOR_YOU, forYou)
                     },

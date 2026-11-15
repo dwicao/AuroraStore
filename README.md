@@ -77,11 +77,17 @@ and security. Upstream behavior is unchanged everywhere else.
 - **Auth material isolated from backups.** Sign-in state, account type, e-mail,
   AAS/AUTH tokens, the saved session and the microG flag live in a dedicated
   `auth_prefs.xml`, excluded from cloud and device-transfer backups in both
-  rules files (existing installs migrate transparently on next write). A logging
+  rules files (existing installs migrate transparently on next write). The Room
+  account table mirrors the same secrets, so it is excluded from both backups
+  too (`aurora_database` plus its `-wal`/`-shm` siblings) — neither store leaks
+  into a backup. (Full physical separation would require a database move,
+  deliberately deferred to avoid a data migration.) A logging
   audit confirmed no tokens are printed or surfaced anywhere on the auth paths.
-  Note: the Room account rows still mirror these secrets; full separation would
-  require moving the account table to its own database, which was deliberately
-  deferred to avoid a data migration.
+  Proxy credentials (the proxy URL embeds any proxy password) likewise moved out
+  of the default SharedPreferences into the same encrypted, backup-excluded
+  store, and HTTP proxies now answer 407 challenges per-client instead of via
+  the JVM-global `java.net.Authenticator` (SOCKS5 can only authenticate through
+  that global path and still installs it, in-process only).
 - **Startup account reconciliation.** On cold start the Room account DB (source
   of truth) is reconciled against the legacy SharedPreferences mirror, and the
   stale sibling token is cleared on login — fixing drift from backup restores or
@@ -116,12 +122,30 @@ and security. Upstream behavior is unchanged everywhere else.
   `.github/workflows/nightly-health.yml` runs daily dispenser/Play probes, a
   gplayapi freshness check, and the JVM unit tests as an early warning for
   upstream breakage.
+- **Migration integrity & tests.** Room migrations now fail loudly (transaction
+  rolled back and an `IllegalStateException` thrown so startup aborts with the
+  cause attached) instead of logging and limping on with a half-migrated
+  database. JVM unit tests cover the Play-error mapping, `PlayGateway`, the
+  self-update feed parser, the proxy URL parser and the proxy-info decoder;
+  `unitTests.isReturnDefaultValues` is enabled so framework-touching code no
+  longer crashes plain JUnit runs.
 - **Supply chain.** The Gradle wrapper is hash-pinned and
   `gradle/verification-metadata.xml` pins sha256 checksums for every resolved
   artifact, so a silently swapped upstream dependency fails the build instead of
   shipping. After any dependency bump, regenerate it via
   `gh workflow run bootstrap-verification.yml` (or the equivalent local Gradle
   invocation in that workflow) before pushing.
+- **Deep-link parcel allowlist.** `ComposeActivity` is exported (it owns the
+  launcher and `APP_MARKET`), and external callers could smuggle an arbitrary
+  `SCREEN` parcel to make Aurora open any internal screen. Externally-supplied
+  parcels are now honoured only for the listing screens reachable from deep
+  links and notifications (`AppDetails`/`Main`/`DevProfile`/`PublisherProfile`);
+  anything else falls back to the normal start destination. The embedded Google
+  sign-in WebView additionally only extracts the OAuth token from pages on
+  `*.google.com`, no longer allows `file://`/`content://` access, verifies the
+  profile email before creating an account, cancels SSL errors instead of
+  proceeding silently, and delivers the minted AAS token on a view-model-scoped
+  flow instead of the process-wide event bus.
 - **Manifest hardening.** `usesCleartextTraffic` is explicitly off — every
   network call the app makes (Play, dispensers, self-update feed) is
   HTTPS-only, complementing the in-code HTTPS enforcement for dispensers.

@@ -59,8 +59,9 @@ sealed interface PlayError {
  */
 object PlayErrors {
 
-    fun of(throwable: Throwable): PlayError {        // Auth/session semantics dominate: check the whole cause chain for them first,
-        // since gplayapi tends to wrap the meaningful error.
+    // Auth/session semantics dominate: check the whole cause chain first, since gplayapi
+    // tends to wrap the meaningful error.
+    fun of(throwable: Throwable): PlayError {
         var cursor: Throwable? = throwable
         while (cursor != null) {
             when (cursor) {

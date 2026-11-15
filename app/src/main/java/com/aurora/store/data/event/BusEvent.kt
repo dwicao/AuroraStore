@@ -15,12 +15,6 @@ sealed class BusEvent : Event() {
 }
 
 sealed class AuthEvent : Event() {
-    data class GoogleLogin(
-        val success: Boolean,
-        val email: String,
-        val token: String,
-        val error: String? = null
-    ) : AuthEvent()
     data class SessionExpired(val packageName: String? = null) : AuthEvent()
 }
 

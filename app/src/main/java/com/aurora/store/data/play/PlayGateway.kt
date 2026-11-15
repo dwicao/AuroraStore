@@ -63,30 +63,28 @@ class PlayGateway @Inject constructor() {
         label: String,
         expiredPackage: String? = null,
         block: suspend () -> T
-    ): Result<T> {
-        return try {
-            Result.success(block())
-        } catch (cancellation: CancellationException) {
-            throw cancellation
-        } catch (throwable: Throwable) {
-            val error = PlayErrors.of(throwable)
-            PlayErrorMonitor.record(label, error)
-            when (error) {
-                is PlayError.AuthExpired, is PlayError.NeedsAccount -> {
-                    Log.w(TAG, "[$label] session rejected ($error), redirecting to Splash")
-                    AuroraApp.events.send(AuthEvent.SessionExpired(expiredPackage))
-                }
-
-                is PlayError.ProtocolChanged, is PlayError.Unknown -> {
-                    Log.e(TAG, "[$label] unexpected Play API failure ($error)", throwable)
-                }
-
-                else -> {
-                    Log.i(TAG, "[$label] Play call failed ($error)")
-                }
+    ): Result<T> = try {
+        Result.success(block())
+    } catch (cancellation: CancellationException) {
+        throw cancellation
+    } catch (throwable: Throwable) {
+        val error = PlayErrors.of(throwable)
+        PlayErrorMonitor.record(label, error)
+        when (error) {
+            is PlayError.AuthExpired, is PlayError.NeedsAccount -> {
+                Log.w(TAG, "[$label] session rejected ($error), redirecting to Splash")
+                AuroraApp.events.send(AuthEvent.SessionExpired(expiredPackage))
             }
-            Result.failure(throwable)
+
+            is PlayError.ProtocolChanged, is PlayError.Unknown -> {
+                Log.e(TAG, "[$label] unexpected Play API failure ($error)", throwable)
+            }
+
+            else -> {
+                Log.i(TAG, "[$label] Play call failed ($error)")
+            }
         }
+        Result.failure(throwable)
     }
 
     /** [call] that yields `null` on any failure. For best-effort reads. */

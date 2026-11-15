@@ -6,8 +6,6 @@
 
 package com.aurora.store.compose.ui.downloads
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,6 +46,7 @@ import com.aurora.store.compose.composable.DownloadListItem
 import com.aurora.store.compose.composable.Placeholder
 import com.aurora.store.compose.composable.ScrollHint
 import com.aurora.store.compose.composable.TopAppBar
+import com.aurora.store.compose.composable.rememberCreateDocumentLauncher
 import com.aurora.store.compose.navigation.Destination
 import com.aurora.store.compose.preview.AppPreviewProvider
 import com.aurora.store.compose.preview.ThemePreviewProvider
@@ -73,17 +72,14 @@ fun DownloadsScreen(
 
     val exportMimeType = "application/zip"
     var requestedExport by rememberSaveable { mutableStateOf<Download?>(null) }
-    val documentLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument(exportMimeType),
-        onResult = {
-            if (it != null) {
-                requestedExport?.let { download -> viewModel.export(download, it) }
-            } else {
-                context.toast(R.string.failed_apk_export)
-            }
-            requestedExport = null
+    val documentLauncher = rememberCreateDocumentLauncher(exportMimeType) {
+        if (it != null) {
+            requestedExport?.let { download -> viewModel.export(download, it) }
+        } else {
+            context.toast(R.string.failed_apk_export)
         }
-    )
+        requestedExport = null
+    }
 
     ScreenContent(
         downloads = downloads,

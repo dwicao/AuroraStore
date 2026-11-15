@@ -117,12 +117,17 @@ object CommonUtil {
                 val username = match.groupValues[2]
                 val password = match.groupValues[3]
                 val url = match.groupValues[4]
-                val port = match.groupValues[5]
+                val port = match.groupValues[5].toIntOrNull()
+
+                if (port == null || port !in 1..65535) {
+                    Log.w(TAG, "Proxy URL rejected: port out of range")
+                    return null
+                }
 
                 ProxyInfo(
                     protocol,
                     url,
-                    port.toInt(),
+                    port,
                     username,
                     password
                 )

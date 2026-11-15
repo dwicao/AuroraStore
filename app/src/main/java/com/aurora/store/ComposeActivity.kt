@@ -6,6 +6,7 @@
 package com.aurora.store
 
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,6 +26,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aurora.extensions.TAG
 import com.aurora.extensions.getPackageName
 import com.aurora.store.R
 import com.aurora.store.compose.composition.LocalNetworkStatus
@@ -165,11 +167,31 @@ class ComposeActivity : FragmentActivity() {
         AppInstaller.requestShizukuPermissionIfNeeded(this)
     }
 
+    /**
+     * The activity is the launcher and handles external `market://` / `play.google.com`
+     * intents, so it is exported. Any app can therefore smuggle a [Screen] parcel in as
+     * the `SCREEN` extra: restrict parcelled starts to the listing screens that are
+     * reachable from deep links and notifications (AppDetails/Main/DevProfile/
+     * PublisherProfile). Anything else from outside is ignored and we fall back to the
+     * normal start destination. Internal navigation goes through the NavDisplay instead.
+     */
+    private val externalParcelAllowlist: Set<Class<out Screen>> = setOf(
+        Screen.AppDetails::class.java,
+        Screen.Main::class.java,
+        Screen.DevProfile::class.java,
+        Screen.PublisherProfile::class.java
+    )
+
     private fun resolveStartDestination(): Screen {
         // Parcel-based navigation (e.g. from NotificationUtil or DeepLinkConfirmActivity, which
         // owns the external ACTION_VIEW market:// and play.google.com deep links)
         IntentCompat.getParcelableExtra(intent, Screen.PARCEL_KEY, Screen::class.java)
-            ?.let { return it }
+            ?.let { screen ->
+                if (screen::class.java in externalParcelAllowlist) {
+                    return screen
+                }
+                Log.w(TAG, "Ignoring non-allowlisted SCREEN parcel (${screen::class.simpleName})")
+            }
 
         // SEND / SHOW_APP_INFO — getPackageName() handles both
         intent.getPackageName()?.let { return Screen.AppDetails(it) }

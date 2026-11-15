@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aurora.gplayapi.model.App
 import com.aurora.gplayapi.model.StreamCluster
 import com.aurora.store.HomeStash
@@ -28,7 +28,7 @@ internal fun ForYouContent(
     onScrolledToEnd: () -> Unit
 ) {
     val category = category(pageType)
-    val state by viewModel.liveData.observeAsState()
+    val state by viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(category) {
         viewModel.getStreamBundle(category)

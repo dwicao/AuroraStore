@@ -48,22 +48,20 @@ object AuthPrefs {
         return created
     }
 
-    private fun createEncrypted(context: Context): SharedPreferences? {
-        return try {
-            val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-            val encrypted = EncryptedSharedPreferences.create(
-                FILE_NAME,
-                masterKeyAlias,
-                context,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            )
-            migratePlainInto(context, encrypted)
-            encrypted
-        } catch (exception: Exception) {
-            Log.e(TAG, "Encrypted prefs unavailable, using plain private file", exception)
-            null
-        }
+    private fun createEncrypted(context: Context): SharedPreferences? = try {
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val encrypted = EncryptedSharedPreferences.create(
+            FILE_NAME,
+            masterKeyAlias,
+            context,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+        migratePlainInto(context, encrypted)
+        encrypted
+    } catch (exception: Exception) {
+        Log.e(TAG, "Encrypted prefs unavailable, using plain private file", exception)
+        null
     }
 
     /**

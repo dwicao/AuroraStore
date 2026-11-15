@@ -355,7 +355,9 @@ class AuthProvider @Inject constructor(
     suspend fun sessionFor(accountId: String): AuthenticatedSession {
         val stored = getAuthData(accountId)
             ?.takeIf { matchesActiveSpoof(it.device, it.locale) }
-        if (stored != null && withTimeout(VALIDATE_TIMEOUT_MS) { sessionFactory.validate(stored) }) {
+        if (stored != null &&
+            withTimeout(VALIDATE_TIMEOUT_MS) { sessionFactory.validate(stored) }
+        ) {
             return stored
         }
 
@@ -562,6 +564,17 @@ class AuthProvider @Inject constructor(
                 isDefault = true
             )
         )
+
+        // The import succeeded, so the DB is the source of truth; wipe the legacy cleartext
+        // SharedPreferences now instead of leaving the token copy behind in the default prefs
+        // (and in any backup made from here on) indefinitely.
+        Preferences.remove(context, Constants.ACCOUNT_SIGNED_IN)
+        Preferences.remove(context, Constants.ACCOUNT_TYPE)
+        Preferences.remove(context, Constants.ACCOUNT_EMAIL_PLAIN)
+        Preferences.remove(context, Constants.ACCOUNT_AAS_PLAIN)
+        Preferences.remove(context, Constants.ACCOUNT_AUTH_PLAIN)
+        Preferences.remove(context, PREFERENCE_AUTH_DATA)
+        Preferences.remove(context, Preferences.PREFERENCE_AUTH_VIA_MICROG)
     }
 
     @Throws(Exception::class)

@@ -15,4 +15,15 @@
     <exclude
         domain="sharedpref"
         path="auth_prefs.xml" />
+    <!-- The account table stores the same tokens (aasToken/authToken/authDataJson)
+         as auth_prefs.xml; exclude the Room database too. -->
+    <exclude
+        domain="database"
+        path="aurora_database" />
+    <exclude
+        domain="database"
+        path="aurora_database-wal" />
+    <exclude
+        domain="database"
+        path="aurora_database-shm" />
 </full-backup-content>

@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.core.net.toUri
@@ -83,7 +84,9 @@ private fun ScreenContent() {
             if (!notificationsEnabled) {
                 item {
                     ListItem(
-                        modifier = Modifier.clickable { openAppNotificationSettings(context) },
+                        modifier = Modifier.clickable(role = Role.Button) {
+                            openAppNotificationSettings(context)
+                        },
                         headlineContent = {
                             Text(stringResource(R.string.pref_notification_disabled))
                         },
@@ -97,7 +100,7 @@ private fun ScreenContent() {
 
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         showProgress = !showProgress
                         context.save(PREFERENCE_NOTIFICATION_PROGRESS, showProgress)
                     },
@@ -136,7 +139,7 @@ private fun ScreenContent() {
                 channels.forEach { (channelId, nameRes) ->
                     item {
                         ListItem(
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.clickable(role = Role.Button) {
                                 openChannelSettings(context, channelId)
                             },
                             headlineContent = { Text(stringResource(nameRes)) }

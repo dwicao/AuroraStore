@@ -63,7 +63,7 @@ fun DeveloperDetails(address: String, website: String, email: String) {
                 title = AnnotatedString(text = stringResource(R.string.details_dev_address)),
                 description = AnnotatedString.fromHtml(htmlString = address),
                 painter = painterResource(R.drawable.ic_person_location),
-                onClick = { context.copyToClipBoard(address) }
+                onClick = { context.copyToClipBoard(address, "Developer address") }
             )
         }
     }

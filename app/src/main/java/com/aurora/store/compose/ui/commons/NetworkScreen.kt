@@ -93,7 +93,9 @@ fun NetworkScreen() {
                             Log.i(TAG, "Unable to launch network settings")
                             try {
                                 context.startActivity(Intent(Settings.ACTION_SETTINGS))
-                            } catch (_: Exception) { }
+                            } catch (exception: Exception) {
+                                Log.i(TAG, "Unable to launch settings either", exception)
+                            }
                         }
                     }
                 ) {

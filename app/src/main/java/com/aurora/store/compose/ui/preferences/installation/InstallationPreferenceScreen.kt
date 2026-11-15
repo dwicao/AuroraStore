@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.core.content.getSystemService
@@ -114,7 +115,9 @@ private fun ScreenContent(
         ) {
             item {
                 ListItem(
-                    modifier = Modifier.clickable { onNavigateTo(Destination.Installer) },
+                    modifier = Modifier.clickable(role = Role.Button) {
+                        onNavigateTo(Destination.Installer)
+                    },
                     headlineContent = { Text(stringResource(R.string.pref_install_mode_title)) },
                     supportingContent = { Text(stringResource(installerTitle)) }
                 )
@@ -127,7 +130,7 @@ private fun ScreenContent(
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         autoDelete = !autoDelete
                         context.save(PREFERENCE_AUTO_DELETE, autoDelete)
                     },
@@ -148,7 +151,7 @@ private fun ScreenContent(
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(role = Role.Button) {
                         downloadSystemLanguages = !downloadSystemLanguages
                         context.save(PREFERENCE_DOWNLOAD_SYSTEM_LANGUAGES, downloadSystemLanguages)
                     },
@@ -172,7 +175,10 @@ private fun ScreenContent(
             if (isDeviceOwner) {
                 item {
                     ListItem(
-                        modifier = Modifier.clickable { showClearOwnerDialog = true },
+                        modifier = Modifier.clickable(role = Role.Button) {
+                            showClearOwnerDialog =
+                                true
+                        },
                         headlineContent = {
                             Text(stringResource(R.string.pref_clear_device_owner_title))
                         },

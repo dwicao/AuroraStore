@@ -75,7 +75,8 @@ class CacheWorker @AssistedInject constructor(
         val protectedVersions = runCatching {
             downloadDao.downloads().first()
                 .filter {
-                    it.isActive || it.status == DownloadStatus.PAUSED ||
+                    it.isActive ||
+                        it.status == DownloadStatus.PAUSED ||
                         it.status == DownloadStatus.COMPLETED
                 }
                 .map { it.packageName to it.versionCode }

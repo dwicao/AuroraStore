@@ -6,7 +6,6 @@
 package com.aurora.store.compose.ui.accounts
 
 import android.accounts.AccountManager
-import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,6 +58,7 @@ import com.aurora.Constants.URL_DISCLAIMER
 import com.aurora.Constants.URL_LICENSE
 import com.aurora.Constants.URL_TOS
 import com.aurora.extensions.browse
+import com.aurora.extensions.toast
 import com.aurora.store.BuildConfig
 import com.aurora.store.R
 import com.aurora.store.compose.composable.AccountListItem
@@ -104,11 +104,7 @@ fun AccountsScreen(
             accountName.isNullOrBlank() -> isAddingAccount = false
             accounts.any { it.email.equals(accountName, ignoreCase = true) } -> {
                 isAddingAccount = false
-                Toast.makeText(
-                    context,
-                    resources.getString(R.string.account_exists),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast(R.string.account_exists)
             }
             else -> viewModel.addSystemAccount(accountName, activity)
         }
@@ -120,11 +116,7 @@ fun AccountsScreen(
                 RestartUtil.restart(context)
             } else {
                 isSwitchingDefault = false
-                Toast.makeText(
-                    context,
-                    resources.getString(R.string.account_switch_failed),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast(R.string.account_switch_failed)
             }
         }
     }
@@ -142,11 +134,7 @@ fun AccountsScreen(
         viewModel.addResult.collect { added ->
             isAddingAccount = false
             if (!added) {
-                Toast.makeText(
-                    context,
-                    resources.getString(R.string.account_add_failed),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast(R.string.account_add_failed)
             }
         }
     }
@@ -163,7 +151,7 @@ fun AccountsScreen(
                     failures
                 )
             }
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            context.toast(message)
         }
     }
 
