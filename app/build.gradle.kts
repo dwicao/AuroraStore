@@ -29,12 +29,17 @@ val lastCommitTimestamp = providers.exec {
 /**
  * The in-app version follows the fork's release tags (v4.8.15 -> "4.8.15") instead of
  * a hardcoded upstream version, so the app, the Updates screen and the self-update
- * feed never disagree about what is installed. Falls back to the last release
- * when git tags are unavailable (e.g. shallow/local builds without tags).
+ * feed never disagree about what is installed. Tagless builds (e.g. shallow CI clones
+ * without tags) fall back to the last release. The `|| echo …` keeps the command's
+ * exit code 0 so a missing tag never poisons the configuration cache (a failing
+ * external-process ValueSource fails the build even inside try/catch).
  */
 val appVersionName: String = try {
     providers.exec {
-        commandLine("git", "describe", "--tags", "--abbrev=0", "--match", "v*")
+        commandLine(
+            "sh", "-c",
+            "git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || echo v4.8.17"
+        )
     }.standardOutput.asText.get().trim().removePrefix("v").ifBlank { "4.8.17" }
 } catch (_: Exception) {
     "4.8.17"

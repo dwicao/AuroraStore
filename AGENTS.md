@@ -50,9 +50,10 @@ All CI jobs use these exact invocations:
   `nightly` (`.nightly` suffix + commit hash; **vanilla only** — huawei/preload
   × nightly variants are disabled in `androidComponents.beforeVariants`).
 - `missingDimensionStrategy("device","vanilla")` so tests default to vanilla.
-- **versionName comes from the latest git tag `v*`** (`git describe`), falling
-  back to hardcoded `"4.8.4"` when tags are unavailable — shallow clones
-  without tags produce a wrong version name. `versionCode` is hardcoded in
+- **versionName comes from the latest git tag `v*`** (`git describe`, wrapped in
+  an always-zero shell fallback), falling back to `"4.8.17"` when tags are
+  unavailable (tagless clones build fine; a failing `git describe` must never
+  reach the configuration cache). `versionCode` is hardcoded in
   `app/build.gradle.kts` and **must keep increasing** per fork release (the
   self-update feed compares against it).
 - Flavor-specific code lives in `app/src/<flavor>/java` — notably each flavor
