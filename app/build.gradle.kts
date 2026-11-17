@@ -37,7 +37,8 @@ val lastCommitTimestamp = providers.exec {
 val appVersionName: String = try {
     providers.exec {
         commandLine(
-            "sh", "-c",
+            "sh",
+            "-c",
             "git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || echo v4.8.17"
         )
     }.standardOutput.asText.get().trim().removePrefix("v").ifBlank { "4.8.17" }
