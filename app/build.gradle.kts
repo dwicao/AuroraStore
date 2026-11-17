@@ -85,7 +85,7 @@ configure<ApplicationExtension> {
             version = release(37)
         }
 
-        versionCode = 83
+        versionCode = 84
         versionName = appVersionName
 
         testInstrumentationRunner = "com.aurora.store.HiltInstrumentationTestRunner"
