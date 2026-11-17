@@ -148,8 +148,15 @@ data layer → gplayapi / Room / WorkManager.
 ## Testing
 
 - **JVM unit tests** (`app/src/test/`): JUnit4 + Google Truth; pure-logic
-  seams only (Play error mapping, dispenser health policy, bsdiff, APK
-  frosting). Run: `./gradlew testVanillaDebugUnitTest`.
+  seams only (Play error mapping, download retry policy, app-lock policy,
+  ignored-update rules, dispenser health policy, bsdiff, APK frosting).
+  Run: `./gradlew testVanillaDebugUnitTest`.
+  - Policies that used to be buried in Android-bound classes live in their own
+    objects so they stay testable: `data/work/DownloadRetryPolicy.kt` (retry
+    gate + cause-chain walk), `data/AppLockPolicy.kt` (re-lock rule, including
+    the "grace period elapsed" boundary), `data/room/update/IgnoredUpdate.kt`
+    (`hides`/`isIgnoredBy`). Keep them Context-free — no `@Inject`, no
+    `Preferences` reads inside; the caller reads state and passes values in.
   - `FrostingVerifierTest` needs a real Play APK via
     `-Pfrosted.apk=/path/to/base.apk`; without it those cases are skipped
     (`assumeTrue`), not failed.
@@ -171,7 +178,9 @@ data layer → gplayapi / Room / WorkManager.
     `KEY_PASSWORD` (builds unsigned without them).
   - `nightly-health.yml` — daily probes (default dispenser, Play
     reachability), gplayapi-freshness check (warning only). Fast; no build.
-  - `tests.yml` — JVM unit tests on every master push + manual dispatch.
+  - `tests.yml` — `ktlintCheck` + JVM unit tests on every master push + manual
+    dispatch (GitLab already lints; GitHub used to gate a release tag on tests
+    only).
   - `bootstrap-verification.yml` — regenerates dependency verification
     metadata (manual dispatch).
 

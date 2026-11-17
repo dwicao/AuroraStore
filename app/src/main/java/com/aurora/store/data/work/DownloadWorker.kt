@@ -75,7 +75,6 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlin.properties.Delegates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
 import okhttp3.Headers.Companion.toHeaders
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -105,10 +104,6 @@ class DownloadWorker @AssistedInject constructor(
 
     companion object {
         private const val NOTIFICATION_ID: Int = 200
-
-        // Upper bound on automatic WorkManager retries for transient (network) failures
-        // before the download is marked as failed and left for the user to retry.
-        private const val MAX_DOWNLOAD_RETRIES = 5
 
         // java.net.HttpURLConnection defines no constant for 416.
         private const val HTTP_RANGE_NOT_SATISFIABLE = 416
@@ -167,8 +162,14 @@ class DownloadWorker @AssistedInject constructor(
         super.doWork()
 
         // Fetch required data for download
+        val packageName = inputData.getString(DownloadHelper.PACKAGE_NAME)
+        if (packageName.isNullOrBlank()) {
+            Log.e(TAG, "Download work started without a package name")
+            return Result.failure()
+        }
+
         try {
-            download = downloadDao.getDownload(inputData.getString(DownloadHelper.PACKAGE_NAME)!!)
+            download = downloadDao.getDownload(packageName)
             deliveryClient = playClientFor(download.packageName)
         } catch (exception: Exception) {
             return onFailure(exception)
@@ -423,25 +424,20 @@ class DownloadWorker @AssistedInject constructor(
     }.getOrDefault(false)
 
     /**
-     * Transient errors worth retrying once connectivity returns. Walks the cause chain so a
-     * wrapped network error is still recognised.
+     * Transient errors worth retrying once connectivity returns. Classifies the app's own
+     * failure types; anything else is handed to [DownloadRetryPolicy], which walks the cause
+     * chain so a wrapped network error is still recognised.
      */
     private fun isRetryable(throwable: Throwable?): Boolean = when (throwable) {
         null -> false
         is NoNetworkException,
-        is SocketException,
-        is SocketTimeoutException,
-        is UnknownHostException,
         // Expired URLs were re-purchased by clearing the file list; retrying re-fetches them.
         is ExpiredUrlException -> true
 
         // A sick CDN edge (5xx) deserves the same backoff treatment as lost connectivity.
         is TransientServerException -> true
 
-        // A session validation/refresh that hit its timeout is transient by nature.
-        is TimeoutCancellationException -> true
-
-        else -> isRetryable(throwable.cause)
+        else -> DownloadRetryPolicy.isRetryableType(throwable)
     }
 
     private suspend fun onFailure(exception: Exception): Result {
@@ -464,14 +460,17 @@ class DownloadWorker @AssistedInject constructor(
             // backoff, keeping any partial download for resume. The network constraint on
             // the work request means the retry only runs once connectivity is back.
             val isSystemStop = exception is DownloadCancelledException && !cancelledByUser
-            if (!cancelledByUser &&
-                (isRetryable(exception) || isSystemStop) &&
-                runAttemptCount < MAX_DOWNLOAD_RETRIES
-            ) {
+            val retry = DownloadRetryPolicy.shouldRetry(
+                cancelledByUser = cancelledByUser,
+                isSystemStop = isSystemStop,
+                retryable = isRetryable(exception),
+                attemptCount = runAttemptCount
+            )
+            if (retry) {
                 Log.w(
                     TAG,
-                    "Transient failure for ${download.packageName}, " +
-                        "retrying (attempt $runAttemptCount)"
+                    "Transient failure for ${download.packageName}, retrying " +
+                        "(attempt $runAttemptCount/${DownloadRetryPolicy.MAX_RETRIES})"
                 )
                 return@withContext Result.retry()
             }

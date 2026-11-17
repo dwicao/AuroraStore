@@ -21,26 +21,23 @@ import javax.inject.Singleton
 @Singleton
 class AppLockManager @Inject constructor() {
 
-    companion object {
-        // Grace period before a backgrounded app re-locks, in seconds
-        private const val DEFAULT_TIMEOUT_SECONDS = 30
-    }
-
     private var unlocked = false
     private var backgroundedAt = 0L
 
     /**
      * Whether the app should currently present the lock screen, i.e. the feature is enabled
      * and the session is not (still) unlocked within the grace [timeout].
+     *
+     * This reads the state and the preference; the rule itself lives in [AppLockPolicy] so
+     * it can be tested without a [Context] or a real grace period.
      */
-    fun shouldLock(context: Context): Boolean {
-        if (!Preferences.getBoolean(context, PREFERENCE_APP_LOCK_ENABLED, false)) return false
-        if (!unlocked) return true
-
-        if (backgroundedAt == 0L) return false
-        val elapsed = System.currentTimeMillis() - backgroundedAt
-        return elapsed >= timeoutMillis(context)
-    }
+    fun shouldLock(context: Context): Boolean = AppLockPolicy.shouldLock(
+        enabled = Preferences.getBoolean(context, PREFERENCE_APP_LOCK_ENABLED, false),
+        unlocked = unlocked,
+        backgroundedAtMillis = backgroundedAt,
+        timeoutMillis = timeoutMillis(context),
+        nowMillis = System.currentTimeMillis()
+    )
 
     /** Marks the current session as authenticated. */
     fun markUnlocked() {
@@ -57,8 +54,8 @@ class AppLockManager @Inject constructor() {
         val seconds = Preferences.getInteger(
             context,
             PREFERENCE_APP_LOCK_TIMEOUT,
-            DEFAULT_TIMEOUT_SECONDS
+            AppLockPolicy.DEFAULT_TIMEOUT_SECONDS
         )
-        return seconds * 1000L
+        return AppLockPolicy.timeoutMillis(seconds)
     }
 }

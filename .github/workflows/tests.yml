@@ -1,10 +1,14 @@
 # SPDX-FileCopyrightText: 2026 Aurora OSS
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# JVM unit tests on every master push (and on demand). These are offline, deterministic
-# tests of in-repo logic — the Play-error taxonomy, the dispenser health policy, the
-# self-update feed parser, the proxy parsers — so they gate merges, not upstream health.
-# Upstream breakage (Play API / dispensers) is watched by nightly-health.yml instead.
+# JVM unit tests and style checks on every master push (and on demand). The tests are
+# offline and deterministic — the Play-error taxonomy, the retry/app-lock/dispenser
+# policies, the self-update feed parser, the proxy parsers — so they gate merges, not
+# upstream health. Upstream breakage (Play API / dispensers) is watched by
+# nightly-health.yml instead.
+#
+# ktlint runs here too: GitLab CI already lints, but a push that only lands on GitHub
+# used to reach a release tag unchecked.
 #
 # The build cache from actions/setup-java keeps repeat runs fast. This workflow is the
 # fork's only push-triggered check, so keep it green before tagging a release.
@@ -48,10 +52,13 @@ jobs:
           # (platform android-37, build-tools) during the Gradle run.
           packages: 'platform-tools'
 
-      - name: Run JVM unit tests
+      - name: Check code style
         run: |
           chmod +x gradlew
-          ./gradlew testVanillaDebugUnitTest --stacktrace
+          ./gradlew ktlintCheck --stacktrace
+
+      - name: Run JVM unit tests
+        run: ./gradlew testVanillaDebugUnitTest --stacktrace
 
       - name: Upload test reports on failure
         if: failure()
